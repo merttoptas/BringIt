@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/abeezee</item>
+        <item>@font/actor</item>
+        <item>@font/cormorant_upright_light</item>
+        <item>@font/nova_slim</item>
+        <item>@font/vampiro_one</item>
+    </array>
+</resources>

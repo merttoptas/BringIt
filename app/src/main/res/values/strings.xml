@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">BringIt</string>
+    <string name="facebook_app_id">2251530274888483</string>
+    <string name="fb_login_protocol_scheme">fb2251530274888483</string>
+
+    <string name="btnCıkıs">Çıkış Yap </string>
+    <string name="todo">TODO</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_offer">OfferActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps_new">Map</string>
+    <string name="splashText">                  Bring It</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_main">Taşınacak eşyalarınız için Bring İt aracılığıyla, ilan bilgisini girerek, teklif alabilirsiniz.
+        Eğer, eşya taşımayı düşünüyorsanız ilanlara bakarak, teklif verebilirisniz.</string>
+    <string name="kat_say_s">Kat Sayısı</string>
+    <string name="tarih">Tarih</string>
+    <string name="e_yan_n_bulundu_u_l">Eşyanın Bulunduğu İl</string>
+    <string name="llce">İlçe</string>
+    <string name="esyanin_gidecegi_il">Eşyanın Gideceği İl</string>
+    <string name="esyanin_gidecegi_ilce">Eşyanın Gideceği İlçe</string>
+    <string name="esyanin_cikacagi_kat_sayisi">Eşyanın Çıkacağı Kat Sayısı</string>
+    <string name="aciklama">Açıklama</string>
+    <string name="ilan_ver">İlan Ver</string>
+    <string name="esyanin_tasinma_sekli">Eşya Taşınma Şekli</string>
+    <string name="esyanin_basligi">Eşya Başlığı</string>
+    <string name="baslik">Başlık</string>
+    <string name="textview">TextView</string>
+    <string name="reklam">Reklam</string>
+    <string name="ilanlar">İlanlar</string>
+    <string name="mesajlar">Mesajlar</string>
+    <string name="hesap">Hesap</string>
+    <string name="ayarla">Ayarla</string>
+
+    <string-array name="tasinmaSekli">
+        <item>Bina Merdiveni</item>
+        <item>Bina Asansörü</item>
+        <item>Asansör Kurulmasını İstiyorum</item>
+    </string-array>
+
+    <string-array name="katSayisi">
+        <item>20.Kat</item>
+        <item>19.Kat</item>
+        <item>18.Kat</item>
+        <item>17.Kat</item>
+        <item>16.Kat</item>
+        <item>15.Kat</item>
+        <item>14.Kat</item>
+        <item>13.Kat</item>
+        <item>12.Kat</item>
+        <item>11.Kat</item>
+        <item>10.Kat</item>
+        <item>9.Kat</item>
+        <item>8.Kat</item>
+        <item>7.Kat</item>
+        <item>6.Kat</item>
+        <item>5.Kat</item>
+        <item>4.Kat</item>
+        <item>3.Kat</item>
+        <item>2.Kat</item>
+        <item>1.Kat</item>
+        <item>Zemin Kat</item>
+        <item>-1.Kat</item>
+        <item>-2.Kat</item>
+    </string-array>
+
+    <string-array name="odaSayisi">
+        <item>1+1</item>
+        <item>2+1</item>
+        <item>3+1</item>
+        <item>4+1</item>
+        <item>5+1</item>
+        <item>6+1</item>
+        <item>7+1</item>
+
+    </string-array>
+
+
+</resources>
