@@ -37,6 +37,15 @@
     <string name="mesajlar">Mesajlar</string>
     <string name="hesap">Hesap</string>
     <string name="ayarla">Ayarla</string>
+    <string name="bringit">BringIt</string>
+    <string name="tvNameSurname">Mert Toptaş</string>
+    <string name="lanlar">İlanlar</string>
+    <string name="tasima">Taşıma</string>
+    <string name="tvMail_account">merttoptas34@gmail.com</string>
+    <string name="tvPhone_account">+901234567890</string>
+    <string name="tvWebSite_account">merttoptas.com</string>
+    <string name="tvIlanNumber">100</string>
+    <string name="tvTasimaNumber">100</string>
 
     <string-array name="tasinmaSekli">
         <item>Bina Merdiveni</item>

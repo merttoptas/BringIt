@@ -27,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        new starting().run();
 
     }
 

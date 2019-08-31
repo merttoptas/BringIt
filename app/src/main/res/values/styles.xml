@@ -46,4 +46,11 @@
         <item name="paddingEnd">32dp</item>
     </style>
 
+
+    <style name="ToolbarName" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+
+    </style>
+
 </resources>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -73,6 +75,11 @@ public class OfferFragment extends Fragment {
     public double longitude;
     LocationManager locationManager;
     ScrollView scrollView;
+    Toolbar toolbar;
+    TextView mTitle;
+    Typeface typeface;
+
+
 
     public OfferFragment() {
         // Required empty public constructor
@@ -145,6 +152,14 @@ public class OfferFragment extends Fragment {
         scrollView = v.findViewById(R.id.scrollView);
         etdateTime = v.findViewById(R.id.etdateTime);
         etAciklama = v.findViewById(R.id.etAciklama);
+
+        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/SourceSansPro-Regular.ttf");
+        btnOfferSave.setTypeface(typeface);
+
+        toolbar = v.findViewById(R.id.toolbar);
+        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        mTitle.setText(toolbar.getTitle());
+        mTitle.setText("İlan Ver");
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));

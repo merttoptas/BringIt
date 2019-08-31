@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -41,12 +43,18 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "FACELOG";
     private CallbackManager mCallbackManager;
-    //NetworkFragment networkFragment = new  NetworkFragment();
+    TextView tvLoginText;
+    Typeface typeface;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        tvLoginText = findViewById(R.id.tvLoginText);
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/Billabong.ttf");
+        tvLoginText.setTypeface(typeface);
 
         getSupportActionBar().hide();
 

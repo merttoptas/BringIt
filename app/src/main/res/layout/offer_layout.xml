@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:elevation="5dp"
     app:cardCornerRadius="5dp"
+    android:layout_margin="3dp"
     app:cardElevation="5dp"
     app:cardPreventCornerOverlap="true">
 
@@ -15,6 +16,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="2"
+        android:padding="10dp"
         android:baselineAligned="false">
 
         <LinearLayout
@@ -22,15 +24,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:padding="3dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvBaslik"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_gravity="left"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/baslik"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
@@ -40,9 +44,10 @@
                 android:id="@+id/tvOfferBaslik"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_gravity="left"
+                android:fontFamily="sans-serif-medium"
                 android:shadowColor="@color/white"
                 android:text="@string/textview"
                 android:textColor="@color/quantum_black_100"
@@ -54,14 +59,15 @@
                 android:id="@+id/tvAdSoyad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_gravity="left"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/textview"
                 android:textColor="@color/quantum_black_100"
                 android:textSize="10sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,15 +75,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:padding="3dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvIl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="5dp"
                 android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/baslik"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp">
@@ -89,22 +97,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="@string/textview"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/textview"
                 android:textColor="@color/quantum_black_100"
                 android:textSize="10sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
 
             <TextView
                 android:id="@+id/tvIlce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/textview"
                 android:layout_gravity="right"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/textview"
                 android:textColor="@color/quantum_black_100"
                 android:textSize="10sp"
                 android:textStyle="bold"
