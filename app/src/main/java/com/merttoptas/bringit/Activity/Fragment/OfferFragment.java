@@ -374,6 +374,7 @@ public class OfferFragment extends Fragment {
 
             );
 
+
             Toast.makeText(getActivity(), "Başarıyla Kaydedildi!", Toast.LENGTH_SHORT).show();
 
 
@@ -472,7 +473,7 @@ public class OfferFragment extends Fragment {
             Gson gson = new Gson();
             districtDetail = gson.fromJson(jsonBuilder.toString(), DistrictList.class);
 
-            Log.d("Deneme", districtDetail.getDistrictDetail().get(0).getIlceTitle());
+            Log.d("Ilce", districtDetail.getDistrictDetail().get(0).getIlceTitle());
 
         }catch (FileNotFoundException e){
             Log.e("jsonFİle", "file not found");
@@ -534,9 +535,5 @@ public class OfferFragment extends Fragment {
         etToIl.setAdapter(adapter);
         etToIl.setThreshold(0);
     }
-
-
-
-
 
 }

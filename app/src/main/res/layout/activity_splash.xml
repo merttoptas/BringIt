@@ -7,19 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Activity.SplashActivity">
 
-
     <TextView
         android:id="@+id/tvSplash"
-        android:layout_width="@dimen/splash_layout_weight"
-        android:layout_height="@dimen/splash_layout_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/shape"
+        android:textColor="@color/quantum_bluegrey50"
+        android:textColorHint="@color/quantum_bluegrey100"
+        android:textColorLink="@color/colorPrimary"
         android:text="@string/splashText"
         android:textAlignment="center"
-        android:textSize="50sp"
+        android:textSize="72sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

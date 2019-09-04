@@ -54,7 +54,12 @@ public class MainActivity extends AppCompatActivity implements MorphBottomNaviga
     Button btnOfferSave;
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements MorphBottomNaviga
         getSupportActionBar().hide();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
         //Resource of Items
         etBaslik = findViewById(R.id.etBaslik);
@@ -88,20 +92,20 @@ public class MainActivity extends AppCompatActivity implements MorphBottomNaviga
         switch (menuItem.getItemId()){
 
             case  R.id.navigation_account:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, accountFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
 
                 return  true;
 
             case R.id.navigation_offer:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, offerFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, offerFragment).commit();
 
                 return  true;
             case R.id.navigation_maps:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, mapsFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
                 return true;
 
             case  R.id.navigation_message:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, messageFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, messageFragment).commit();
 
                 return true;
 

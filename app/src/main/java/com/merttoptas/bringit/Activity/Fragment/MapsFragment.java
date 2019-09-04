@@ -216,7 +216,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(latitude,longitude))
                                 .title(currentUser.getDisplayName()));
 
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 15.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 14.0f));
 
                     }
 
@@ -226,9 +226,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onKeyEntered(String key, GeoLocation location) {
 
-                            marker= mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
+                            marker= mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)).draggable(true)
                                     .title(currentUser.getDisplayName()));
                             //list the all users location in firebase database
+
                             Log.d("DbLocation", key +" :"  + location.latitude + " " +location.longitude);
 
 
@@ -404,6 +405,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         //0.9f = 0.9 km = 900m
         //In this code, it sends the location that will search within the radius range.
         geoQuery = geoFire.queryAtLocation(new GeoLocation(currentLocation.latitude, currentLocation.longitude), 0.9);
+
+
+    }
+
+    private void offerDetails(){
+
+
+          recyclerView.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+
+
+
+              }
+          });
 
 
     }

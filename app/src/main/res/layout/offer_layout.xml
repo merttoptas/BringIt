@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="5dp"
     app:cardCornerRadius="5dp"
     android:layout_margin="3dp"
-    app:cardElevation="5dp"
     app:cardPreventCornerOverlap="true">
 
     <LinearLayout

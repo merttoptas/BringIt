@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.merttoptas.bringit.R;
@@ -27,7 +29,10 @@ public class SplashActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        new starting().run();
+        Animation mySplashAnim = AnimationUtils.loadAnimation(this, R.anim.splash_transition);
+        tvSplash.startAnimation(mySplashAnim);
+
+        new starting().start();
 
     }
 
@@ -39,8 +44,12 @@ public class SplashActivity extends AppCompatActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+            finally {
+
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,9 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<Object> list;
     private final static int TIP_Offer =1, TIP_Reklam =2;
+    private final int VIEW_TYPE_LOADING = 3;
+
+
     private Context context;
 
 
@@ -30,7 +34,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position) instanceof Offer) { // Tipler eşit ise true döner
+        if (list.get(position) instanceof Offer) {
+            // Tipler eşit ise true döner
             return TIP_Offer;
         } else if (list.get(position) instanceof Reklam) {
             return TIP_Reklam;
@@ -89,7 +94,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 Reklam reklam = (Reklam) list.get(i);
                 ((ReklamViewHolder)viewHolder).showDetails(reklam);
                 break;
+
+            case VIEW_TYPE_LOADING:
+                showLoadingView((LoadingViewHolder) viewHolder, i);
+                break;
+
+
         }
+
 
 
     }
@@ -138,4 +150,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         }
     }
+
+    private class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        ProgressBar progressBar;
+
+        public LoadingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.progressBar);
+        }
+    }
+
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        //ProgressBar would be displayed
+
+    }
+
 }

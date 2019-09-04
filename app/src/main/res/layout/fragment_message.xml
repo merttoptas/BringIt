@@ -7,14 +7,54 @@
     tools:context=".Activity.Fragment.MessageFragment">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar"></include>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerview"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@id/relative_bottom">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:id="@+id/relative_bottom"
+            android:background="#FFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etMessageSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/btn_send"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Bir Mesaj Yazın"
+                android:textAlignment="textStart"
+                android:textSize="14sp" />
+
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_send_black_24dp"
+                android:id="@+id/btn_send"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </FrameLayout>
