@@ -40,15 +40,17 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
+
                 Thread.sleep(3000);
-            }catch (Exception e){
+            }
+            catch (Exception e){
                 e.printStackTrace();
             }
+
             finally {
 
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
-
             }
         }
     }
