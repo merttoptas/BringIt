@@ -38,7 +38,7 @@
 
 
     <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="itemBackground">@drawable/background_bottom_nav_item</item>
+        <item name="itemBackground">@drawable/bg_bottom_nav_item</item>
         <item name="itemIconTint">@drawable/color_bottom_nav_item</item>
         <item name="itemTextColor">@drawable/color_bottom_nav_item</item>
         <item name="android:textAllCaps">true</item>

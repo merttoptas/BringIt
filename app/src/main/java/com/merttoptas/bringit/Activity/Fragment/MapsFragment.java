@@ -90,7 +90,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private List<Object> offerlist = new ArrayList<>();
     private RecyclerViewAdapter adapter;
     private FirebaseStorage mDb;
-    private double radius = 500;
+    private double radius = 10000;
     private GeoQuery geoQuery;
     private Circle mapCircle;
     private GeoFire geoFire;
@@ -199,7 +199,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     currentUser = mAuth.getCurrentUser();
 
                     mLastLocation = location;
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("offersLocation").child("offers").child("location");
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("offerAvailable");
+                    GeoFire geoFire = new GeoFire(ref);
 
                     LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -208,18 +209,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                         final double latitude = mLastLocation.getLatitude();
                         final double longitude = mLastLocation.getLongitude();
+                        geoFire.setLocation(currentUser.getUid(),new GeoLocation(latitude, longitude),
+                                new GeoFire.CompletionListener() {
+                                    @Override
+                                    public void onComplete(String key, DatabaseError error) {
 
-                        if(marker !=null){
-                            marker.remove();
-                        }
-                        marker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(latitude,longitude))
-                                .title(currentUser.getDisplayName()));
+                                        //ad marker
+                                        if(marker !=null){
+                                        marker.remove();
+                                        }
+                                        marker = mMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(latitude,longitude))
+                                                .title(currentUser.getDisplayName()));
 
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 14.0f));
+                                        //move camera
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 10.0f));
 
+                                    }
+                                });
                     }
-
 
                     setCircle(location);
                     geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -231,7 +239,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                             //list the all users location in firebase database
 
                             Log.d("DbLocation", key +" :"  + location.latitude + " " +location.longitude);
-
 
                         }
 
@@ -301,7 +308,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             } else {
 
-                Toast.makeText(getActivity(), "Lütfen izin verin", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.location_izin_Ver), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -340,13 +347,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Offer o = snapshot.getValue(Offer.class);
-
-
                     offerlist.add(o);
-
                     offerlist.add(new Reklam(
                             "54544"
                     ));
+
                 }
 
                 adapter = new RecyclerViewAdapter(offerlist, getActivity());
@@ -356,7 +361,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Veriler Alınamadı", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.veriler_alinamadi), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -367,9 +372,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private void mlocationRequest(){
         mLocationRequest = new LocationRequest();
         //i nterval for active location updates, in milliseconds
-        mLocationRequest.setInterval(5000);
+        mLocationRequest.setInterval(15000);
         //This controls the fastest rate at which your application will receive location updates,
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setFastestInterval(15000);
         //the most acccurate locations available
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -404,8 +409,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         //0.9f = 0.9 km = 900m
         //In this code, it sends the location that will search within the radius range.
-        geoQuery = geoFire.queryAtLocation(new GeoLocation(currentLocation.latitude, currentLocation.longitude), 0.9);
-
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(currentLocation.latitude, currentLocation.longitude), 10.0);
 
     }
 

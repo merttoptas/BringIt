@@ -1,22 +1,13 @@
 <resources>
-    <string name="app_name">BringIt</string>
-    <string name="facebook_app_id">2251530274888483</string>
-    <string name="fb_login_protocol_scheme">fb2251530274888483</string>
-
+    <string name="app_name" translatable="false">BringIt</string>
+    <string name="facebook_app_id" translatable="false">2251530274888483</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2251530274888483</string>
     <string name="btnCıkıs">Çıkış Yap </string>
-    <string name="todo">TODO</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_offer">OfferActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_maps_new">Map</string>
-    <string name="splashText">                  Bring It</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo" translatable="false">TODO</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="title_activity_offer" translatable="false">OfferActivity</string>
+    <string name="title_activity_maps_new" translatable="false">Map</string>
+    <string name="splashText" translatable="false">Bring It</string>
     <string name="tv_main">Taşınacak eşyalarınız için Bring İt aracılığıyla, ilan bilgisini girerek, teklif alabilirsiniz.
         Eğer, eşya taşımayı düşünüyorsanız ilanlara bakarak, teklif verebilirisniz.</string>
     <string name="kat_say_s">Kat Sayısı</string>
@@ -31,21 +22,35 @@
     <string name="esyanin_tasinma_sekli">Eşya Taşınma Şekli</string>
     <string name="esyanin_basligi">Eşya Başlığı</string>
     <string name="baslik">Başlık</string>
-    <string name="textview">TextView</string>
-    <string name="reklam">Reklam</string>
+    <string name="textview" translatable="false">TextView</string>
+    <string name="reklam" translatable="false">Reklam</string>
     <string name="ilanlar">İlanlar</string>
     <string name="mesajlar">Mesajlar</string>
     <string name="hesap">Hesap</string>
     <string name="ayarla">Ayarla</string>
     <string name="bringit">BringIt</string>
-    <string name="tvNameSurname">Mert Toptaş</string>
+    <string name="tvNameSurname" translatable="false">Mert Toptaş</string>
     <string name="lanlar">İlanlar</string>
     <string name="tasima">Taşıma</string>
-    <string name="tvMail_account">merttoptas34@gmail.com</string>
-    <string name="tvPhone_account">+901234567890</string>
-    <string name="tvWebSite_account">merttoptas.com</string>
-    <string name="tvIlanNumber">100</string>
-    <string name="tvTasimaNumber">100</string>
+    <string name="tvMail_account" translatable="false">merttoptas34@gmail.com</string>
+    <string name="tvPhone_account" translatable="false">+901234567890</string>
+    <string name="tvWebSite_account" translatable="false">merttoptas.com</string>
+    <string name="tvIlanNumber" translatable="false">0</string>
+    <string name="tvTasimaNumber" translatable="false">0</string>
+    <string name="tamam">Tamam</string>
+    <string name="kapat">kapat</string>
+    <string name="kat_sayisi">Kat Sayısı</string>
+    <string name="mail_adresi">Mail Adresi</string>
+    <string name="tel_no">Tel No</string>
+    <string name="web_sitesi">Web Sitesi</string>
+    <string name="kaydet">Kaydet</string>
+    <string name="iptal">İptal</string>
+    <string name="veriler_alinamadi">Veriler Alınamadı</string>
+    <string name="location_izin_Ver">Lütfen izin verin</string>
+    <string name="kayit_basarisiz">Kayıt Başarısız Oldu!</string>
+    <string name="basariya_kaydedildi">Başarıyla Kaydedildi!</string>
+    <string name="eksik_bilgiler">Eksik Bilgiler Girdiniz!</string>
+
 
     <string-array name="tasinmaSekli">
         <item>Bina Merdiveni</item>

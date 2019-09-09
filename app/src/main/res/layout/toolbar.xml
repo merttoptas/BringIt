@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="#03a9f4"
     android:elevation="5dp"
     android:fadeScrollbars="true"
     android:minHeight="50dp"
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/abeezee"
         android:text="Mesajlar"
         android:textColor="@color/white" />
 </androidx.appcompat.widget.Toolbar>

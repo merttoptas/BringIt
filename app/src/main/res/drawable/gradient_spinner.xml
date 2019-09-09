@@ -11,7 +11,7 @@
 
             <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
         </shape></item>
-        <item ><bitmap android:gravity="bottom|right" android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+        <item ><bitmap android:gravity="bottom|right" android:src="@drawable/ic_arrow_drop_down_black" />
         </item>
     </layer-list></item>
 

@@ -11,7 +11,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view_linear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,19 +19,95 @@
     </FrameLayout>
 
 
-    <com.tbuonomo.morphbottomnavigation.MorphBottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <com.gauravk.bubblenavigation.BubbleNavigationConstraintView
+        android:id="@+id/bottom_navigation_view_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:padding="5dp"
+        android:orientation="horizontal"
+        app:bnc_mode="spread"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom_navigation"
-        app:backgroundTint="@color/quantum_white_100"
-        app:morphCornerRadius="128dp"
-        app:itemIconTint="@drawable/item_selected"
-        app:itemTextColor="@drawable/item_selected"
-        app:morphItemRadius="64dp"
-        app:morphVerticalOffset="8dp"
-        style="@style/BottomNavigationView"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/navigation_maps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:bt_active="true"
+            app:bt_colorActive="@color/blue_active"
+            app:bt_colorInactive="@color/blue_inactive"
+            app:bt_duration="300"
+            app:bt_icon="@drawable/ic_home_black_24dp"
+            app:bt_shape="@drawable/transition_background_drawable_maps"
+            app:bt_title="@string/ilanlar"
+            app:bt_titlePadding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/navigation_offer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/navigation_offer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:bt_active="true"
+            app:bt_colorActive="@color/blue_active"
+            app:bt_colorInactive="@color/blue_inactive"
+            app:bt_duration="300"
+            app:bt_icon="@drawable/ic_add_circle_black"
+            app:bt_shape="@drawable/transition_background_drawable_maps"
+            app:bt_title="@string/ilan_ver"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/navigation_message"
+            app:layout_constraintStart_toEndOf="@+id/navigation_maps"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/navigation_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:bt_active="true"
+            app:bt_colorActive="@color/blue_active"
+            app:bt_colorInactive="@color/blue_inactive"
+            app:bt_duration="300"
+            app:bt_icon="@drawable/ic_message_black_24dp"
+            app:bt_shape="@drawable/transition_background_drawable_maps"
+            app:bt_title="@string/mesajlar"
+            app:bt_titlePadding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/navigation_account"
+            app:layout_constraintStart_toEndOf="@+id/navigation_offer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/navigation_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:bt_active="true"
+            app:bt_colorActive="@color/blue_active"
+            app:bt_colorInactive="@color/blue_inactive"
+            app:bt_duration="300"
+            app:bt_icon="@drawable/ic_account_circle_black"
+            app:bt_shape="@drawable/transition_background_drawable_maps"
+            app:bt_title="@string/hesap"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/navigation_message"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </com.gauravk.bubblenavigation.BubbleNavigationConstraintView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

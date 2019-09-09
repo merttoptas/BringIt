@@ -49,10 +49,6 @@ public class AccountFragment extends Fragment {
     SharedPreferences myPrefs;
     SharedPreferences.Editor editor;
 
-
-    //TODO dialog interface
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -77,19 +73,13 @@ public class AccountFragment extends Fragment {
         ivPhone = v.findViewById(R.id.ivPhone);
         navUserPhoto = v.findViewById(R.id.navUserPhoto);
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
-
-
         //firebase
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        tvMail.setText(myPrefs.getString("email", ""));
-        tvPhone.setText(myPrefs.getString("phone", ""));
-        tvWebSite.setText(myPrefs.getString("webSite", ""));
-
-
+        setAccountUser();
+        updateUser();
         btnSetAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +87,6 @@ public class AccountFragment extends Fragment {
                 dialogUret();
             }
         });
-
 
         return v;
 
@@ -115,7 +104,17 @@ public class AccountFragment extends Fragment {
 
         final EditText etWebSite = d.findViewById(R.id.etUserWebSite);
 
+        // dialog u var firebaseden gelen verilerle doldurduk
 
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(tvMail.getText().toString().matches("")){
+            etMail.setText(currentUser.getEmail());
+
+        }else {
+            etMail.setText(myPrefs.getString("email",""));
+        }
+        etPhoneNo.setText(myPrefs.getString("phone",""));
+        etWebSite.setText(myPrefs.getString("webSite",""));
 
         Button btnOlumlu = d.findViewById(R.id.btnSave_1);
         Button btnOlumsuz = d.findViewById(R.id.btnCikis_2);
@@ -181,5 +180,110 @@ public class AccountFragment extends Fragment {
         }
     }
 
+    private void updateUser(){
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+        }
+
+        if (user != null) {
+            for (UserInfo profile : user.getProviderData()) {
+                // Id of the provider (ex: google.com)
+                String providerId = profile.getProviderId();
+
+                // UID specific to the provider
+                String uid = profile.getUid();
+
+                // Name, email address, and profile photo Url
+                String name = profile.getDisplayName();
+                String email = profile.getEmail();
+                Uri photoUrl = profile.getPhotoUrl();
+            }
+        }
+
+        try {
+
+            if(tvMail.getText().toString().matches("")){
+                tvMail.setText(currentUser.getEmail());
+
+            }else {
+
+            }
+            if(tvPhone.getText().toString().matches("")){
+
+                tvPhone.setText(currentUser.getPhoneNumber());
+
+            }else {
+                Log.d("tvPhone", tvPhone.getText().toString());
+            }
+
+            tvAdSoyad.setText(currentUser.getDisplayName());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+
+        String facebookUserId = "";
+
+        for (UserInfo profile : user.getProviderData()) {
+            // check if the provider id matches "facebook.com"
+            if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+
+                facebookUserId = profile.getUid();
+
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+                Log.d("fbİmg", "fbİmgSuccess : " + photoUrl);
+
+                Glide.with(this).load(photoUrl).into(navUserPhoto);
+            } else if (GoogleAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                String personPhoto = acct.getPhotoUrl().toString();
+
+                Glide.with(this).load(personPhoto).into(navUserPhoto);
+
+                Log.d("imgUrl", "signInWithCredential:success: " + personPhoto);
+
+            }
+
+        }
+
+
+
+
+    }
+
+    private void setAccountUser(){
+        currentUser = mAuth.getCurrentUser();
+
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        if(tvMail.getText().toString().matches("")){
+
+            Log.d("tvMail", tvMail.getText().toString());
+
+        }else {
+            tvMail.setText(myPrefs.getString("email", ""));
+
+
+        }
+        if (tvPhone.getText().toString().matches("")){
+
+            tvPhone.setText(currentUser.getPhoneNumber());
+        }else {
+            tvPhone.setText(myPrefs.getString("phone", ""));
+        }
+
+        tvWebSite.setText(myPrefs.getString("webSite", ""));
+        tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
+    }
 
 }

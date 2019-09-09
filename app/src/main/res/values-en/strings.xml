@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BringIt</string>
+    <string name="aciklama">Explanation</string>
+    <string name="ayarla">Set</string>
+    <string name="baslik">Title</string>
+    <string name="btnCıkıs">Exit</string>
+    <string name="e_yan_n_bulundu_u_l">Province of Goods</string>
+    <string name="esyanin_basligi">Good of Title</string>
+    <string name="esyanin_cikacagi_kat_sayisi">Number of Storeys</string>
+    <string name="esyanin_gidecegi_il">Destination</string>
+    <string name="esyanin_gidecegi_ilce">District</string>
+    <string name="esyanin_tasinma_sekli">Way of Moving</string>
+</resources>

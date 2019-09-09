@@ -3,6 +3,7 @@ package com.merttoptas.bringit.Activity.Fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,9 +56,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -65,7 +71,7 @@ public class OfferFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     TextView etEsyaSekli, etKatSayisi, etKat;
-    EditText etBaslik, etdateTime, etAciklama;
+    EditText etBaslik, etAciklama;
     Button btnOfferSave;
     AutoCompleteTextView etIl, etIlce, etToIl, etToIlce;
     FusedLocationProviderClient mFusedLocationClient;
@@ -78,11 +84,14 @@ public class OfferFragment extends Fragment {
     Toolbar toolbar;
     TextView mTitle;
     Typeface typeface;
+    SharedPreferences myPrefs;
+    SharedPreferences.Editor editor;
+    TextView tvIlanSayisi;
+    int offerNumber =0;
 
 
 
     public OfferFragment() {
-        // Required empty public constructor
     }
 
 
@@ -150,8 +159,8 @@ public class OfferFragment extends Fragment {
         etToIlce = v.findViewById(R.id.etToIlce);
         btnOfferSave = v.findViewById(R.id.btnSave);
         scrollView = v.findViewById(R.id.scrollView);
-        etdateTime = v.findViewById(R.id.etdateTime);
         etAciklama = v.findViewById(R.id.etAciklama);
+        tvIlanSayisi = v.findViewById(R.id.tvIlanSayisi);
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/SourceSansPro-Regular.ttf");
         btnOfferSave.setTypeface(typeface);
@@ -160,6 +169,8 @@ public class OfferFragment extends Fragment {
         mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         mTitle.setText("İlan Ver");
+
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
@@ -231,9 +242,9 @@ public class OfferFragment extends Fragment {
 
 
         pTasima.setPicker(tasimaList);
-        pTasima.setSubmitButtonText("Tamam");
-        pTasima.setCancelButtonText("Kapat");
-        pTasima.setTitle("Kat Sayısı");
+        pTasima.setSubmitButtonText(R.string.tamam);
+        pTasima.setCancelButtonText(R.string.kapat);
+        pTasima.setTitle(getString(R.string.kat_sayisi));
         pTasima.setCyclic(false);
         pTasima.setSelectOptions(0);
         pTasima.setSelectOptions(0);
@@ -270,9 +281,9 @@ public class OfferFragment extends Fragment {
         final  MyOptionsPickerView<String>  pKatList = new MyOptionsPickerView<>(getActivity());
 
         pKatList.setPicker(katList);
-        pKatList.setSubmitButtonText("Tamam");
-        pKatList.setCancelButtonText("Kapat");
-        pKatList.setTitle("Kat Sayısı");
+        pKatList.setSubmitButtonText(R.string.tamam);
+        pKatList.setCancelButtonText(R.string.kapat);
+        pKatList.setTitle(getString(R.string.kat_sayisi));
         pKatList.setCyclic(false);
         pKatList.setSelectOptions(0);
         pKatList.setSelectOptions(0);
@@ -309,9 +320,9 @@ public class OfferFragment extends Fragment {
 
 
         pKatSayisi.setPicker(odaList);
-        pKatSayisi.setSubmitButtonText("Tamam");
-        pKatSayisi.setCancelButtonText("Kapat");
-        pKatSayisi.setTitle("Kat Sayısı");
+        pKatSayisi.setSubmitButtonText(R.string.tamam);
+        pKatSayisi.setCancelButtonText(R.string.kapat);
+        pKatSayisi.setTitle(getString(R.string.kat_sayisi));
         pKatSayisi.setCyclic(false);
         pKatSayisi.setSelectOptions(0);
         pKatSayisi.setSelectOptions(0);
@@ -338,56 +349,74 @@ public class OfferFragment extends Fragment {
         });
 
     }
+
+
     private void OfferSave() {
+        if(etBaslik.getText().toString().matches("") & etEsyaSekli.getText().toString().matches("")
+                &  etKatSayisi.getText().toString().matches("")
+                & etIl.getText().toString().matches("")   & etIlce.getText().toString().matches("")
+                & etToIl.getText().toString().matches("") & etToIlce.getText().toString().matches("")
+                & etKat.getText().toString().matches("")  & etAciklama.getText().toString().matches(""))
+        {
+            Toast.makeText(getActivity(), getString(R.string.eksik_bilgiler), Toast.LENGTH_SHORT).show();
 
-        try {
-            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("offersLocation").child("offers").child("location");
+            return;
 
-            LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }else {
 
-                    return;
+            try {
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("offersLocation").child("offers").child("location");
+
+                LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                        return;
+                    }
                 }
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                latitude =location.getLatitude();
+                longitude = location .getLongitude();
+
+                String etdateTime = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                Log.d("CurrentDate", etdateTime.toString());
+                dbRef.push().setValue(
+                        new Offer(
+                                etBaslik.getText().toString(),
+                                etEsyaSekli.getText().toString(),
+                                etKatSayisi.getText().toString(),
+                                etIl.getText().toString(),
+                                etIlce.getText().toString(),
+                                etToIl.getText().toString(),
+                                etToIlce.getText().toString(),
+                                etKat.getText().toString(),
+                                latitude,
+                                longitude,
+                                etdateTime,
+                                etAciklama.getText().toString()
+                        )
+                );
+                offerNumber++;
+                textClear();
+                Toast.makeText(getActivity(), getString(R.string.basariya_kaydedildi), Toast.LENGTH_SHORT).show();
+                System.out.println(offerNumber);
+                myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                editor =myPrefs.edit();
+
+                editor.putString("offerNumber", Integer.toString(offerNumber));
+                editor.apply();
+
+            }catch (Exception e){
+
+                e.printStackTrace();
+
+                Toast.makeText(getActivity(), getString(R.string.kayit_basarisiz), Toast.LENGTH_SHORT).show();
             }
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude =location.getLatitude();
-            longitude = location .getLongitude();
-
-            dbRef.push().setValue(
-                    new Offer(
-                            etBaslik.getText().toString(),
-                            etEsyaSekli.getText().toString(),
-                            etKatSayisi.getText().toString(),
-                            etIl.getText().toString(),
-                            etIlce.getText().toString(),
-                            etToIl.getText().toString(),
-                            etToIlce.getText().toString(),
-                            etKat.getText().toString(),
-                            latitude,
-                            longitude,
-                            etdateTime.getText().toString(),
-                            etAciklama.getText().toString()
-
-                    )
-
-            );
-
-
-            Toast.makeText(getActivity(), "Başarıyla Kaydedildi!", Toast.LENGTH_SHORT).show();
-
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-
-            Toast.makeText(getActivity(), "Kayıt Başarısız Oldu!", Toast.LENGTH_SHORT).show();
         }
 
+
     }
-
-
 
     private LocationCallback mLocationCallback = new LocationCallback(){
         @Override
@@ -396,11 +425,8 @@ public class OfferFragment extends Fragment {
                 mLastLocation = location;
 
             }
-
         }
     };
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -536,4 +562,15 @@ public class OfferFragment extends Fragment {
         etToIl.setThreshold(0);
     }
 
+    private void textClear(){
+        etBaslik.getText().clear();
+        etEsyaSekli.setText("");
+        etKatSayisi.setText("");
+        etAciklama.getText().clear();
+        etIl.getText().clear();
+        etToIlce.getText().clear();
+        etIlce.getText().clear();
+        etToIl.getText().clear();
+
+    }
 }

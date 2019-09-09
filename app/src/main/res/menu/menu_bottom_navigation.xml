@@ -10,7 +10,7 @@
 
     <item android:id="@+id/navigation_offer"
         android:title="@string/ilan_ver"
-        android:icon="@drawable/ic_add_circle_outline_black_24dp"/>
+        android:icon="@drawable/ic_add_circle_black"/>
 
     <item android:id="@+id/navigation_message"
         android:title="@string/mesajlar"
@@ -19,7 +19,7 @@
 
      <item android:id="@+id/navigation_account"
          android:title="@string/hesap"
-         android:icon="@drawable/ic_account_circle_black_24dp"/>
+         android:icon="@drawable/ic_account_circle_black"/>
 
 
 

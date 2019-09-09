@@ -26,11 +26,11 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginRight="24dp"
+                android:fontFamily="@font/abeezee"
+                android:hint="@string/mail_adresi"
                 android:inputType="textEmailAddress"
                 android:textAlignment="textStart"
-                android:textSize="18sp"
-                android:hint="Mail Adresi"
-                android:textStyle="bold" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/etPhoneNo"
@@ -41,11 +41,11 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="24dp"
-                android:hint="Tel No"
+                android:fontFamily="@font/abeezee"
+                android:hint="@string/tel_no"
                 android:inputType="phone"
                 android:textAlignment="textStart"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/etUserWebSite"
@@ -56,10 +56,9 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="24dp"
-                android:hint="Web Sitesi"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:fontFamily="@font/abeezee"
+                android:hint="@string/web_sitesi"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnSave_1"
@@ -68,28 +67,26 @@
                 android:layout_alignEnd="@+id/etMailAdress"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="190dp"
-                android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_button_border"
-                android:text="Kaydet" />
+                android:fontFamily="@font/abeezee"
+                android:text="@string/kaydet"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btnCikis_2"
                 android:layout_width="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/etMailAdress"
-                android:textColor="@color/white"
                 android:layout_alignTop="@+id/btnSave_1"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_button_border"
-                android:text="İptal" />
+                android:fontFamily="@font/abeezee"
+                android:text="@string/iptal"
+                android:textColor="@color/white" />
 
         </RelativeLayout>
 
-
     </androidx.cardview.widget.CardView>
-
-
-
 
 </RelativeLayout>
