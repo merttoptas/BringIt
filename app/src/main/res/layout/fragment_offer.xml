@@ -100,7 +100,7 @@
                 android:focusable="true"
                 android:fontFamily="@font/abeezee"
                 android:gravity="bottom"
-                android:hint="@string/kat_say_s"
+                android:hint="@string/kat_sayisi"
                 android:inputType="number"
                 android:padding="10dp"
                 android:textAlignment="textStart"

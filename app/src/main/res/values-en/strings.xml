@@ -11,4 +11,25 @@
     <string name="esyanin_gidecegi_il">Destination</string>
     <string name="esyanin_gidecegi_ilce">District</string>
     <string name="esyanin_tasinma_sekli">Way of Moving</string>
+    <string name="basariya_kaydedildi">"Saved Successfully! "</string>
+    <string name="eksik_bilgiler">"Missing Information! "</string>
+    <string name="hesap">Account</string>
+    <string name="ilanlar">Leads</string>
+    <string name="iptal">Cancel</string>
+    <string name="kapat">Close</string>
+    <string name="kat_sayisi">"Number of Floors "</string>
+    <string name="kaydet">Save</string>
+    <string name="kayit_basarisiz">"Registration Failed! "</string>
+    <string name="llce">District</string>
+    <string name="location_izin_Ver">"Please allow me! "</string>
+    <string name="mail_adresi">"Mail Address "</string>
+    <string name="mesajlar">Messages</string>
+    <string name="tamam">OK</string>
+    <string name="tarih">Date</string>
+    <string name="tasima">Transport</string>
+    <string name="tel_no">"Phone Number "</string>
+    <string name="veriler_alinamadi">"Data Failed! "</string>
+    <string name="web_sitesi">Website</string>
+    <string name="mesaj_yazma">"Send a Message! "</string>
+    <string name="ilan_ver">Advertise</string>
 </resources>

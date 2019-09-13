@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/abeezee"
-        android:text="Mesajlar"
+        android:text="@string/mesajlar"
         android:textColor="@color/white" />
 </androidx.appcompat.widget.Toolbar>
 

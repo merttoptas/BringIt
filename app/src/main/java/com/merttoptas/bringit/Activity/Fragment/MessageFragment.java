@@ -35,7 +35,7 @@ public class MessageFragment extends Fragment {
         toolbar = v.findViewById(R.id.toolbar);
         mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
-        mTitle.setText("Mesajlar");
+        mTitle.setText(R.string.mesajlar);
 
 
         return v;

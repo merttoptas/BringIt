@@ -10,7 +10,6 @@
     <string name="splashText" translatable="false">Bring It</string>
     <string name="tv_main">Taşınacak eşyalarınız için Bring İt aracılığıyla, ilan bilgisini girerek, teklif alabilirsiniz.
         Eğer, eşya taşımayı düşünüyorsanız ilanlara bakarak, teklif verebilirisniz.</string>
-    <string name="kat_say_s">Kat Sayısı</string>
     <string name="tarih">Tarih</string>
     <string name="e_yan_n_bulundu_u_l">Eşyanın Bulunduğu İl</string>
     <string name="llce">İlçe</string>
@@ -28,9 +27,8 @@
     <string name="mesajlar">Mesajlar</string>
     <string name="hesap">Hesap</string>
     <string name="ayarla">Ayarla</string>
-    <string name="bringit">BringIt</string>
+    <string name="bringit" translatable="false">BringIt</string>
     <string name="tvNameSurname" translatable="false">Mert Toptaş</string>
-    <string name="lanlar">İlanlar</string>
     <string name="tasima">Taşıma</string>
     <string name="tvMail_account" translatable="false">merttoptas34@gmail.com</string>
     <string name="tvPhone_account" translatable="false">+901234567890</string>
@@ -45,11 +43,12 @@
     <string name="web_sitesi">Web Sitesi</string>
     <string name="kaydet">Kaydet</string>
     <string name="iptal">İptal</string>
-    <string name="veriler_alinamadi">Veriler Alınamadı</string>
-    <string name="location_izin_Ver">Lütfen izin verin</string>
+    <string name="veriler_alinamadi">Veriler Alınamadı!</string>
+    <string name="location_izin_Ver">Lütfen izin verin!</string>
     <string name="kayit_basarisiz">Kayıt Başarısız Oldu!</string>
     <string name="basariya_kaydedildi">Başarıyla Kaydedildi!</string>
     <string name="eksik_bilgiler">Eksik Bilgiler Girdiniz!</string>
+    <string name="mesaj_yazma">Bir Mesaj Gönderin!</string>
 
 
     <string-array name="tasinmaSekli">

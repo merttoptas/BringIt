@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/btn_send"
             android:fontFamily="@font/abeezee"
-            android:hint="Bir Mesaj Yazın"
+            android:hint="@string/mesaj_yazma"
             android:textAlignment="textStart"
             android:textSize="14sp" />
 

@@ -1,15 +1,11 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
-
 import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -126,7 +119,6 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
                 tvMail.setText(etMail.getText().toString());
                 tvPhone.setText(etPhoneNo.getText().toString());
                 tvWebSite.setText(etWebSite.getText().toString());
@@ -137,13 +129,9 @@ public class AccountFragment extends Fragment {
                 editor.putString("email", etMail.getText().toString());
                 editor.putString("phone", etPhoneNo.getText().toString());
                 editor.putString("webSite", etWebSite.getText().toString());
-
                 editor.apply();
 
-
                 d.dismiss();
-
-
 
             }
         });
@@ -167,11 +155,6 @@ public class AccountFragment extends Fragment {
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
             Log.d("dbCurrentUser", "currentUser" + currentUser.getDisplayName() +currentUser.getEmail());
-            if (currentUser == null) {
-
-                Toast.makeText(getActivity(), "Veriler Alınamadı!", Toast.LENGTH_SHORT).show();
-
-            }
 
         } catch (Exception e) {
 
@@ -232,7 +215,6 @@ public class AccountFragment extends Fragment {
 
         }
 
-
         String facebookUserId = "";
 
         for (UserInfo profile : user.getProviderData()) {
@@ -256,12 +238,10 @@ public class AccountFragment extends Fragment {
 
         }
 
-
-
-
     }
 
     private void setAccountUser(){
+
         currentUser = mAuth.getCurrentUser();
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -272,8 +252,6 @@ public class AccountFragment extends Fragment {
 
         }else {
             tvMail.setText(myPrefs.getString("email", ""));
-
-
         }
         if (tvPhone.getText().toString().matches("")){
 

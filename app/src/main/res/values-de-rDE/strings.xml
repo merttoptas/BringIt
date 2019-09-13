@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BringIt</string>
+    <string name="basariya_kaydedildi">" Erfolgreich gespeichert!"</string>
+    <string name="baslik">"Titel "</string>
+    <string name="aciklama">"Aussage "</string>
+    <string name="ayarla">Einstellen</string>
+    <string name="btnCıkıs">Ausgang</string>
+    <string name="e_yan_n_bulundu_u_l">"Provinz der Waren "</string>
+    <string name="mesaj_yazma">"Eine Nachricht schicken! "</string>
 </resources>

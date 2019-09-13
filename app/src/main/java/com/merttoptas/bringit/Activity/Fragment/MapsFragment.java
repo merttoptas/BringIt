@@ -278,7 +278,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 new android.app.AlertDialog.Builder(getActivity())
                         .setTitle("İzin Ver")
                         .setMessage("Lokasyon Kullanıma İzin Ver")
-                        .setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.tamam), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -370,6 +370,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void mlocationRequest(){
+
         mLocationRequest = new LocationRequest();
         //i nterval for active location updates, in milliseconds
         mLocationRequest.setInterval(15000);
@@ -424,7 +425,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
               }
           });
-
 
     }
 }

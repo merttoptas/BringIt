@@ -65,7 +65,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:20.2.0'
 
     //Picker Library
-    implementation 'com.ramesh.mypicker:pickerview:1.1'
+        implementation 'com.ramesh.mypicker:pickerview:1.1'
 
     //Json
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'

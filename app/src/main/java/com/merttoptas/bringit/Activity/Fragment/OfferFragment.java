@@ -8,17 +8,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,7 +29,6 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bigkoo.pickerview.MyOptionsPickerView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -51,12 +47,10 @@ import com.merttoptas.bringit.Activity.Model.DistrictList;
 import com.merttoptas.bringit.Activity.Model.GlobalBus;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.R;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -168,7 +162,7 @@ public class OfferFragment extends Fragment {
         toolbar = v.findViewById(R.id.toolbar);
         mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
-        mTitle.setText("İlan Ver");
+        mTitle.setText(R.string.ilan_ver);
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -563,6 +557,7 @@ public class OfferFragment extends Fragment {
     }
 
     private void textClear(){
+
         etBaslik.getText().clear();
         etEsyaSekli.setText("");
         etKatSayisi.setText("");
