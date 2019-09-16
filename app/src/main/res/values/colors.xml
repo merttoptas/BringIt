@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#03a9f4</color>
     <color name="colorAccent">#64b5f6</color>
     <color name="white">#FFFFFF</color>
+    <color name="bubleButtomcolor">#424242</color>
+    <color name="colorPrimaryDarkMode">#212121</color>
+    <color name="colorPrimaryDarkNight">#000000</color>
 
     <color name="red_active">#f44336</color>
     <color name="purple_active">#9c27b0</color>

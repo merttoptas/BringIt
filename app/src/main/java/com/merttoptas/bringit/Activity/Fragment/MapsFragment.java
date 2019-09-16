@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,7 +78,7 @@ import java.util.Map;
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private RecyclerView recyclerView;
-    private GoogleMap mMap;
+    GoogleMap mMap;
     private Marker marker;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
@@ -110,6 +111,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
         mGeoDataClient = Places.getGeoDataClient(this.getActivity(),null);
+
 
         if(currentUser !=null){
 
@@ -348,9 +350,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                     Offer o = snapshot.getValue(Offer.class);
                     offerlist.add(o);
-                    offerlist.add(new Reklam(
-                            "54544"
-                    ));
+                    //offerlist.add(new Reklam(
+                     //       "54544"
+                   // ));
 
                 }
 

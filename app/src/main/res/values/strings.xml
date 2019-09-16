@@ -49,6 +49,7 @@
     <string name="basariya_kaydedildi">Başarıyla Kaydedildi!</string>
     <string name="eksik_bilgiler">Eksik Bilgiler Girdiniz!</string>
     <string name="mesaj_yazma">Bir Mesaj Gönderin!</string>
+    <string name="gece_modu">Gece Modu</string>
 
 
     <string-array name="tasinmaSekli">

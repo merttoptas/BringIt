@@ -32,4 +32,5 @@
     <string name="web_sitesi">Website</string>
     <string name="mesaj_yazma">"Send a Message! "</string>
     <string name="ilan_ver">Advertise</string>
+    <string name="gece_modu">Night Mode</string>
 </resources>

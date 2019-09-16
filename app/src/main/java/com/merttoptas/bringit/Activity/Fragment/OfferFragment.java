@@ -84,7 +84,6 @@ public class OfferFragment extends Fragment {
     int offerNumber =0;
 
 
-
     public OfferFragment() {
     }
 
@@ -248,7 +247,7 @@ public class OfferFragment extends Fragment {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3) {
                 try {
-                    etEsyaSekli.setText(tasimaList.get(options1));
+                    etEsyaSekli.setText(tasimaList.get(options1).toUpperCase());
 
                 }catch (Exception e){
                     e.fillInStackTrace();
@@ -377,7 +376,7 @@ public class OfferFragment extends Fragment {
                 Log.d("CurrentDate", etdateTime.toString());
                 dbRef.push().setValue(
                         new Offer(
-                                etBaslik.getText().toString(),
+                                etBaslik.getText().toString().toUpperCase(),
                                 etEsyaSekli.getText().toString(),
                                 etKatSayisi.getText().toString(),
                                 etIl.getText().toString(),
@@ -388,7 +387,7 @@ public class OfferFragment extends Fragment {
                                 latitude,
                                 longitude,
                                 etdateTime,
-                                etAciklama.getText().toString()
+                                etAciklama.getText().toString().toUpperCase()
                         )
                 );
                 offerNumber++;

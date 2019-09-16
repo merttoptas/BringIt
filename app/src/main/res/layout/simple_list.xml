@@ -18,8 +18,8 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:fontFamily="sans-serif-medium"
+    android:background="?attr/backgroundcolor"
+    android:fontFamily="@font/abeezee"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
@@ -27,5 +27,5 @@
     android:textAlignment="center"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:textColor="@color/colorPrimary"
-    android:textSize="14sp"
+    android:textSize="12sp"
     android:textStyle="bold" />

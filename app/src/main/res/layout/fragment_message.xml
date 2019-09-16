@@ -20,16 +20,17 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerview"
             android:layout_below="@id/toolbar"
+            android:background="?attr/backgroundcolor"
             android:layout_above="@id/relative_bottom">
 
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <RelativeLayout
+            android:id="@+id/relative_bottom"
             android:layout_width="match_parent"
             android:padding="5dp"
-            android:id="@+id/relative_bottom"
-            android:background="#FFFF"
+            android:background="?attr/backgroundcolor"
             android:layout_alignParentBottom="true"
             android:layout_height="wrap_content">
 
@@ -41,6 +42,8 @@
                 android:layout_toLeftOf="@id/btn_send"
                 android:fontFamily="@font/abeezee"
                 android:hint="Bir Mesaj Yazın"
+                android:textColor="?attr/textcolor"
+                android:textColorHint="?attr/textcolor"
                 android:textAlignment="textStart"
                 android:textSize="14sp" />
 

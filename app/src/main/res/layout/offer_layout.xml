@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
     android:layout_margin="3dp"
+    app:cardBackgroundColor="?attr/cardbackground"
     app:cardPreventCornerOverlap="true">
 
     <LinearLayout
@@ -34,7 +35,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/baslik"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="12sp" />
 
             <TextView
@@ -47,7 +48,7 @@
                 android:fontFamily="@font/abeezee"
                 android:shadowColor="@color/white"
                 android:text="@string/textview"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="10sp"
                 tools:ignore="SmallSp" />
 
@@ -61,7 +62,7 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/textview"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -81,7 +82,7 @@
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/baslik"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="12sp">
 
             </TextView>
@@ -95,7 +96,7 @@
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/textview"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="10sp" />
 
 
@@ -108,7 +109,7 @@
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/textview"
-                android:textColor="@color/quantum_black_100"
+                android:textColor="?attr/offerlayoutcolor"
                 android:textSize="10sp"
                 tools:ignore="RelativeOverlap,SmallSp" />
 

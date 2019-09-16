@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/FrameLayout"
+    android:background="?attr/backgroundcolor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.merttoptas.bringit.Activity.Fragment.AccountFragment">
@@ -9,6 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout0"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,6 +42,7 @@
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="10dp"
+                    app:cardBackgroundColor="?attr/cardbackground"
                     app:cardPreventCornerOverlap="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
@@ -67,6 +70,8 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/abeezee"
                                 android:text="@string/ilanlar"
+                                android:textColor="?attr/textcolor"
+                                android:textAllCaps="false"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -94,6 +99,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/abeezee"
+                                android:textColor="?attr/textcolor"
                                 android:text="@string/tasima"
                                 android:textSize="18sp" />
 
@@ -134,7 +140,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/abeezee"
                         android:text="@string/tvNameSurname"
-                        android:textColor="#fff"
+                        android:textColor="?attr/textcolor"
                         android:textSize="21sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +195,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearweb" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 
         <LinearLayout
             android:id="@+id/linearweb"
@@ -201,7 +208,7 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal"
             android:paddingStart="25dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnSetAccount"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearlayoutPhone"
@@ -222,6 +229,7 @@
                 android:layout_marginStart="25dp"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/tvWebSite_account"
+                android:textColor="?attr/textcolor"
                 android:textAllCaps="false"
                 android:textStyle="bold" />
 
@@ -259,6 +267,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="25dp"
                 android:fontFamily="@font/abeezee"
+                android:textColor="?attr/textcolor"
                 android:text="@string/tvMail_account"
                 android:textStyle="bold" />
 
@@ -294,8 +303,50 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="25dp"
                 android:fontFamily="@font/abeezee"
+                android:textColor="?attr/textcolor"
                 android:text="@string/tvPhone_account"
                 android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="25dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/btnSetAccount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearweb">
+
+
+            <ImageView
+                android:id="@+id/ivNightMode"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_camera_night_mode" />
+
+            <Switch
+                android:id="@+id/mySwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="25dp"
+                android:checked="false"
+                android:fontFamily="@font/abeezee"
+                android:text="@string/gece_modu"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="?attr/textcolor" />
 
 
         </LinearLayout>

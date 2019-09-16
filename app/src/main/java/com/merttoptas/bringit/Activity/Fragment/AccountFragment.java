@@ -1,10 +1,13 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -12,10 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -23,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.R;
 
 
@@ -36,6 +43,8 @@ public class AccountFragment extends Fragment {
     private TextView tvWebSite;
     private ImageView navUserPhoto;
     private TextView tvAdSoyad;
+    private ImageView ivNightMode;
+    private Switch mySwitch;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     ImageView ivMail,ivPhone;
@@ -52,6 +61,13 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+
+            getActivity().setTheme(R.style.darktheme);
+        }else {
+
+            getActivity().setTheme(R.style.AppTheme);
+        }
         View v= inflater.inflate(R.layout.fragment_account, container, false);
 
         tvAdSoyad = (TextView) v.findViewById(R.id.tvAdSoyad);
@@ -65,7 +81,29 @@ public class AccountFragment extends Fragment {
         ivMail = v.findViewById(R.id.ivMail);
         ivPhone = v.findViewById(R.id.ivPhone);
         navUserPhoto = v.findViewById(R.id.navUserPhoto);
+        ivNightMode = v.findViewById(R.id.ivNightMode);
+        mySwitch = v.findViewById(R.id.mySwitch);
+
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
+
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+
+            mySwitch.setChecked(true);
+        }
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                if(isChecked){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    restartApp();
+                }else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    restartApp();
+                }
+            }
+        });
+
         //firebase
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -84,6 +122,20 @@ public class AccountFragment extends Fragment {
         return v;
 
 
+
+
+    }
+
+    private void restartApp(){
+        AccountFragment accountFragment = (AccountFragment)
+                getFragmentManager().findFragmentById(R.id.container);
+        getFragmentManager().beginTransaction()
+                .detach(accountFragment)
+                .attach(accountFragment)
+                .commit();
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
 

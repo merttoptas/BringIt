@@ -8,4 +8,5 @@
     <string name="btnCıkıs">Ausgang</string>
     <string name="e_yan_n_bulundu_u_l">"Provinz der Waren "</string>
     <string name="mesaj_yazma">"Eine Nachricht schicken! "</string>
+    <string name="gece_modu">Nachtmodus</string>
 </resources>

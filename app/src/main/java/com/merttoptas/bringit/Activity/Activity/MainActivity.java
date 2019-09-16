@@ -2,9 +2,13 @@ package com.merttoptas.bringit.Activity.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -42,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
     @Override
     protected void onStart() {
         super.onStart();
-
         bubbleNavigation.setCurrentActiveItem(0);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
 
@@ -54,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-
-
         bubbleNavigation = findViewById(R.id.bottom_navigation_view_linear);
         bubbleNavigation.setNavigationChangeListener(this);
         bubbleNavigation.setCurrentActiveItem(navigation_maps);
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
         etAciklama = findViewById(R.id.etAciklama);
 
     }
+
 
     @Override
     public void onNavigationChanged(View view, int position) {
@@ -135,5 +137,20 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            int bubleButtomcolor = Color.parseColor("#424242");
+            bubbleNavigation.setBackgroundColor(bubleButtomcolor);
+
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            int bubleBottomColor = Color.parseColor("#ffffffff");
+            bubbleNavigation.setBackgroundColor(bubleBottomColor);
+        }
+
+    }
 
 }

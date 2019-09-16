@@ -20,12 +20,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public List<Object> list;
     private final static int TIP_Offer =1, TIP_Reklam =2;
     private final int VIEW_TYPE_LOADING = 3;
-
-
     private Context context;
-
-
     public RecyclerViewAdapter(List<Object> offerlist, Context context) {
+
         list = offerlist;
         this.context = context;
     }

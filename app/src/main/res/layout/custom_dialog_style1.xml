@@ -12,9 +12,11 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
+        android:background="?attr/cardbackground"
         >
 
         <RelativeLayout
+            android:background="?attr/cardbackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -27,6 +29,8 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginRight="24dp"
                 android:fontFamily="@font/abeezee"
+                android:textColor="?attr/textcolor"
+                android:textColorHint="?attr/textcolor"
                 android:hint="@string/mail_adresi"
                 android:inputType="textEmailAddress"
                 android:textAlignment="textStart"
@@ -42,6 +46,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="24dp"
                 android:fontFamily="@font/abeezee"
+                android:textColor="?attr/textcolor"
+                android:textColorHint="?attr/textcolor"
                 android:hint="@string/tel_no"
                 android:inputType="phone"
                 android:textAlignment="textStart"
@@ -57,6 +63,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="24dp"
                 android:fontFamily="@font/abeezee"
+                android:textColor="?attr/textcolor"
+                android:textColorHint="?attr/textcolor"
                 android:hint="@string/web_sitesi"
                 android:textSize="14sp" />
 
