@@ -33,7 +33,6 @@ import com.bigkoo.pickerview.MyOptionsPickerView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,17 +141,17 @@ public class OfferFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
 
         //Resource of Items
-        etBaslik = v.findViewById(R.id.etBaslik);
-        etEsyaSekli = v.findViewById(R.id.etEsyaSekli);
-        etKatSayisi = v.findViewById(R.id.etKatSayisi);
-        etIl = v.findViewById(R.id.etIl);
-        etIlce = v.findViewById(R.id.etIlce);
-        etToIl = v.findViewById(R.id.etToİl);
-        etKat = v.findViewById(R.id.etKat);
-        etToIlce = v.findViewById(R.id.etToIlce);
-        btnOfferSave = v.findViewById(R.id.btnSave);
+        etBaslik = v.findViewById(R.id.mTvBaslik);
+        etEsyaSekli = v.findViewById(R.id.mTvEsyaSekli);
+        etKatSayisi = v.findViewById(R.id.mTvKatSayisi);
+        etIl = v.findViewById(R.id.mTvetIl);
+        etIlce = v.findViewById(R.id.mTvIlce);
+        etToIl = v.findViewById(R.id.mTvToİl);
+        etKat = v.findViewById(R.id.mTvKat);
+        etToIlce = v.findViewById(R.id.mTvToIlce);
+        btnOfferSave = v.findViewById(R.id.btnSend);
         scrollView = v.findViewById(R.id.scrollView);
-        etAciklama = v.findViewById(R.id.etAciklama);
+        etAciklama = v.findViewById(R.id.mTvAciklama);
         tvIlanSayisi = v.findViewById(R.id.tvIlanSayisi);
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/SourceSansPro-Regular.ttf");

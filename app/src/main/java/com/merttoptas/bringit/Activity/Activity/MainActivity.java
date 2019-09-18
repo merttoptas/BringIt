@@ -7,17 +7,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
-import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
 import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
 import com.merttoptas.bringit.Activity.Fragment.MessageFragment;
@@ -25,9 +23,9 @@ import com.merttoptas.bringit.Activity.Fragment.OfferFragment;
 import com.merttoptas.bringit.R;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements BubbleNavigationChangeListener{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    BubbleNavigationConstraintView bubbleNavigation;
+    BottomNavigationView bottomNavigationView;
     AccountFragment accountFragment = new AccountFragment();
     MapsFragment mapsFragment = new MapsFragment();
     MessageFragment messageFragment = new MessageFragment();
@@ -36,18 +34,23 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
     public double longitude;
     AutoCompleteTextView etIl, etIlce, etToİl, etToIlce;
     TextView etEsyaSekli, etKatSayisi, etKat;
-    EditText etBaslik, etdateTime, etAciklama;
+    EditText etBaslik, etAciklama;
     Button btnOfferSave;
-    private final static int navigation_maps =0, navigation_offer =1,navigation_message =2, navigation_account =3;
     Typeface typeface;
-
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        bubbleNavigation.setCurrentActiveItem(0);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
+
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
+
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
+        }else if(AppCompatDelegate.getDefaultNightMode() ==AppCompatDelegate.MODE_NIGHT_NO){
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
+
+        }
 
     }
 
@@ -57,62 +60,46 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-        bubbleNavigation = findViewById(R.id.bottom_navigation_view_linear);
-        bubbleNavigation.setNavigationChangeListener(this);
-        bubbleNavigation.setCurrentActiveItem(navigation_maps);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view_linear);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
-        bubbleNavigation.setTypeface(typeface);
 
         //Resource of Items
-        etBaslik = findViewById(R.id.etBaslik);
-        etEsyaSekli = findViewById(R.id.etEsyaSekli);
-        etKatSayisi = findViewById(R.id.etKatSayisi);
-        etIl = findViewById(R.id.etIl);
-        etIlce = findViewById(R.id.etIlce);
-        etToİl = findViewById(R.id.etToİl);
-        etKat = findViewById(R.id.etKat);
-        etToIlce = findViewById(R.id.etToIlce);
-        btnOfferSave = findViewById(R.id.btnSave);
-        etAciklama = findViewById(R.id.etAciklama);
+        etBaslik = findViewById(R.id.mTvBaslik);
+        etEsyaSekli = findViewById(R.id.mTvEsyaSekli);
+        etKatSayisi = findViewById(R.id.mTvKatSayisi);
+        etIl = findViewById(R.id.mTvetIl);
+        etIlce = findViewById(R.id.mTvIlce);
+        etToİl = findViewById(R.id.mTvToİl);
+        etKat = findViewById(R.id.mTvKat);
+        etToIlce = findViewById(R.id.mTvToIlce);
+        btnOfferSave = findViewById(R.id.btnSend);
+        etAciklama = findViewById(R.id.mTvAciklama);
 
     }
 
-
     @Override
-    public void onNavigationChanged(View view, int position) {
-        bubbleNavigation.setNavigationChangeListener(new BubbleNavigationChangeListener() {
-            @Override
-            public void onNavigationChanged(View view, int position) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                switch (position) {
-                    case navigation_account:
+        switch (menuItem.getItemId()) {
 
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
-                        bubbleNavigation.getCurrentActiveItemPosition();
+            case R.id.navigation_account:
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
+                return  true;
+            case R.id.navigation_offer:
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, offerFragment).commit();
+                return  true;
 
-                        break;
-                    case navigation_offer:
+            case R.id.navigation_maps:
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
+                return true;
+            case R.id.navigation_message:
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, messageFragment).commit();
+                return true;
+        }
 
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, offerFragment).commit();
-                        bubbleNavigation.getCurrentActiveItemPosition();
-
-                        break;
-                    case navigation_maps:
-
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
-                        bubbleNavigation.getCurrentActiveItemPosition();
-                        break;
-                    case navigation_message:
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, messageFragment).commit();
-                        bubbleNavigation.getCurrentActiveItemPosition();
-                        break;
-                }
-
-
-            }
-        });
-
-
+        return false;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter{
@@ -143,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements BubbleNavigationC
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             int bubleButtomcolor = Color.parseColor("#424242");
-            bubbleNavigation.setBackgroundColor(bubleButtomcolor);
+            bottomNavigationView.setBackgroundColor(bubleButtomcolor);
 
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             int bubleBottomColor = Color.parseColor("#ffffffff");
-            bubbleNavigation.setBackgroundColor(bubleBottomColor);
+            bottomNavigationView.setBackgroundColor(bubleBottomColor);
         }
 
     }

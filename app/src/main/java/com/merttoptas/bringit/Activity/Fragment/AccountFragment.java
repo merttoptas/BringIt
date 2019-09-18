@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -21,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -31,6 +32,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.R;
+
+import static com.merttoptas.bringit.R.drawable.bg_ac_nightmode;
+import static com.merttoptas.bringit.R.drawable.bg_account_gradient;
 
 
 public class AccountFragment extends Fragment {
@@ -50,11 +54,11 @@ public class AccountFragment extends Fragment {
     ImageView ivMail,ivPhone;
     SharedPreferences myPrefs;
     SharedPreferences.Editor editor;
+    ConstraintLayout constraintLayout3;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
     }
 
@@ -83,6 +87,7 @@ public class AccountFragment extends Fragment {
         navUserPhoto = v.findViewById(R.id.navUserPhoto);
         ivNightMode = v.findViewById(R.id.ivNightMode);
         mySwitch = v.findViewById(R.id.mySwitch);
+        constraintLayout3 = v.findViewById(R.id.constraintLayout3);
 
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
 
@@ -96,10 +101,10 @@ public class AccountFragment extends Fragment {
 
                 if(isChecked){
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    restartApp();
+                    //restartApp();
                 }else{
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    restartApp();
+                    //restartApp();
                 }
             }
         });
@@ -122,20 +127,14 @@ public class AccountFragment extends Fragment {
         return v;
 
 
-
-
     }
 
     private void restartApp(){
-        AccountFragment accountFragment = (AccountFragment)
-                getFragmentManager().findFragmentById(R.id.container);
-        getFragmentManager().beginTransaction()
-                .detach(accountFragment)
-                .attach(accountFragment)
-                .commit();
-
+        MapsFragment mapsFragment = new MapsFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
+
     }
 
 
@@ -163,8 +162,8 @@ public class AccountFragment extends Fragment {
 
         Button btnOlumlu = d.findViewById(R.id.btnSave_1);
         Button btnOlumsuz = d.findViewById(R.id.btnCikis_2);
-        btnOlumlu.setText("Kaydet");
-        btnOlumsuz.setText("Çıkış");
+        btnOlumlu.setText(getString(R.string.kaydet));
+        btnOlumsuz.setText(getString(R.string.kapat));
 
 
         btnOlumlu.setOnClickListener(new View.OnClickListener() {
@@ -260,7 +259,7 @@ public class AccountFragment extends Fragment {
                 Log.d("tvPhone", tvPhone.getText().toString());
             }
 
-            tvAdSoyad.setText(currentUser.getDisplayName());
+            tvAdSoyad.setText(currentUser.getDisplayName().toUpperCase());
         }
         catch (Exception e){
             e.printStackTrace();
