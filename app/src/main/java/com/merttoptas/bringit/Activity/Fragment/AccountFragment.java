@@ -3,8 +3,6 @@ package com.merttoptas.bringit.Activity.Fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -33,9 +31,6 @@ import com.google.firebase.auth.UserInfo;
 import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.R;
 
-import static com.merttoptas.bringit.R.drawable.bg_ac_nightmode;
-import static com.merttoptas.bringit.R.drawable.bg_account_gradient;
-
 
 public class AccountFragment extends Fragment {
 
@@ -48,7 +43,7 @@ public class AccountFragment extends Fragment {
     private ImageView navUserPhoto;
     private TextView tvAdSoyad;
     private ImageView ivNightMode;
-    private Switch mySwitch;
+    Switch mySwitch;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     ImageView ivMail,ivPhone;
@@ -74,7 +69,7 @@ public class AccountFragment extends Fragment {
         }
         View v= inflater.inflate(R.layout.fragment_account, container, false);
 
-        tvAdSoyad = (TextView) v.findViewById(R.id.tvAdSoyad);
+        tvAdSoyad = (TextView) v.findViewById(R.id.mtvNameSurname);
         tvIlanlar = v.findViewById(R.id.tvIlanlar);
         tvTasima =v.findViewById(R.id.tvTasima);
         tvIlanSayisi =v.findViewById(R.id.tvIlanSayisi);
@@ -84,10 +79,10 @@ public class AccountFragment extends Fragment {
         tvWebSite=v.findViewById(R.id.tvWebSite);
         ivMail = v.findViewById(R.id.ivMail);
         ivPhone = v.findViewById(R.id.ivPhone);
-        navUserPhoto = v.findViewById(R.id.navUserPhoto);
+        navUserPhoto = v.findViewById(R.id.navOfferPhoto);
         ivNightMode = v.findViewById(R.id.ivNightMode);
         mySwitch = v.findViewById(R.id.mySwitch);
-        constraintLayout3 = v.findViewById(R.id.constraintLayout3);
+        constraintLayout3 = v.findViewById(R.id.constraintLayout);
 
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
 
@@ -95,12 +90,17 @@ public class AccountFragment extends Fragment {
 
             mySwitch.setChecked(true);
         }
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 if(isChecked){
+                    mySwitch.setChecked(myPrefs.getBoolean("fragment", true));
+
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
                     //restartApp();
                 }else{
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -109,11 +109,12 @@ public class AccountFragment extends Fragment {
             }
         });
 
+
+
         //firebase
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         setAccountUser();
         updateUser();
         btnSetAccount.setOnClickListener(new View.OnClickListener() {
@@ -130,11 +131,6 @@ public class AccountFragment extends Fragment {
     }
 
     private void restartApp(){
-        MapsFragment mapsFragment = new MapsFragment();
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-
     }
 
 

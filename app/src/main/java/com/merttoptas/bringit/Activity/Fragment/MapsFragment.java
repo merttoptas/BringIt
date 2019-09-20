@@ -64,6 +64,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.Activity.Activity.MapsActivity;
 import com.merttoptas.bringit.Activity.Adapter.RecyclerViewAdapter;
 import com.merttoptas.bringit.Activity.Model.Offer;
@@ -332,7 +333,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void getData() {
 
-        int resId = R.anim.layout_animation_fall_down;
+        final int resId = R.anim.layout_animation_fall_down;
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), resId);
         recyclerView.setLayoutAnimation(animation);
         recyclerView.scheduleLayoutAnimation();
@@ -357,8 +358,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 adapter = new RecyclerViewAdapter(offerlist, getActivity());
-                adapter.notifyDataSetChanged();
                 recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -413,20 +415,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         //0.9f = 0.9 km = 900m
         //In this code, it sends the location that will search within the radius range.
         geoQuery = geoFire.queryAtLocation(new GeoLocation(currentLocation.latitude, currentLocation.longitude), 10.0);
-
-    }
-
-    private void offerDetails(){
-
-
-          recyclerView.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-
-
-
-              }
-          });
 
     }
 }

@@ -12,6 +12,8 @@
         <attr name="offerlayoutcolor" format="color"></attr>
         <attr name="accountcolor" format="color"></attr>
         <attr name="bubleButtomcolor" format="color"></attr>
+        <attr name="offerDetailTextColor" format="color"></attr>
+
 
 
     </declare-styleable>

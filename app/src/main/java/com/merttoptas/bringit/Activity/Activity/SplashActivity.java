@@ -27,8 +27,6 @@ public class SplashActivity extends AppCompatActivity {
         typeface = Typeface.createFromAsset(getAssets(), "fonts/Billabong.ttf");
         tvSplash.setTypeface(typeface);
 
-        getSupportActionBar().hide();
-
         Animation mySplashAnim = AnimationUtils.loadAnimation(this, R.anim.splash_transition);
         tvSplash.startAnimation(mySplashAnim);
 

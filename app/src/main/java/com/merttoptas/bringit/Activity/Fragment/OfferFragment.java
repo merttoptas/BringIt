@@ -81,6 +81,7 @@ public class OfferFragment extends Fragment {
     SharedPreferences.Editor editor;
     TextView tvIlanSayisi;
     int offerNumber =0;
+    String offerNameSurname  ="";
 
 
     public OfferFragment() {
@@ -141,17 +142,17 @@ public class OfferFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
 
         //Resource of Items
-        etBaslik = v.findViewById(R.id.mTvBaslik);
-        etEsyaSekli = v.findViewById(R.id.mTvEsyaSekli);
-        etKatSayisi = v.findViewById(R.id.mTvKatSayisi);
-        etIl = v.findViewById(R.id.mTvetIl);
-        etIlce = v.findViewById(R.id.mTvIlce);
-        etToIl = v.findViewById(R.id.mTvToİl);
+        etBaslik = v.findViewById(R.id.tvBaslik);
+        etEsyaSekli = v.findViewById(R.id.tvEsyaSekli);
+        etKatSayisi = v.findViewById(R.id.tvKatSayisi);
+        etIl = v.findViewById(R.id.tvetIl);
+        etIlce = v.findViewById(R.id.mTtvIlce);
+        etToIl = v.findViewById(R.id.tvToIl);
         etKat = v.findViewById(R.id.mTvKat);
         etToIlce = v.findViewById(R.id.mTvToIlce);
         btnOfferSave = v.findViewById(R.id.btnSend);
         scrollView = v.findViewById(R.id.scrollView);
-        etAciklama = v.findViewById(R.id.mTvAciklama);
+        etAciklama = v.findViewById(R.id.tvAciklama);
         tvIlanSayisi = v.findViewById(R.id.tvIlanSayisi);
 
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/SourceSansPro-Regular.ttf");
@@ -370,7 +371,7 @@ public class OfferFragment extends Fragment {
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 latitude =location.getLatitude();
                 longitude = location .getLongitude();
-
+                offerNameSurname = currentUser.getDisplayName();
                 String etdateTime = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
                 Log.d("CurrentDate", etdateTime.toString());
                 dbRef.push().setValue(
@@ -378,15 +379,16 @@ public class OfferFragment extends Fragment {
                                 etBaslik.getText().toString().toUpperCase(),
                                 etEsyaSekli.getText().toString(),
                                 etKatSayisi.getText().toString(),
-                                etIl.getText().toString(),
+                                etIl.getText().toString().toUpperCase(),
                                 etIlce.getText().toString(),
-                                etToIl.getText().toString(),
+                                etToIl.getText().toString().toUpperCase(),
                                 etToIlce.getText().toString(),
                                 etKat.getText().toString(),
                                 latitude,
                                 longitude,
                                 etdateTime,
-                                etAciklama.getText().toString().toUpperCase()
+                                etAciklama.getText().toString().toUpperCase(),
+                                offerNameSurname
                         )
                 );
                 offerNumber++;

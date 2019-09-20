@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
@@ -37,18 +38,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     EditText etBaslik, etAciklama;
     Button btnOfferSave;
     Typeface typeface;
-
+    SharedPreferences myPrefs;
+    Switch mySwitch;
 
     @Override
     protected void onStart() {
         super.onStart();
 
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
-
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
         }else if(AppCompatDelegate.getDefaultNightMode() ==AppCompatDelegate.MODE_NIGHT_NO){
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
 
         }
 
@@ -59,23 +59,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
         bottomNavigationView = findViewById(R.id.bottom_navigation_view_linear);
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
 
         //Resource of Items
-        etBaslik = findViewById(R.id.mTvBaslik);
-        etEsyaSekli = findViewById(R.id.mTvEsyaSekli);
-        etKatSayisi = findViewById(R.id.mTvKatSayisi);
-        etIl = findViewById(R.id.mTvetIl);
-        etIlce = findViewById(R.id.mTvIlce);
-        etToİl = findViewById(R.id.mTvToİl);
+        etBaslik = findViewById(R.id.tvBaslik);
+        etEsyaSekli = findViewById(R.id.tvEsyaSekli);
+        etKatSayisi = findViewById(R.id.tvKatSayisi);
+        etIl = findViewById(R.id.tvetIl);
+        etIlce = findViewById(R.id.mTtvIlce);
+        etToİl = findViewById(R.id.tvToIl);
         etKat = findViewById(R.id.mTvKat);
         etToIlce = findViewById(R.id.mTvToIlce);
         btnOfferSave = findViewById(R.id.btnSend);
-        etAciklama = findViewById(R.id.mTvAciklama);
+        etAciklama = findViewById(R.id.tvAciklama);
+        mySwitch = findViewById(R.id.mySwitch);
+
 
     }
 
@@ -101,28 +102,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         return false;
     }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter{
-
-        private ArrayList<Fragment> fragments;
-
-
-
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-    }
-
 
     @Override
     protected void onResume() {

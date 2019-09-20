@@ -1,7 +1,7 @@
 package com.merttoptas.bringit.Activity.Model;
 
 public class Offer {
-
+    private String offerNameSurname;
     private String etBaslik;
     private String etEsyaSekli;
     private String etKatSayisi;
@@ -19,7 +19,9 @@ public class Offer {
 
     }
 
-    public Offer(String etBaslik, String etEsyaSekli, String etKatSayisi, String etIl, String etIlce, String etToIl, String etToIlce, String etKat, double latitude, double longitude, String dateTime, String aciklama) {
+    public Offer(String etBaslik, String etEsyaSekli, String etKatSayisi, String etIl, String etIlce,
+                 String etToIl, String etToIlce, String etKat, double latitude, double longitude,
+                 String dateTime, String aciklama, String offerNameSurname) {
         this.etBaslik = etBaslik;
         this.etEsyaSekli = etEsyaSekli;
         this.etKatSayisi = etKatSayisi;
@@ -32,6 +34,7 @@ public class Offer {
         this.longitude = longitude;
         this.dateTime = dateTime;
         this.aciklama=aciklama;
+        this.offerNameSurname =offerNameSurname;
 
     }
 
@@ -133,5 +136,13 @@ public class Offer {
 
     public void setAciklama(String aciklama) {
         this.aciklama = aciklama;
+    }
+
+    public String getOfferNameSurname() {
+        return offerNameSurname;
+    }
+
+    public void setOfferNameSurname(String offerNameSurname) {
+        this.offerNameSurname = offerNameSurname;
     }
 }

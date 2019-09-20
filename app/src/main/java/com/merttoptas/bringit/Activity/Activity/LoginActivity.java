@@ -56,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         typeface = Typeface.createFromAsset(getAssets(), "fonts/Billabong.ttf");
         tvLoginText.setTypeface(typeface);
 
-        getSupportActionBar().hide();
-
         mAuth = FirebaseAuth.getInstance();
         signInButton = findViewById(R.id.SignInButton);
         loadingProgress = findViewById(R.id.progressBar);

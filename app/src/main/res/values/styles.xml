@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -16,6 +16,7 @@
         <item name="edittextcolor">@color/quantum_bluegrey50</item>
         <item name="offerlayoutcolor">@color/quantum_black_100</item>
         <item name="bubleButtomcolor">#ffffffff</item>
+        <item name="offerDetailTextColor">@color/quantum_bluegrey50</item>
         <item name="android:windowAnimationStyle">@style/WindowsAnimationTransition</item>
 
     </style>
@@ -33,6 +34,7 @@
         <item name="buttoncolor">#ffffffff</item>
         <item name="toolbarcolor">#303030</item>
         <item name="edittextcolor">#424242</item>
+        <item name="offerDetailTextColor">#303030</item>
         <item name="offerlayoutcolor">#ffffffff</item>
         <item name="bubleButtomcolor">#424242</item>
         <item name="android:windowAnimationStyle">@style/WindowsAnimationTransition</item>

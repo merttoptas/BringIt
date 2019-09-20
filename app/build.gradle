@@ -36,7 +36,7 @@ dependencies {
     //Firebase Database
     implementation 'com.google.firebase:firebase-database:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.0.1'
-    
+
     // facebooklogin
     implementation 'com.facebook.android:facebook-login:[5,6)'
 

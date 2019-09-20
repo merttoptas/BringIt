@@ -1,15 +1,23 @@
 package com.merttoptas.bringit.Activity.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.merttoptas.bringit.Activity.Activity.DetailActivity;
+import com.merttoptas.bringit.Activity.Activity.MainActivity;
+import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.Reklam;
 import com.merttoptas.bringit.R;
@@ -44,8 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         int layout = 0;
-        RecyclerView.ViewHolder viewHolder;
-
+        final RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case TIP_Offer:
                 layout = R.layout.offer_layout;
@@ -53,8 +60,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         LayoutInflater
                                 .from(viewGroup.getContext())
                                 .inflate(layout,viewGroup, false);
-
                 viewHolder = new OfferViewHolder(offerView);
+
+
 
                 break;
 
@@ -76,8 +84,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return viewHolder;    }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        int viewType = viewHolder.getItemViewType();
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
+        final int viewType = viewHolder.getItemViewType();
         Object object  = list.get(i);
 
         switch (viewType){
@@ -85,6 +93,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TIP_Offer:
                 Offer offer = (Offer) list.get(i);
                 ((OfferViewHolder) viewHolder).showDetails(offer);
+                ((OfferViewHolder) viewHolder).offer_layoutt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent intent  = new Intent(context, DetailActivity.class);
+                        intent.putExtra("baslik", ((Offer) list.get(i)).getEtBaslik());
+                        intent.putExtra("esyaS", ((Offer) list.get(i)).getEtEsyaSekli());
+                        intent.putExtra("kat", ((Offer) list.get(i)).getEtKat());
+                        intent.putExtra("esyaIl", ((Offer) list.get(i)).getEtIl());
+                        intent.putExtra("esyaIlce", ((Offer) list.get(i)).getEtIlce());
+                        intent.putExtra("esyaToIl", ((Offer) list.get(i)).getEtToIl());
+                        intent.putExtra("esyaToIlce", ((Offer) list.get(i)).getEtToIlce());
+                        intent.putExtra("esyaIlce", ((Offer) list.get(i)).getEtIlce());
+                        intent.putExtra("katSayisi", ((Offer) list.get(i)).getEtKatSayisi());
+                        intent.putExtra("date", ((Offer) list.get(i)).getDateTime());
+                        intent.putExtra("aciklama", ((Offer) list.get(i)).getAciklama());
+                        intent.putExtra("nameSurname", ((Offer) list.get(i)).getOfferNameSurname());
+
+                        context.startActivity(intent);
+
+                    }
+                });
                 break;
 
             case TIP_Reklam:
@@ -110,15 +140,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class OfferViewHolder extends RecyclerView.ViewHolder{
         private TextView tvOfferBaslik,tvAdSoyad, tvIl, tvIlce,tvDate;
-
+        private CardView offer_layoutt;
         OfferViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvAdSoyad = (TextView) itemView.findViewById(R.id.tvAdSoyad);
+            offer_layoutt =(CardView) itemView.findViewById(R.id.offer_cardview);
+            tvAdSoyad = (TextView) itemView.findViewById(R.id.mtvNameSurname);
             tvIl =  (TextView) itemView.findViewById(R.id.tvIl);
-            tvIlce =(TextView) itemView.findViewById(R.id.tvIlce);
+            tvIlce =(TextView) itemView.findViewById(R.id.mTtvIlce);
             tvOfferBaslik = (TextView) itemView.findViewById(R.id.tvOfferBaslik);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+
+            //
+
 
         }
         void showDetails(Offer offer){
@@ -134,6 +168,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvIl.setText(il);
             tvIlce.setText(ilce);
             tvDate.setText(date);
+
+
         }
 
 

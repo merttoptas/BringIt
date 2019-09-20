@@ -43,10 +43,5 @@ public class MessageActivity extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("chats");
 
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.content,new MessageFragment());
-        fragmentTransaction.commit();
-
     }
 }

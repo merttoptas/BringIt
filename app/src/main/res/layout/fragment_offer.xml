@@ -33,7 +33,7 @@
 
 
             <EditText
-                android:id="@+id/mTvBaslik"
+                android:id="@+id/tvBaslik"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -51,14 +51,14 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvEsyaSekli"
+                app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/mTvEsyaSekli"
+                android:id="@+id/tvEsyaSekli"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -79,14 +79,14 @@
                 android:padding="10dp"
                 android:textSize="12sp"
                 android:typeface="normal"
-                app:layout_constraintBottom_toTopOf="@+id/mTvKatSayisi"
+                app:layout_constraintBottom_toTopOf="@+id/tvKatSayisi"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvBaslik" />
+                app:layout_constraintTop_toBottomOf="@+id/tvBaslik" />
 
 
             <TextView
-                android:id="@+id/mTvKatSayisi"
+                android:id="@+id/tvKatSayisi"
                 style="@style/spinner_style"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
@@ -108,14 +108,14 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvetIl"
+                app:layout_constraintBottom_toTopOf="@+id/tvetIl"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvEsyaSekli"
+                app:layout_constraintTop_toBottomOf="@+id/tvEsyaSekli"
                 tools:ignore="RtlCompat" />
 
             <AutoCompleteTextView
-                android:id="@+id/mTvetIl"
+                android:id="@+id/tvetIl"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -135,13 +135,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvIlce"
+                app:layout_constraintBottom_toTopOf="@+id/mTtvIlce"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvKatSayisi" />
+                app:layout_constraintTop_toBottomOf="@+id/tvKatSayisi" />
 
             <AutoCompleteTextView
-                android:id="@+id/mTvIlce"
+                android:id="@+id/mTtvIlce"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -159,13 +159,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvToİl"
+                app:layout_constraintBottom_toTopOf="@+id/tvToIl"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvetIl" />
+                app:layout_constraintTop_toBottomOf="@+id/tvetIl" />
 
             <AutoCompleteTextView
-                android:id="@+id/mTvToİl"
+                android:id="@+id/tvToIl"
                 style="@style/spinner_style"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
@@ -186,7 +186,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mTvToIlce"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvIlce" />
+                app:layout_constraintTop_toBottomOf="@+id/mTtvIlce" />
 
             <AutoCompleteTextView
                 android:id="@+id/mTvToIlce"
@@ -212,7 +212,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mTvKat"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvToİl" />
+                app:layout_constraintTop_toBottomOf="@+id/tvToIl" />
 
             <TextView
                 android:id="@+id/mTvKat"
@@ -236,13 +236,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvAciklama"
+                app:layout_constraintBottom_toTopOf="@+id/tvAciklama"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mTvToIlce" />
 
             <EditText
-                android:id="@+id/mTvAciklama"
+                android:id="@+id/tvAciklama"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
@@ -287,7 +287,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvAciklama" />
+                app:layout_constraintTop_toBottomOf="@+id/tvAciklama" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
