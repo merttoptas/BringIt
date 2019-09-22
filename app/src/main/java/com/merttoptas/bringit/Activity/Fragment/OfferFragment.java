@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,23 +62,21 @@ import java.util.Objects;
 
 public class OfferFragment extends Fragment {
 
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-    TextView etEsyaSekli, etKatSayisi, etKat;
-    EditText etBaslik, etAciklama;
-    Button btnOfferSave;
-    AutoCompleteTextView etIl, etIlce, etToIl, etToIlce;
-    FusedLocationProviderClient mFusedLocationClient;
-    Location mLastLocation;
-    LocationRequest mLocationRequest;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private TextView etTransportMethod, etNumberOfFloors, etToFloors;
+    private EditText etOfferTitle, etExplanation;
+    private Button btnOfferSave;
+    private AutoCompleteTextView etProvince, etDistrict, etTargetProvince, etTargetDistrict;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mLastLocation;
+    private LocationRequest mLocationRequest;
     public double latitude;
     public double longitude;
-    LocationManager locationManager;
-    ScrollView scrollView;
-    Toolbar toolbar;
-    TextView mTitle;
-    Typeface typeface;
-    SharedPreferences myPrefs;
+    private LocationManager locationManager;
+    private ScrollView scrollView;
+    private Typeface typeface;
+    private SharedPreferences myPrefs;
     SharedPreferences.Editor editor;
     TextView tvIlanSayisi;
     int offerNumber =0;
@@ -101,25 +100,24 @@ public class OfferFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        etEsyaSekli.setOnClickListener(new View.OnClickListener() {
+        etTransportMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initEsyaSekli();
-
+                initTransportMove();
             }
         });
 
-        etKatSayisi.setOnClickListener(new View.OnClickListener() {
+        etNumberOfFloors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initKatSayisi();
+                initNumberOfFloors();
             }
         });
 
-        etKat.setOnClickListener(new View.OnClickListener() {
+        etToFloors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                initKat();
+                initToFloors();
             }
         });
 
@@ -142,24 +140,24 @@ public class OfferFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
 
         //Resource of Items
-        etBaslik = v.findViewById(R.id.tvBaslik);
-        etEsyaSekli = v.findViewById(R.id.tvEsyaSekli);
-        etKatSayisi = v.findViewById(R.id.tvKatSayisi);
-        etIl = v.findViewById(R.id.tvetIl);
-        etIlce = v.findViewById(R.id.mTtvIlce);
-        etToIl = v.findViewById(R.id.tvToIl);
-        etKat = v.findViewById(R.id.mTvKat);
-        etToIlce = v.findViewById(R.id.mTvToIlce);
-        btnOfferSave = v.findViewById(R.id.btnSend);
+        etOfferTitle = v.findViewById(R.id.etOfferTitle);
+        etTransportMethod = v.findViewById(R.id.etTransportMethod);
+        etNumberOfFloors = v.findViewById(R.id.etNumberOfFloors);
+        etProvince = v.findViewById(R.id.etProvince);
+        etDistrict = v.findViewById(R.id.etDistrict);
+        etTargetProvince = v.findViewById(R.id.etTargetProvince);
+        etToFloors = v.findViewById(R.id.etToFloors);
+        etTargetDistrict = v.findViewById(R.id.etTargetDistrict);
+        btnOfferSave = v.findViewById(R.id.btnOfferSave);
         scrollView = v.findViewById(R.id.scrollView);
-        etAciklama = v.findViewById(R.id.tvAciklama);
+        etExplanation = v.findViewById(R.id.etExplanation);
         tvIlanSayisi = v.findViewById(R.id.tvIlanSayisi);
 
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/SourceSansPro-Regular.ttf");
+        typeface = Typeface.createFromAsset(Objects.requireNonNull(getActivity()).getAssets(), "fonts/SourceSansPro-Regular.ttf");
         btnOfferSave.setTypeface(typeface);
 
-        toolbar = v.findViewById(R.id.toolbar);
-        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
+        TextView mTitle = toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         mTitle.setText(R.string.ilan_ver);
 
@@ -176,11 +174,9 @@ public class OfferFragment extends Fragment {
         FirebaseStorage db = FirebaseStorage.getInstance();
 
         //City and district get a name
-        initEsyaSekli();
-        District();
-        citylist();
-
-
+        initTransportMove();
+        districtList();
+        cityList();
 
         return  v;
     }
@@ -225,29 +221,29 @@ public class OfferFragment extends Fragment {
 
     }
 
-    private void initEsyaSekli(){
+    private void initTransportMove(){
 
-        final String [] initTasimaSekli = getResources().getStringArray(R.array.tasinmaSekli);
+        final String [] initTransportMove = getResources().getStringArray(R.array.tasinmaSekli);
 
-        final  ArrayList<String> tasimaList = new ArrayList<String>(Arrays.asList(initTasimaSekli));
+        final  ArrayList<String> transportList = new ArrayList<String>(Arrays.asList(initTransportMove));
 
-        final  MyOptionsPickerView<String>  pTasima = new MyOptionsPickerView<>(getActivity());
-
-
-        pTasima.setPicker(tasimaList);
-        pTasima.setSubmitButtonText(R.string.tamam);
-        pTasima.setCancelButtonText(R.string.kapat);
-        pTasima.setTitle(getString(R.string.kat_sayisi));
-        pTasima.setCyclic(false);
-        pTasima.setSelectOptions(0);
-        pTasima.setSelectOptions(0);
+        final  MyOptionsPickerView<String>  pTransport = new MyOptionsPickerView<>(getActivity());
 
 
-        pTasima.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
+        pTransport.setPicker(transportList);
+        pTransport.setSubmitButtonText(R.string.tamam);
+        pTransport.setCancelButtonText(R.string.kapat);
+        pTransport.setTitle(getString(R.string.kat_sayisi));
+        pTransport.setCyclic(false);
+        pTransport.setSelectOptions(0);
+        pTransport.setSelectOptions(0);
+
+
+        pTransport.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3) {
                 try {
-                    etEsyaSekli.setText(tasimaList.get(options1).toUpperCase());
+                    etTransportMethod.setText(transportList.get(options1));
 
                 }catch (Exception e){
                     e.fillInStackTrace();
@@ -255,38 +251,38 @@ public class OfferFragment extends Fragment {
             }
         });
 
-        etEsyaSekli.setOnClickListener(new View.OnClickListener() {
+        etTransportMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pTasima.show();
+                pTransport.show();
             }
         });
 
     }
 
 
-    private void initKatSayisi(){
+    private void initNumberOfFloors(){
 
-        final String [] initkatSayisi = getResources().getStringArray(R.array.katSayisi);
+        final String [] initNumberOfFloors = getResources().getStringArray(R.array.katSayisi);
 
-        final  ArrayList<String> katList = new ArrayList<String>(Arrays.asList(initkatSayisi));
+        final  ArrayList<String> katList = new ArrayList<String>(Arrays.asList(initNumberOfFloors));
 
-        final  MyOptionsPickerView<String>  pKatList = new MyOptionsPickerView<>(getActivity());
+        final  MyOptionsPickerView<String>  pNumberOfFloors = new MyOptionsPickerView<>(getActivity());
 
-        pKatList.setPicker(katList);
-        pKatList.setSubmitButtonText(R.string.tamam);
-        pKatList.setCancelButtonText(R.string.kapat);
-        pKatList.setTitle(getString(R.string.kat_sayisi));
-        pKatList.setCyclic(false);
-        pKatList.setSelectOptions(0);
-        pKatList.setSelectOptions(0);
+        pNumberOfFloors.setPicker(katList);
+        pNumberOfFloors.setSubmitButtonText(R.string.tamam);
+        pNumberOfFloors.setCancelButtonText(R.string.kapat);
+        pNumberOfFloors.setTitle(getString(R.string.kat_sayisi));
+        pNumberOfFloors.setCyclic(false);
+        pNumberOfFloors.setSelectOptions(0);
+        pNumberOfFloors.setSelectOptions(0);
 
-        pKatList.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
+        pNumberOfFloors.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3) {
 
                 try{
-                    etKatSayisi.setText(katList.get(options1));
+                    etNumberOfFloors.setText(katList.get(options1));
 
                 }catch (Exception e){
                     e.fillInStackTrace();
@@ -294,39 +290,39 @@ public class OfferFragment extends Fragment {
             }
         });
 
-        etKatSayisi.setOnClickListener(new View.OnClickListener() {
+        etNumberOfFloors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pKatList.show();
+                pNumberOfFloors.show();
             }
         });
     }
 
-    private void initKat( ){
+    private void initToFloors( ){
 
 
-        final String [] katsayisi = getResources().getStringArray(R.array.katSayisi);
+        final String [] toFloors = getResources().getStringArray(R.array.katSayisi);
 
-        final ArrayList<String> odaList = new ArrayList<String>(Arrays.asList(katsayisi));
+        final ArrayList<String> odaList = new ArrayList<String>(Arrays.asList(toFloors));
 
-        final  MyOptionsPickerView <String> pKatSayisi = new MyOptionsPickerView<>(getActivity());
+        final  MyOptionsPickerView <String> pToFloors = new MyOptionsPickerView<>(getActivity());
 
 
-        pKatSayisi.setPicker(odaList);
-        pKatSayisi.setSubmitButtonText(R.string.tamam);
-        pKatSayisi.setCancelButtonText(R.string.kapat);
-        pKatSayisi.setTitle(getString(R.string.kat_sayisi));
-        pKatSayisi.setCyclic(false);
-        pKatSayisi.setSelectOptions(0);
-        pKatSayisi.setSelectOptions(0);
+        pToFloors.setPicker(odaList);
+        pToFloors.setSubmitButtonText(R.string.tamam);
+        pToFloors.setCancelButtonText(R.string.kapat);
+        pToFloors.setTitle(getString(R.string.kat_sayisi));
+        pToFloors.setCyclic(false);
+        pToFloors.setSelectOptions(0);
+        pToFloors.setSelectOptions(0);
 
-        pKatSayisi.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
+        pToFloors.setOnoptionsSelectListener(new MyOptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3) {
 
                 try{
 
-                    etKat.setText(odaList.get(options1));
+                    etToFloors.setText(odaList.get(options1));
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -334,10 +330,10 @@ public class OfferFragment extends Fragment {
             }
         });
 
-        etKat.setOnClickListener(new View.OnClickListener() {
+        etToFloors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pKatSayisi.show();
+                pToFloors.show();
             }
         });
 
@@ -345,15 +341,23 @@ public class OfferFragment extends Fragment {
 
 
     private void OfferSave() {
-        if(etBaslik.getText().toString().matches("") & etEsyaSekli.getText().toString().matches("")
-                &  etKatSayisi.getText().toString().matches("")
-                & etIl.getText().toString().matches("")   & etIlce.getText().toString().matches("")
-                & etToIl.getText().toString().matches("") & etToIlce.getText().toString().matches("")
-                & etKat.getText().toString().matches("")  & etAciklama.getText().toString().matches(""))
+        String controlTitle =etOfferTitle.getText().toString();
+        String controlTransportMethod = etTransportMethod.getText().toString();
+        String controlNumberFloors = etNumberOfFloors.getText().toString();
+        String controlProvince =  etProvince.getText().toString();
+        String controlDistrict = etDistrict.getText().toString();
+        String controlToProvince =etTargetProvince.getText().toString();
+        String controlToDistrict =etTargetDistrict.getText().toString();
+        String controlFloor =  etToFloors.getText().toString();
+        String controlExplanation =etExplanation.getText().toString();
+
+        if(TextUtils.isEmpty(controlTitle) || TextUtils.isEmpty(controlTransportMethod)
+                || TextUtils.isEmpty(controlNumberFloors) || TextUtils.isEmpty(controlProvince)
+                || TextUtils.isEmpty(controlDistrict) || TextUtils.isEmpty(controlToProvince)
+                || TextUtils.isEmpty(controlToDistrict) || TextUtils.isEmpty(controlFloor)
+                || TextUtils.isEmpty(controlExplanation))
         {
             Toast.makeText(getActivity(), getString(R.string.eksik_bilgiler), Toast.LENGTH_SHORT).show();
-
-            return;
 
         }else {
 
@@ -376,18 +380,18 @@ public class OfferFragment extends Fragment {
                 Log.d("CurrentDate", etdateTime.toString());
                 dbRef.push().setValue(
                         new Offer(
-                                etBaslik.getText().toString().toUpperCase(),
-                                etEsyaSekli.getText().toString(),
-                                etKatSayisi.getText().toString(),
-                                etIl.getText().toString().toUpperCase(),
-                                etIlce.getText().toString(),
-                                etToIl.getText().toString().toUpperCase(),
-                                etToIlce.getText().toString(),
-                                etKat.getText().toString(),
+                                etOfferTitle.getText().toString().toUpperCase(),
+                                etTransportMethod.getText().toString(),
+                                etNumberOfFloors.getText().toString(),
+                                etProvince.getText().toString().toUpperCase(),
+                                etDistrict.getText().toString(),
+                                etTargetProvince.getText().toString().toUpperCase(),
+                                etTargetDistrict.getText().toString(),
+                                etToFloors.getText().toString(),
                                 latitude,
                                 longitude,
                                 etdateTime,
-                                etAciklama.getText().toString().toUpperCase(),
+                                etExplanation.getText().toString(),
                                 offerNameSurname
                         )
                 );
@@ -477,7 +481,7 @@ public class OfferFragment extends Fragment {
     }
 
 
-    private void District(){
+    private void districtList(){
 
         //Distcirt json raw file
 
@@ -486,7 +490,7 @@ public class OfferFragment extends Fragment {
             //load File
             BufferedReader jsonReader = new BufferedReader(new InputStreamReader(this.getResources().openRawResource(R.raw.district)));
             StringBuilder jsonBuilder = new StringBuilder();
-            for (String line = null; (line = jsonReader.readLine()) != null; ) {
+            for (String line; (line = jsonReader.readLine()) != null; ) {
                 jsonBuilder.append(line).append("\n");
             }
 
@@ -508,14 +512,15 @@ public class OfferFragment extends Fragment {
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(Objects.requireNonNull(getActivity()), R.layout.simple_list, districtData);
 
-        etIlce.setAdapter(adapter1);
-        etIlce.setThreshold(0);
-        etToIlce.setAdapter(adapter1);
-        etToIlce.setThreshold(0);
+        etDistrict.setAdapter(adapter1);
+        etDistrict.setThreshold(0);
+
+        etTargetDistrict.setAdapter(adapter1);
+        etTargetDistrict.setThreshold(0);
 
     }
 
-    private void citylist(){
+    private void cityList(){
 
         //city json get raw file
 
@@ -524,7 +529,7 @@ public class OfferFragment extends Fragment {
             //Load File
             BufferedReader jsonReader = new BufferedReader(new InputStreamReader(this.getResources().openRawResource(R.raw.citys)));
             StringBuilder jsonBuilder = new StringBuilder();
-            for (String line = null; (line = jsonReader.readLine()) != null; ) {
+            for (String line; (line = jsonReader.readLine()) != null; ) {
                 jsonBuilder.append(line).append("\n");
             }
 
@@ -549,23 +554,24 @@ public class OfferFragment extends Fragment {
 
         ArrayAdapter<String> adapter =new ArrayAdapter<>(Objects.requireNonNull(this.getActivity()), R.layout.simple_list, spinnerData);
 
-        etIl.setAdapter(adapter);
-        etIl.setThreshold(0);
+        etProvince.setAdapter(adapter);
+        etProvince.setThreshold(0);
 
-        etToIl.setAdapter(adapter);
-        etToIl.setThreshold(0);
+        etTargetProvince.setAdapter(adapter);
+        etTargetProvince.setThreshold(0);
     }
 
     private void textClear(){
 
-        etBaslik.getText().clear();
-        etEsyaSekli.setText("");
-        etKatSayisi.setText("");
-        etAciklama.getText().clear();
-        etIl.getText().clear();
-        etToIlce.getText().clear();
-        etIlce.getText().clear();
-        etToIl.getText().clear();
+        etOfferTitle.getText().clear();
+        etTransportMethod.setText("");
+        etNumberOfFloors.setText("");
+        etExplanation.getText().clear();
+        etProvince.getText().clear();
+        etTargetDistrict.getText().clear();
+        etDistrict.getText().clear();
+        etTargetProvince.getText().clear();
+        etToFloors.setText("");
 
     }
 }

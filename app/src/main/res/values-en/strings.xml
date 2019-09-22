@@ -6,7 +6,7 @@
     <string name="baslik">Title</string>
     <string name="btnCıkıs">Exit</string>
     <string name="e_yan_n_bulundu_u_l">Province of Goods</string>
-    <string name="esyanin_basligi">Good of Title</string>
+    <string name="esyanin_basligi">Item Title</string>
     <string name="esyanin_cikacagi_kat_sayisi">Number of Storeys</string>
     <string name="esyanin_gidecegi_il">Destination</string>
     <string name="esyanin_gidecegi_ilce">District</string>
@@ -33,4 +33,8 @@
     <string name="mesaj_yazma">"Send a Message! "</string>
     <string name="ilan_ver">Advertise</string>
     <string name="gece_modu">Night Mode</string>
+    <string name="tasinma_bilgileri">"Moving Information "</string>
+    <string name="mesaj">Message</string>
+    <string name="ilan_detay">Offer Details</string>
+    <string name="il">Province</string>
 </resources>

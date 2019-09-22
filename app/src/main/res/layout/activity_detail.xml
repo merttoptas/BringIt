@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundcolor"
+    android:background="?attr/backgroundColor"
     tools:context="com.merttoptas.bringit.Activity.Activity.DetailActivity">
 
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar" />
 
 
     <ScrollView
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="?attr/backgroundcolor"
+        android:background="?attr/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/backgroundcolor"
+            android:background="?attr/backgroundColor"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context=".Activity.OfferActivity">
 
@@ -36,19 +36,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="44dp"
-                android:background="?attr/backgroundcolor"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/backgroundColor"
                 android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/cardView1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/mtvNameSurname"
+                    android:id="@+id/tvUserNameSurname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:fontFamily="@font/abeezee"
                     android:text="@string/tvNameSurname"
                     android:textColor="?attr/textcolor"
@@ -68,7 +71,7 @@
                     android:layout_marginBottom="32dp"
                     android:src="@drawable/userphoto"
                     app:civ_border_width="1dp"
-                    app:layout_constraintBottom_toTopOf="@+id/mtvNameSurname"
+                    app:layout_constraintBottom_toTopOf="@+id/tvUserNameSurname"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -77,175 +80,238 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/LinearLayout"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="?attr/cardBackground"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="true"
+                app:layout_constraintBottom_toBottomOf="@id/cardView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.50"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout">
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                tools:ignore="MissingConstraints">
 
-                <TextView
-                    android:id="@+id/tvBaslik"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="?attr/edittextcolor"
-                    android:ems="10"
-                    android:fontFamily="@font/abeezee"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="@string/esyanin_basligi"
-                    android:textColor="?attr/textcolor"
-                    android:textColorHint="?attr/textcolor"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    android:layout_height="match_parent">
 
-            </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/LinearLayout8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toTopOf="@+id/LinearLayout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/LinearLayout1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.50"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/LinearLayout">
+                        <TextView
+                            android:id="@+id/tvTransport"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:ems="8"
+                            android:fontFamily="@font/abeezee"
+                            android:gravity="bottom"
+                            android:text="@string/bilgiler"
+                            android:textAlignment="center"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="MissingConstraints" />
 
-                <TextView
-                    android:id="@+id/tvEsyaSekli"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="?attr/edittextcolor"
-                    android:ems="10"
-                    android:fontFamily="@font/abeezee"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="@string/esyanin_tasinma_sekli"
-                    android:textColor="?attr/textcolor"
-                    android:textColorHint="?attr/textcolor"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    </LinearLayout>
 
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/LinearLayout2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.50"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/LinearLayout1">
+                    <LinearLayout
+                        android:id="@+id/LinearLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/LinearLayout8">
 
-                <TextView
-                    android:id="@+id/tvKatSayisi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="?attr/edittextcolor"
-                    android:ems="10"
-                    android:fontFamily="@font/abeezee"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="@string/kat_sayisi"
-                    android:textColor="?attr/textcolor"
-                    android:textColorHint="?attr/textcolor"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                        <TextView
+                            android:id="@+id/tvOfferTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="?attr/offerDetailTextColor"
+                            android:ems="10"
+                            android:fontFamily="@font/abeezee"
+                            android:padding="10dp"
+                            android:text="@string/esyanin_basligi"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/tvTransportMethod"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/LinearLayout3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.50"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/LinearLayout2">
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvetIl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="?attr/edittextcolor"
-                    android:ems="10"
-                    android:fontFamily="@font/abeezee"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="@string/e_yan_n_bulundu_u_l"
-                    android:textColor="?attr/textcolor"
-                    android:textColorHint="?attr/textcolor"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    <LinearLayout
+                        android:id="@+id/LinearLayout1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/LinearLayout">
+
+                        <TextView
+                            android:id="@+id/tvTransportMethod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="?attr/offerDetailTextColor"
+                            android:ems="10"
+                            android:fontFamily="@font/abeezee"
+                            android:gravity="bottom"
+                            android:padding="10dp"
+                            android:text="@string/esyanin_tasinma_sekli"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
-                <TextView
-                    android:id="@+id/mTtvIlce"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="?attr/edittextcolor"
-                    android:ems="10"
-                    android:fontFamily="@font/abeezee"
-                    android:gravity="bottom"
-                    android:hint="@string/llce"
-                    android:padding="10dp"
-                    android:textColor="?attr/textcolor"
-                    android:textColorHint="?attr/textcolor"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tvToIl"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvetIl" />
+                        <TextView
+                            android:id="@+id/tvNumberOfFloors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="?attr/offerDetailTextColor"
+                            android:ems="10"
+                            android:fontFamily="@font/abeezee"
+                            android:gravity="bottom"
+                            android:padding="10dp"
+                            android:text="@string/kat_sayisi"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/tvTargetProvince"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTargetProvince" />
 
-            </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/LinearLayout1">
+
+                        <TextView
+                            android:id="@+id/tvProvince"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="?attr/offerDetailTextColor"
+                            android:ems="10"
+                            android:fontFamily="@font/abeezee"
+                            android:gravity="bottom"
+                            android:padding="10dp"
+                            android:text="@string/e_yan_n_bulundu_u_l"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvDistrict"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="?attr/offerDetailTextColor"
+                            android:ems="10"
+                            android:fontFamily="@font/abeezee"
+                            android:gravity="bottom"
+                            android:hint="@string/llce"
+                            android:padding="10dp"
+                            android:textColor="?attr/textcolor"
+                            android:textColorHint="?attr/textcolor"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayout3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.50"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/LinearLayout2" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -255,14 +321,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                app:cardBackgroundColor="?attr/cardbackground"
+                app:cardBackgroundColor="?attr/cardBackground"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="10dp"
                 app:cardPreventCornerOverlap="true"
                 app:layout_constraintBottom_toTopOf="@+id/btnMessage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/LinearLayout3"
+                app:layout_constraintTop_toBottomOf="@id/cardView1"
                 tools:ignore="MissingConstraints">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -277,7 +343,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toTopOf="@+id/LinearLayout5"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -296,7 +362,6 @@
                             android:ems="8"
                             android:fontFamily="@font/abeezee"
                             android:gravity="bottom"
-                            android:padding="10dp"
                             android:text="@string/tasinma_bilgileri"
                             android:textAlignment="center"
                             android:textColor="?attr/textcolor"
@@ -324,7 +389,7 @@
                         app:layout_constraintTop_toBottomOf="@id/LinearLayout4">
 
                         <TextView
-                            android:id="@+id/mTvToIl"
+                            android:id="@+id/tvTargetProvince"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -340,7 +405,6 @@
                             android:textColor="?attr/textcolor"
                             android:textColorHint="?attr/textcolor"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -348,7 +412,7 @@
 
 
                         <TextView
-                            android:id="@+id/mTvToIlce"
+                            android:id="@+id/tvTargetDistrict"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -364,10 +428,10 @@
                             android:textColor="?attr/textcolor"
                             android:textColorHint="?attr/textcolor"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvToIl"
+                            app:layout_constraintBottom_toTopOf="@+id/tvTargetProvince"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvetIl" />
+                            app:layout_constraintTop_toBottomOf="@+id/tvTargetProvince" />
 
                     </LinearLayout>
 
@@ -376,7 +440,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -385,7 +448,7 @@
                         app:layout_constraintTop_toBottomOf="@id/LinearLayout5">
 
                         <TextView
-                            android:id="@+id/mTvKat"
+                            android:id="@+id/tvToFloors"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -401,14 +464,13 @@
                             android:textColor="?attr/textcolor"
                             android:textColorHint="?attr/textcolor"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="MissingConstraints" />
 
                         <TextView
-                            android:id="@+id/mTvDate"
+                            android:id="@+id/TvDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -424,7 +486,6 @@
                             android:textColor="?attr/textcolor"
                             android:textColorHint="?attr/textcolor"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -438,9 +499,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -449,7 +509,7 @@
                         app:layout_constraintTop_toBottomOf="@id/LinearLayout6">
 
                         <TextView
-                            android:id="@+id/tvAciklama"
+                            android:id="@+id/tvExplanation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -465,7 +525,7 @@
                             android:textColor="?attr/textcolor"
                             android:textColorHint="?attr/textcolor"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
+                            app:layout_constraintBottom_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -473,7 +533,6 @@
 
 
                     </LinearLayout>
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

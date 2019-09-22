@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion 29
@@ -36,6 +38,16 @@ dependencies {
     //Firebase Database
     implementation 'com.google.firebase:firebase-database:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.0.1'
+
+    //firebase crasch
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+    //firebase performance
+    implementation 'com.google.firebase:firebase-perf:19.0.0'
+
+
 
     // facebooklogin
     implementation 'com.facebook.android:facebook-login:[5,6)'

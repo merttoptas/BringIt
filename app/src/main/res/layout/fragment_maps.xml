@@ -31,7 +31,7 @@
             android:id="@+id/recyclerview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/backgroundcolor"
+            android:background="?attr/backgroundColor"
             android:layoutAnimation="@anim/layout_animation_fall_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

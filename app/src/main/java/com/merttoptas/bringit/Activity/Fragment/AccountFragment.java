@@ -28,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
-import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.R;
 
 
@@ -41,7 +40,7 @@ public class AccountFragment extends Fragment {
     private TextView tvPhone;
     private TextView tvWebSite;
     private ImageView navUserPhoto;
-    private TextView tvAdSoyad;
+    private TextView tvUserNameSurname;
     private ImageView ivNightMode;
     Switch mySwitch;
     FirebaseUser currentUser;
@@ -69,7 +68,7 @@ public class AccountFragment extends Fragment {
         }
         View v= inflater.inflate(R.layout.fragment_account, container, false);
 
-        tvAdSoyad = (TextView) v.findViewById(R.id.mtvNameSurname);
+        tvUserNameSurname = (TextView) v.findViewById(R.id.tvUserNameSurname);
         tvIlanlar = v.findViewById(R.id.tvIlanlar);
         tvTasima =v.findViewById(R.id.tvTasima);
         tvIlanSayisi =v.findViewById(R.id.tvIlanSayisi);
@@ -255,7 +254,7 @@ public class AccountFragment extends Fragment {
                 Log.d("tvPhone", tvPhone.getText().toString());
             }
 
-            tvAdSoyad.setText(currentUser.getDisplayName().toUpperCase());
+            tvUserNameSurname.setText(currentUser.getDisplayName().toUpperCase());
         }
         catch (Exception e){
             e.printStackTrace();

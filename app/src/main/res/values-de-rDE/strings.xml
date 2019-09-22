@@ -9,4 +9,12 @@
     <string name="e_yan_n_bulundu_u_l">"Provinz der Waren "</string>
     <string name="mesaj_yazma">"Eine Nachricht schicken! "</string>
     <string name="gece_modu">Nachtmodus</string>
+    <string name="eksik_bilgiler">"Fehlende Informationen! "</string>
+    <string name="esyanin_basligi">"Artikelbezeichnung "</string>
+    <string name="esyanin_cikacagi_kat_sayisi">"Anzahl der Stockwerke "</string>
+    <string name="esyanin_gidecegi_il">"Das Reiseziel "</string>
+    <string name="esyanin_gidecegi_ilce">"Grafschaft "</string>
+    <string name="esyanin_tasinma_sekli">"Art zu bewegen "</string>
+    <string name="hesap">Konto</string>
+    <string name="il">Province</string>
 </resources>

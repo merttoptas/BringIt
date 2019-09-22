@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerview"
             android:layout_below="@id/toolbar"
-            android:background="?attr/backgroundcolor"
+            android:background="?attr/backgroundColor"
             android:layout_above="@id/relative_bottom">
 
 
@@ -30,7 +30,7 @@
             android:id="@+id/relative_bottom"
             android:layout_width="match_parent"
             android:padding="5dp"
-            android:background="?attr/backgroundcolor"
+            android:background="?attr/backgroundColor"
             android:layout_alignParentBottom="true"
             android:layout_height="wrap_content">
 

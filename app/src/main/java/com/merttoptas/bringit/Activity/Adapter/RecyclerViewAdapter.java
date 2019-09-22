@@ -1,6 +1,5 @@
 package com.merttoptas.bringit.Activity.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,12 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseUser;
 import com.merttoptas.bringit.Activity.Activity.DetailActivity;
 import com.merttoptas.bringit.Activity.Activity.MainActivity;
@@ -93,22 +89,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TIP_Offer:
                 Offer offer = (Offer) list.get(i);
                 ((OfferViewHolder) viewHolder).showDetails(offer);
-                ((OfferViewHolder) viewHolder).offer_layoutt.setOnClickListener(new View.OnClickListener() {
+                ((OfferViewHolder) viewHolder).offerCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         Intent intent  = new Intent(context, DetailActivity.class);
-                        intent.putExtra("baslik", ((Offer) list.get(i)).getEtBaslik());
-                        intent.putExtra("esyaS", ((Offer) list.get(i)).getEtEsyaSekli());
-                        intent.putExtra("kat", ((Offer) list.get(i)).getEtKat());
-                        intent.putExtra("esyaIl", ((Offer) list.get(i)).getEtIl());
-                        intent.putExtra("esyaIlce", ((Offer) list.get(i)).getEtIlce());
-                        intent.putExtra("esyaToIl", ((Offer) list.get(i)).getEtToIl());
-                        intent.putExtra("esyaToIlce", ((Offer) list.get(i)).getEtToIlce());
-                        intent.putExtra("esyaIlce", ((Offer) list.get(i)).getEtIlce());
-                        intent.putExtra("katSayisi", ((Offer) list.get(i)).getEtKatSayisi());
+                        intent.putExtra("title", ((Offer) list.get(i)).getTitle());
+                        intent.putExtra("transport", ((Offer) list.get(i)).getTransport());
+                        intent.putExtra("toFloors", ((Offer) list.get(i)).getToFloors());
+                        intent.putExtra("province", ((Offer) list.get(i)).getProvince());
+                        intent.putExtra("district", ((Offer) list.get(i)).getDistrict());
+                        intent.putExtra("targetProvince", ((Offer) list.get(i)).getTargetProvince());
+                        intent.putExtra("targetDistrict", ((Offer) list.get(i)).getTargetDistrict());
+                        intent.putExtra("numberOfFloors", ((Offer) list.get(i)).getNumberOfFloors());
                         intent.putExtra("date", ((Offer) list.get(i)).getDateTime());
-                        intent.putExtra("aciklama", ((Offer) list.get(i)).getAciklama());
+                        intent.putExtra("explanation", ((Offer) list.get(i)).getExplanation());
                         intent.putExtra("nameSurname", ((Offer) list.get(i)).getOfferNameSurname());
 
                         context.startActivity(intent);
@@ -139,36 +134,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class OfferViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvOfferBaslik,tvAdSoyad, tvIl, tvIlce,tvDate;
-        private CardView offer_layoutt;
+
+        private TextView tvOfferTitle,tvProvince, tvTargetProvince, tvTargetDistrict,tvDate;
+        private CardView offerCardView;
+
         OfferViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            offer_layoutt =(CardView) itemView.findViewById(R.id.offer_cardview);
-            tvAdSoyad = (TextView) itemView.findViewById(R.id.mtvNameSurname);
-            tvIl =  (TextView) itemView.findViewById(R.id.tvIl);
-            tvIlce =(TextView) itemView.findViewById(R.id.mTtvIlce);
-            tvOfferBaslik = (TextView) itemView.findViewById(R.id.tvOfferBaslik);
-            tvDate = (TextView) itemView.findViewById(R.id.tvDate);
-
-            //
-
+            offerCardView = itemView.findViewById(R.id.offer_cardview);
+            tvProvince = itemView.findViewById(R.id.tvProvince);
+            tvTargetProvince = itemView.findViewById(R.id.tvTargetProvince);
+            tvTargetDistrict = itemView.findViewById(R.id.tvTargetDistrict);
+            tvOfferTitle = itemView.findViewById(R.id.tvOfferTitle);
+            tvDate = itemView.findViewById(R.id.tvDate);
 
         }
         void showDetails(Offer offer){
 
-            String adSoyad = offer.getEtToIl();
-            String baslik = offer.getEtBaslik();
-            String il = offer.getEtIl();
-            String ilce = offer.getEtIlce();
+            String targetProvince = offer.getTargetProvince();
+            String title = offer.getTitle();
+            String province = offer.getProvince();
+            String targetDistrict = offer.getTargetDistrict();
             String date = offer.getDateTime();
 
-            tvAdSoyad.setText(adSoyad);
-            tvOfferBaslik.setText(baslik);
-            tvIl.setText(il);
-            tvIlce.setText(ilce);
+            tvTargetProvince.setText(targetProvince);
+            tvOfferTitle.setText(title);
+            tvProvince.setText(province);
+            tvTargetDistrict.setText(targetDistrict);
             tvDate.setText(date);
-
 
         }
 

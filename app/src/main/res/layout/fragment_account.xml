@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/FrameLayout"
-    android:background="?attr/backgroundcolor"
+    android:background="?attr/backgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.merttoptas.bringit.Activity.Fragment.AccountFragment">
@@ -43,7 +43,7 @@
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="10dp"
-                    app:cardBackgroundColor="?attr/cardbackground"
+                    app:cardBackgroundColor="?attr/cardBackground"
                     app:cardPreventCornerOverlap="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
@@ -127,14 +127,14 @@
                     android:layout_width="0dp"
                     android:layout_height="220dp"
                     android:orientation="vertical"
-                    android:background="?attr/backgroundcolor"
+                    android:background="?attr/backgroundColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/mtvNameSurname"
+                        android:id="@+id/tvUserNameSurname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -158,7 +158,7 @@
                         android:layout_marginBottom="32dp"
                         android:src="@drawable/userphoto"
                         app:civ_border_width="1dp"
-                        app:layout_constraintBottom_toTopOf="@+id/mtvNameSurname"
+                        app:layout_constraintBottom_toTopOf="@+id/tvUserNameSurname"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundcolor"
+    android:background="?attr/backgroundColor"
     tools:context="com.merttoptas.bringit.Activity.Fragment.OfferFragment">
 
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar" />
 
 
     <ScrollView
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="?attr/backgroundcolor"
+        android:background="?attr/backgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,14 +26,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/backgroundcolor"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundColor"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context=".Activity.OfferActivity">
 
 
             <EditText
-                android:id="@+id/tvBaslik"
+                android:id="@+id/etOfferTitle"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -46,19 +46,20 @@
                 android:fontFamily="@font/abeezee"
                 android:gravity="bottom"
                 android:hint="@string/esyanin_basligi"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:padding="10dp"
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvEsyaSekli"
+                app:layout_constraintBottom_toTopOf="@+id/etTransportMethod"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/tvEsyaSekli"
+                android:id="@+id/etTransportMethod"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -73,21 +74,19 @@
                 android:fontFamily="@font/abeezee"
                 android:gravity="bottom"
                 android:hint="@string/esyanin_tasinma_sekli"
+                android:padding="10dp"
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
-                android:inputType="text"
-                android:padding="10dp"
                 android:textSize="12sp"
                 android:typeface="normal"
-                app:layout_constraintBottom_toTopOf="@+id/tvKatSayisi"
+                app:layout_constraintBottom_toTopOf="@+id/etNumberOfFloors"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvBaslik" />
+                app:layout_constraintTop_toBottomOf="@+id/etOfferTitle" />
 
 
             <TextView
-                android:id="@+id/tvKatSayisi"
-                style="@style/spinner_style"
+                android:id="@+id/etNumberOfFloors"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -102,20 +101,19 @@
                 android:fontFamily="@font/abeezee"
                 android:gravity="bottom"
                 android:hint="@string/kat_sayisi"
-                android:inputType="number"
                 android:padding="10dp"
                 android:textAlignment="textStart"
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvetIl"
+                app:layout_constraintBottom_toTopOf="@+id/etProvince"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvEsyaSekli"
+                app:layout_constraintTop_toBottomOf="@+id/etTransportMethod"
                 tools:ignore="RtlCompat" />
 
             <AutoCompleteTextView
-                android:id="@+id/tvetIl"
+                android:id="@+id/etProvince"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -135,13 +133,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTtvIlce"
+                app:layout_constraintBottom_toTopOf="@id/etDistrict"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvKatSayisi" />
+                app:layout_constraintTop_toBottomOf="@id/etNumberOfFloors" />
 
             <AutoCompleteTextView
-                android:id="@+id/mTtvIlce"
+                android:id="@+id/etDistrict"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -159,19 +157,19 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvToIl"
+                app:layout_constraintBottom_toTopOf="@+id/etTargetProvince"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvetIl" />
+                app:layout_constraintTop_toBottomOf="@+id/etProvince" />
 
             <AutoCompleteTextView
-                android:id="@+id/tvToIl"
-                style="@style/spinner_style"
+                android:id="@+id/etTargetProvince"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
-                android:layout_alignParentTop="false"
+                android:layout_alignParentTop="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="5dp"
                 android:background="?attr/edittextcolor"
                 android:ems="10"
@@ -183,14 +181,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvToIlce"
+                app:layout_constraintBottom_toTopOf="@id/etTargetDistrict"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTtvIlce" />
+                app:layout_constraintTop_toBottomOf="@id/etDistrict" />
 
             <AutoCompleteTextView
-                android:id="@+id/mTvToIlce"
-                style="@style/spinner_style"
+                android:id="@+id/etTargetDistrict"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -209,14 +206,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/mTvKat"
+                app:layout_constraintBottom_toTopOf="@+id/etToFloors"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvToIl" />
+                app:layout_constraintTop_toBottomOf="@+id/etTargetProvince" />
 
             <TextView
-                android:id="@+id/mTvKat"
-                style="@style/spinner_style"
+                android:id="@+id/etToFloors"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_layout_height"
                 android:layout_alignParentTop="true"
@@ -236,13 +232,13 @@
                 android:textColor="?attr/textcolor"
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvAciklama"
+                app:layout_constraintBottom_toTopOf="@+id/etExplanation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvToIlce" />
+                app:layout_constraintTop_toBottomOf="@+id/etTargetDistrict" />
 
             <EditText
-                android:id="@+id/tvAciklama"
+                android:id="@+id/etExplanation"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
@@ -261,15 +257,15 @@
                 android:textColorHint="?attr/textcolor"
                 android:textSize="12sp"
                 android:typeface="sans"
-                app:layout_constraintBottom_toTopOf="@+id/btnSend"
+                app:layout_constraintBottom_toTopOf="@+id/btnOfferSave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mTvKat"
+                app:layout_constraintTop_toBottomOf="@+id/etToFloors"
                 tools:ignore="RtlCompat" />
 
 
             <Button
-                android:id="@+id/btnSend"
+                android:id="@+id/btnOfferSave"
                 android:layout_width="200dp"
                 android:layout_height="35dp"
                 android:layout_alignParentTop="true"
@@ -287,7 +283,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAciklama" />
+                app:layout_constraintTop_toBottomOf="@+id/etExplanation" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

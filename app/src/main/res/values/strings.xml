@@ -55,8 +55,9 @@
     <string name="tasinma_bilgileri">Taşınma Bilgileri</string>
 
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="ilan_detay">İlan Detayı</string>
+    <string name="bilgiler">Bilgiler</string>
 
     <string-array name="tasinmaSekli">
         <item>Bina Merdiveni</item>
@@ -90,7 +91,6 @@
         <item>-2.Kat</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="odaSayisi">
         <item>1+1</item>
         <item>2+1</item>

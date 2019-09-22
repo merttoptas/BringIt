@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import android.content.ClipData;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -23,6 +25,8 @@ import com.merttoptas.bringit.Activity.Fragment.MessageFragment;
 import com.merttoptas.bringit.Activity.Fragment.OfferFragment;
 import com.merttoptas.bringit.R;
 import java.util.ArrayList;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     Typeface typeface;
     SharedPreferences myPrefs;
     Switch mySwitch;
+
 
     @Override
     protected void onStart() {
@@ -64,19 +69,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
 
-        //Resource of Items
-        etBaslik = findViewById(R.id.tvBaslik);
-        etEsyaSekli = findViewById(R.id.tvEsyaSekli);
-        etKatSayisi = findViewById(R.id.tvKatSayisi);
-        etIl = findViewById(R.id.tvetIl);
-        etIlce = findViewById(R.id.mTtvIlce);
-        etToİl = findViewById(R.id.tvToIl);
-        etKat = findViewById(R.id.mTvKat);
-        etToIlce = findViewById(R.id.mTvToIlce);
-        btnOfferSave = findViewById(R.id.btnSend);
-        etAciklama = findViewById(R.id.tvAciklama);
         mySwitch = findViewById(R.id.mySwitch);
 
+        Trace myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
+        myTrace.start();
 
     }
 

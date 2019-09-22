@@ -2,111 +2,99 @@ package com.merttoptas.bringit.Activity.Model;
 
 public class Offer {
     private String offerNameSurname;
-    private String etBaslik;
-    private String etEsyaSekli;
-    private String etKatSayisi;
-    private String etIl;
-    private String etIlce;
-    private String etToIl;
-    private String etToIlce;
-    private String etKat;
+    private String title;
+    private String transport;
+    private String numberOfFloors;
+    private String province;
+    private String district;
+    private String targetProvince;
+    private String targetDistrict;
+    private String toFloors;
     private double latitude;
     private double longitude;
     private String dateTime;
-    private String aciklama;
+    private String explanation;
 
-    public Offer(){
+    public Offer(){ }
 
-    }
-
-    public Offer(String etBaslik, String etEsyaSekli, String etKatSayisi, String etIl, String etIlce,
-                 String etToIl, String etToIlce, String etKat, double latitude, double longitude,
-                 String dateTime, String aciklama, String offerNameSurname) {
-        this.etBaslik = etBaslik;
-        this.etEsyaSekli = etEsyaSekli;
-        this.etKatSayisi = etKatSayisi;
-        this.etIl = etIl;
-        this.etIlce = etIlce;
-        this.etToIl = etToIl;
-        this.etToIlce = etToIlce;
-        this.etKat = etKat;
+    public Offer(String title, String transport, String numberOfFloors, String province, String district,
+                 String targetProvince, String targetDistrict, String toFloors, double latitude, double longitude,
+                 String dateTime, String explanation, String offerNameSurname) {
+        this.title = title;
+        this.transport = transport;
+        this.numberOfFloors = numberOfFloors;
+        this.province = province;
+        this.district = district;
+        this.targetProvince = targetProvince;
+        this.targetDistrict = targetDistrict;
+        this.toFloors = toFloors;
         this.latitude = latitude;
         this.longitude = longitude;
         this.dateTime = dateTime;
-        this.aciklama=aciklama;
+        this.explanation=explanation;
         this.offerNameSurname =offerNameSurname;
 
     }
 
 
-    public String getEtBaslik() {
+    public String getTitle() { return title; }
 
-
-        return etBaslik;
+    public void setTitle(String etBaslik) {
+        this.title = etBaslik;
     }
 
-    public void setEtBaslik(String etBaslik) {
-        this.etBaslik = etBaslik;
+    public String getTransport() {
+        return transport;
     }
 
-    public String getEtEsyaSekli() {
-        return etEsyaSekli;
+    public void setTransport(String transport) {
+        this.transport = transport;
     }
 
-    public void setEtEsyaSekli(String etEsyaSekli) {
-        this.etEsyaSekli = etEsyaSekli;
+    public String getNumberOfFloors() {
+        return numberOfFloors;
     }
 
-    public String getEtKatSayisi() {
-        return etKatSayisi;
+    public void setNumberOfFloors(String numberOfFloors) {
+        this.numberOfFloors = numberOfFloors;
     }
 
-    public void setEtKatSayisi(String etKatSayisi) {
-        this.etKatSayisi = etKatSayisi;
+    public String getProvince() {
+        return province;
     }
 
-    public String getEtIl() {
-        return etIl;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public void setEtIl(String etIl) {
-        this.etIl = etIl;
+    public String getDistrict() {
+        return district;
     }
 
-    public String getEtIlce() {
-        return etIlce;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public void setEtIlce(String etIlce) {
-        this.etIlce = etIlce;
+    public String getTargetProvince(){ return  targetProvince;
+    }
+    public void setTargetProvince(String targetProvince) {
+        this.targetProvince = targetProvince;
     }
 
-    public String etToIl() {
-        return etToIl;
+    public String getTargetDistrict() {
+        return targetDistrict;
     }
 
-    public void setEtToIl(String etToIl) {
-        this.etToIl = etToIl;
+    public void setTargetDistrict(String targetDistrict) {
+        this.targetDistrict = targetDistrict;
     }
 
-    public String getEtToIl(){
-        return  etToIl;
+    public String getToFloors() {
+        return toFloors;
     }
 
-    public String getEtToIlce() {
-        return etToIlce;
-    }
-
-    public void setEtToIlce(String etToIlce) {
-        this.etToIlce = etToIlce;
-    }
-
-    public String getEtKat() {
-        return etKat;
-    }
-
-    public void setEtKat(String etKat) {
-        this.etKat = etKat;
+    public void setToFloors(String toFloors) {
+        this.toFloors = toFloors;
     }
 
     public double getLatitude() { return latitude;
@@ -130,19 +118,17 @@ public class Offer {
         this.dateTime = dateTime;
     }
 
-    public String getAciklama() {
-        return aciklama;
+    public String getExplanation() {
+        return explanation;
     }
 
-    public void setAciklama(String aciklama) {
-        this.aciklama = aciklama;
+    public void setExplanation(String aciklama) {
+        this.explanation = aciklama;
     }
 
     public String getOfferNameSurname() {
         return offerNameSurname;
     }
 
-    public void setOfferNameSurname(String offerNameSurname) {
-        this.offerNameSurname = offerNameSurname;
-    }
+    public void setOfferNameSurname(String offerNameSurname) { this.offerNameSurname = offerNameSurname; }
 }

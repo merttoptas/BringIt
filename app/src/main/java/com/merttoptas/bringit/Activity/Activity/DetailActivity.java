@@ -29,8 +29,9 @@ public class DetailActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     Toolbar toolbar;
     CardView mCardView;
-    TextView mTitle, mTvTarget, mTvBaslik, mTvEsyaSekli, mTvKatSayisi, mTvetIl, mTtvIlce, mTvToIl, mTvToIlce, mTvKat, mTvDate, tvAciklama, mtvNameSurname;
+    TextView tvUserNameSurname, tvOfferTitle, tvTransportMethod, tvNumberOfFloors, tvProvince, tvDistrict, tvTargetProvince, tvTargetDistrict,tvToFloors,tvDate, tvExplanation,mTitle,mTvTarget,tvTransport;
     Button mMessageSend;
+
     FirebaseAuth mAuth;
     ImageView navOfferPhoto;
     private List<Object> list;
@@ -44,18 +45,20 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        tvUserNameSurname = findViewById(R.id.tvUserNameSurname);
+        tvOfferTitle = findViewById(R.id.tvOfferTitle);
+        tvTransportMethod = findViewById(R.id.tvTransportMethod);
+        tvNumberOfFloors = findViewById(R.id.tvNumberOfFloors);
+        tvProvince = findViewById(R.id.tvProvince);
+        tvDistrict = findViewById(R.id.tvDistrict);
+        tvTargetProvince = findViewById(R.id.tvTargetProvince);
+        tvTargetDistrict = findViewById(R.id.tvTargetDistrict);
+        tvToFloors = findViewById(R.id.tvToFloors);
+        tvDate = findViewById(R.id.TvDate);
+        tvExplanation = findViewById(R.id.tvExplanation);
+        tvExplanation = findViewById(R.id.tvExplanation);
+        tvTransport = findViewById(R.id.tvTransport);
 
-        mTvBaslik = findViewById(R.id.tvBaslik);
-        mTvEsyaSekli = findViewById(R.id.tvEsyaSekli);
-        mTvKatSayisi = findViewById(R.id.tvKatSayisi);
-        mTvetIl = findViewById(R.id.tvetIl);
-        mTtvIlce = findViewById(R.id.mTtvIlce);
-        mTvToIl = findViewById(R.id.mTvToIl);
-        mTvToIlce = findViewById(R.id.mTvToIlce);
-        mTvKat = findViewById(R.id.mTvKat);
-        mTvDate = findViewById(R.id.mTvDate);
-        tvAciklama = findViewById(R.id.tvAciklama);
-        mtvNameSurname = findViewById(R.id.mtvNameSurname);
         mMessageSend = findViewById(R.id.btnMessage);
         navOfferPhoto = findViewById(R.id.navOfferPhoto);
         //toolbar set name
@@ -69,7 +72,10 @@ public class DetailActivity extends AppCompatActivity {
 
         mCardView = findViewById(R.id.cardView);
         mTvTarget = findViewById(R.id.mTvTarget);
+        typeface = Typeface.createFromAsset(getAssets(),"fonts/rubik.ttf");
+        tvTransport.setTypeface(typeface);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
+        tvUserNameSurname.setTypeface(typeface);
         mTvTarget.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -78,17 +84,17 @@ public class DetailActivity extends AppCompatActivity {
 
     public void getDetail() {
 
-        mTvBaslik.setText(getIntent().getStringExtra("baslik"));
-        mTvEsyaSekli.setText(getIntent().getStringExtra("esyaS"));
-        mTvetIl.setText(getIntent().getStringExtra("esyaIl"));
-        mTtvIlce.setText(getIntent().getStringExtra("esyaIlce"));
-        mTvToIl.setText(getIntent().getStringExtra("esyaToIl"));
-        mTvToIlce.setText(getIntent().getStringExtra("esyaIlce"));
-        mTvKatSayisi.setText(getIntent().getStringExtra("katSayisi"));
-        mTvDate.setText(getIntent().getStringExtra("date"));
-        tvAciklama.setText(getIntent().getStringExtra("aciklama"));
-        mTvKat.setText(getIntent().getStringExtra("kat"));
-        mtvNameSurname.setText(getIntent().getStringExtra("nameSurname"));
+        tvOfferTitle.setText(getIntent().getStringExtra("title"));
+        tvTransportMethod.setText(getIntent().getStringExtra("transport"));
+        tvToFloors.setText(getIntent().getStringExtra("toFloors"));
+        tvProvince.setText(getIntent().getStringExtra("province"));
+        tvDistrict.setText(getIntent().getStringExtra("district"));
+        tvTargetProvince.setText(getIntent().getStringExtra("targetProvince"));
+        tvTargetDistrict.setText(getIntent().getStringExtra("targetDistrict"));
+        tvNumberOfFloors.setText(getIntent().getStringExtra("numberOfFloors"));
+        tvDate.setText(getIntent().getStringExtra("date"));
+        tvExplanation.setText(getIntent().getStringExtra("explanation"));
+        tvUserNameSurname.setText(getIntent().getStringExtra("nameSurname"));
 
     }
 

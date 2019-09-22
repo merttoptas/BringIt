@@ -8,51 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669520976677:android:680363f84bcad61f",
-        "android_client_info": {
-          "package_name": "com.example.bringit"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "669520976677-15359ql6smbgo4nfjhm0fa9t692giii9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.bringit",
-            "certificate_hash": "70841c155f961d21f5212197064aa9c07cd2a2e8"
-          }
-        },
-        {
-          "client_id": "669520976677-tqthk04bmdkjp6k79jo21r189sleqpd2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.bringit",
-            "certificate_hash": "acc2c55b2a2a0630152812a10ba11d876a2bef75"
-          }
-        },
-        {
-          "client_id": "669520976677-3sv6tls1nvl01d0v5b9utbd2af51bjng.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAaxOFZti8xNPFmMpdJKC4Pbh2YFGIlU3s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "669520976677-3sv6tls1nvl01d0v5b9utbd2af51bjng.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:669520976677:android:631044a9093c8d42",
         "android_client_info": {
           "package_name": "com.merttoptas.bringit"

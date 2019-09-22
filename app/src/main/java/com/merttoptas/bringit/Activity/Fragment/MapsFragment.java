@@ -113,7 +113,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
         mGeoDataClient = Places.getGeoDataClient(this.getActivity(),null);
 
-
+        adapter = new RecyclerViewAdapter(offerlist, getActivity());
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         if(currentUser !=null){
 
             connectUser();

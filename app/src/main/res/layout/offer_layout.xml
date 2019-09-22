@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    app:cardBackgroundColor="?attr/cardbackground"
+    app:cardBackgroundColor="?attr/cardBackground"
     app:cardCornerRadius="5dp"
     app:cardPreventCornerOverlap="true">
 
@@ -29,7 +29,7 @@
             android:padding="3dp">
 
             <TextView
-                android:id="@+id/tvBaslik"
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -39,23 +39,22 @@
                 android:text="@string/baslik"
                 android:textColor="?attr/offerlayoutcolor"
                 android:textSize="12sp" />
+         <TextView
+             android:id="@+id/tvOfferTitle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="left"
+             android:layout_marginStart="10dp"
+             android:layout_marginTop="15dp"
+             android:fontFamily="@font/abeezee"
+             android:shadowColor="@color/white"
+             android:text="@string/textview"
+             android:textColor="?attr/offerlayoutcolor"
+             android:textSize="10sp"
+             tools:ignore="SmallSp" />
 
             <TextView
-                android:id="@+id/tvOfferBaslik"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:fontFamily="@font/abeezee"
-                android:shadowColor="@color/white"
-                android:text="@string/textview"
-                android:textColor="?attr/offerlayoutcolor"
-                android:textSize="10sp"
-                tools:ignore="SmallSp" />
-
-            <TextView
-                android:id="@+id/mtvNameSurname"
+                android:id="@+id/tvProvince"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -65,7 +64,10 @@
                 android:fontFamily="@font/abeezee"
                 android:text="@string/textview"
                 android:textColor="?attr/offerlayoutcolor"
-                android:textSize="10sp" />
+                android:textSize="10sp">
+
+            </TextView>
+
         </LinearLayout>
 
         <LinearLayout
@@ -76,18 +78,17 @@
             android:orientation="vertical"
             android:padding="3dp">
 
-            <TextView
-                android:id="@+id/tvIl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="@font/abeezee"
-                android:text="@string/baslik"
-                android:textColor="?attr/offerlayoutcolor"
-                android:textSize="12sp">
-
-            </TextView>
+           <TextView
+               android:id="@+id/tvTargetProvince"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="right"
+               android:layout_marginEnd="10dp"
+               android:fontFamily="@font/abeezee"
+               android:text="@string/baslik"
+               android:textColor="?attr/offerlayoutcolor"
+               android:textSize="10sp">
+           </TextView>
 
             <TextView
                 android:id="@+id/tvDate"
@@ -103,7 +104,7 @@
 
 
             <TextView
-                android:id="@+id/mTtvIlce"
+                android:id="@+id/tvTargetDistrict"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
