@@ -58,6 +58,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="ilan_detay">İlan Detayı</string>
     <string name="bilgiler">Bilgiler</string>
+    <string name="kullanici_adi">Kullanıcı Adı:</string>
 
     <string-array name="tasinmaSekli">
         <item>Bina Merdiveni</item>

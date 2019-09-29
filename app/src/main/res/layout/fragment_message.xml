@@ -26,37 +26,6 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <RelativeLayout
-            android:id="@+id/relative_bottom"
-            android:layout_width="match_parent"
-            android:padding="5dp"
-            android:background="?attr/backgroundColor"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/etMessageSend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/btn_send"
-                android:fontFamily="@font/abeezee"
-                android:hint="@string/mesaj_yazma"
-                android:textColor="?attr/textcolor"
-                android:textColorHint="?attr/textcolor"
-                android:textAlignment="textStart"
-                android:textSize="14sp" />
-
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ic_send_black_24dp"
-                android:id="@+id/btn_send"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-
     </RelativeLayout>
 
 

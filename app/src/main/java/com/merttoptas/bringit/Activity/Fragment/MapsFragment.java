@@ -152,7 +152,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-        mlocationRequest();
+        locationRequest();
 
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -375,10 +375,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private void mlocationRequest(){
+    private void locationRequest(){
 
         mLocationRequest = new LocationRequest();
-        //i nterval for active location updates, in milliseconds
+        //interval for active location updates, in milliseconds
         mLocationRequest.setInterval(15000);
         //This controls the fastest rate at which your application will receive location updates,
         mLocationRequest.setFastestInterval(15000);

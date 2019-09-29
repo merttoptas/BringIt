@@ -124,8 +124,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         }
 
-
-
     }
 
     @Override

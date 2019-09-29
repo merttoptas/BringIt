@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.content.ClipData;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -35,12 +37,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     MapsFragment mapsFragment = new MapsFragment();
     MessageFragment messageFragment = new MessageFragment();
     OfferFragment offerFragment = new OfferFragment();
-    public double latitude;
-    public double longitude;
-    AutoCompleteTextView etIl, etIlce, etToİl, etToIlce;
-    TextView etEsyaSekli, etKatSayisi, etKat;
-    EditText etBaslik, etAciklama;
-    Button btnOfferSave;
     Typeface typeface;
     SharedPreferences myPrefs;
     Switch mySwitch;
@@ -50,12 +46,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onStart() {
         super.onStart();
 
-        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
-        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+        SharedPreferences prefs = getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        boolean switchState = prefs.getBoolean("nightOpen", false);
+
+        if(switchState){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
-        }else if(AppCompatDelegate.getDefaultNightMode() ==AppCompatDelegate.MODE_NIGHT_NO){
+
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
 
         }
+
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
     }
 
@@ -68,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
-
         mySwitch = findViewById(R.id.mySwitch);
 
         Trace myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
@@ -104,13 +109,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onResume();
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
-            int bubleButtomcolor = Color.parseColor("#424242");
-            bottomNavigationView.setBackgroundColor(bubleButtomcolor);
+
+            int bottomNavigationColor = Color.parseColor("#424242");
+            bottomNavigationView.setBackgroundColor(bottomNavigationColor);
 
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            int bubleBottomColor = Color.parseColor("#ffffffff");
-            bottomNavigationView.setBackgroundColor(bubleBottomColor);
+            int bottomNavigationColor = Color.parseColor("#ffffffff");
+            bottomNavigationView.setBackgroundColor(bottomNavigationColor);
         }
 
     }

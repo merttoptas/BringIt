@@ -37,6 +37,8 @@
         <item name="offerDetailTextColor">#303030</item>
         <item name="offerlayoutcolor">#ffffffff</item>
         <item name="bubleButtomcolor">#424242</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/WindowsAnimationTransition</item>
     </style>
 
@@ -51,8 +53,9 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -70,7 +73,6 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:popupBackground">#DFFFFFFF</item>
     </style>
-
 
     <style name="ToolbarName" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">@android:color/white</item>

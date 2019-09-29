@@ -26,6 +26,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.merttoptas.bringit.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +35,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -45,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     TextView tvLoginText;
     Typeface typeface;
+    DatabaseReference ref;
+    FirebaseUser currentUser;
 
 
     @Override
@@ -99,14 +105,14 @@ public class LoginActivity extends AppCompatActivity {
             }
             @Override
             public void onCancel() {
-                Log.d("fbcansel", "facebook:onCancel");
+                Log.d("fbCancel", "facebook:onCancel");
                 Toast.makeText(LoginActivity.this, "Giriş İptal Edildi", Toast.LENGTH_SHORT).show();
                 loadingProgress.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("fberror", "facebook:onError");
+                Log.d("fbError", "facebook:onError");
                 Toast.makeText(LoginActivity.this, "Giriş Hatalı", Toast.LENGTH_SHORT).show();
                 loadingProgress.setVisibility(View.INVISIBLE);
             }
@@ -131,11 +137,36 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
 
         String userName = user.getDisplayName();
-        Toast.makeText(LoginActivity.this, "Kullanıcı Adı: " + userName,  Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.kullanici_adi) + userName,  Toast.LENGTH_LONG).show();
+        String userid = user.getUid();
+        String username =user.getDisplayName();
+        ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
-        Intent accountIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(accountIntent);
-        finish();
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id", userid);
+        hashMap.put("username", username);
+        hashMap.put("imageUrl", "default");
+        if ( currentUser == null){
+
+            ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Intent accountIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(accountIntent);
+                        finish();
+                    }
+                }
+            });
+        }
+        else{
+            Intent accountIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(accountIntent);
+            finish();
+
+        }
+
+
     }
 
     @Override

@@ -78,7 +78,7 @@ public class OfferFragment extends Fragment {
     private Typeface typeface;
     private SharedPreferences myPrefs;
     SharedPreferences.Editor editor;
-    TextView tvIlanSayisi;
+    private TextView tvIlanSayisi;
     int offerNumber =0;
     String offerNameSurname  ="";
 
@@ -91,7 +91,6 @@ public class OfferFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -138,7 +137,6 @@ public class OfferFragment extends Fragment {
         //firebase
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
         //Resource of Items
         etOfferTitle = v.findViewById(R.id.etOfferTitle);
         etTransportMethod = v.findViewById(R.id.etTransportMethod);
@@ -378,9 +376,10 @@ public class OfferFragment extends Fragment {
                 offerNameSurname = currentUser.getDisplayName();
                 String etdateTime = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
                 Log.d("CurrentDate", etdateTime.toString());
+
                 dbRef.push().setValue(
                         new Offer(
-                                etOfferTitle.getText().toString().toUpperCase(),
+                                etOfferTitle.getText().toString().substring(0,1).toUpperCase() + etOfferTitle.toString().substring(1).toLowerCase(),
                                 etTransportMethod.getText().toString(),
                                 etNumberOfFloors.getText().toString(),
                                 etProvince.getText().toString().toUpperCase(),
@@ -574,4 +573,5 @@ public class OfferFragment extends Fragment {
         etToFloors.setText("");
 
     }
+
 }

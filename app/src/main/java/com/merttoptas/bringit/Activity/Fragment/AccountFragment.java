@@ -1,10 +1,13 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -28,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.merttoptas.bringit.Activity.Activity.DetailActivity;
 import com.merttoptas.bringit.R;
 
 
@@ -42,13 +46,13 @@ public class AccountFragment extends Fragment {
     private ImageView navUserPhoto;
     private TextView tvUserNameSurname;
     private ImageView ivNightMode;
-    Switch mySwitch;
-    FirebaseUser currentUser;
-    FirebaseAuth mAuth;
-    ImageView ivMail,ivPhone;
-    SharedPreferences myPrefs;
-    SharedPreferences.Editor editor;
-    ConstraintLayout constraintLayout3;
+    private Switch mySwitch;
+    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
+    private ImageView ivMail,ivPhone;
+    private SharedPreferences myPrefs;
+    private SharedPreferences.Editor editor;
+    private ConstraintLayout constraintLayout3;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -68,12 +72,12 @@ public class AccountFragment extends Fragment {
         }
         View v= inflater.inflate(R.layout.fragment_account, container, false);
 
-        tvUserNameSurname = (TextView) v.findViewById(R.id.tvUserNameSurname);
+        tvUserNameSurname = v.findViewById(R.id.tvUserNameSurname);
         tvIlanlar = v.findViewById(R.id.tvIlanlar);
         tvTasima =v.findViewById(R.id.tvTasima);
         tvIlanSayisi =v.findViewById(R.id.tvIlanSayisi);
         tvTasimaSayisi=v.findViewById(R.id.tvTasimaSayisi);
-        tvMail =(TextView) v.findViewById(R.id.tvMail);
+        tvMail = v.findViewById(R.id.tvMail);
         tvPhone=v.findViewById(R.id.tvPhone);
         tvWebSite=v.findViewById(R.id.tvWebSite);
         ivMail = v.findViewById(R.id.ivMail);
@@ -82,29 +86,29 @@ public class AccountFragment extends Fragment {
         ivNightMode = v.findViewById(R.id.ivNightMode);
         mySwitch = v.findViewById(R.id.mySwitch);
         constraintLayout3 = v.findViewById(R.id.constraintLayout);
-
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
-
             mySwitch.setChecked(true);
         }
+
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        myPrefs =getActivity().getSharedPreferences("nightMode",Context.MODE_PRIVATE );
+        editor = myPrefs.edit();
+        mySwitch.setChecked(myPrefs.getBoolean("nightOpen", false));
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 if(isChecked){
-                    mySwitch.setChecked(myPrefs.getBoolean("fragment", true));
-
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor.putBoolean("nightOpen", true);
 
-
-                    //restartApp();
                 }else{
+                    editor.putBoolean("nightOpen", false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    //restartApp();
                 }
+                editor.commit();
             }
         });
 
@@ -120,7 +124,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                dialogUret();
+                createDialog();
             }
         });
 
@@ -129,11 +133,7 @@ public class AccountFragment extends Fragment {
 
     }
 
-    private void restartApp(){
-    }
-
-
-    private void dialogUret(){
+    private void createDialog(){
         final Dialog d = new Dialog(getActivity());
         d.setContentView(R.layout.custom_dialog_style1);
 
@@ -155,13 +155,13 @@ public class AccountFragment extends Fragment {
         etPhoneNo.setText(myPrefs.getString("phone",""));
         etWebSite.setText(myPrefs.getString("webSite",""));
 
-        Button btnOlumlu = d.findViewById(R.id.btnSave_1);
-        Button btnOlumsuz = d.findViewById(R.id.btnCikis_2);
-        btnOlumlu.setText(getString(R.string.kaydet));
-        btnOlumsuz.setText(getString(R.string.kapat));
+        Button btnPositive = d.findViewById(R.id.btnSave_1);
+        Button btnNegative = d.findViewById(R.id.btnCikis_2);
+        btnPositive.setText(getString(R.string.kaydet));
+        btnNegative.setText(getString(R.string.kapat));
 
 
-        btnOlumlu.setOnClickListener(new View.OnClickListener() {
+        btnPositive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -181,7 +181,7 @@ public class AccountFragment extends Fragment {
 
             }
         });
-        btnOlumsuz.setOnClickListener(new View.OnClickListener() {
+        btnNegative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 d.dismiss();
@@ -243,7 +243,8 @@ public class AccountFragment extends Fragment {
             if(tvMail.getText().toString().matches("")){
                 tvMail.setText(currentUser.getEmail());
 
-            }else {
+            }else{
+                tvMail.setText(currentUser.getEmail());
 
             }
             if(tvPhone.getText().toString().matches("")){
@@ -308,6 +309,15 @@ public class AccountFragment extends Fragment {
 
         tvWebSite.setText(myPrefs.getString("webSite", ""));
         tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+    public void onButtonPressed(int i) {
+
     }
 
 }
