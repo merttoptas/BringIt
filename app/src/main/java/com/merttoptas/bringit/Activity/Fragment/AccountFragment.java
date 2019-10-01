@@ -108,7 +108,7 @@ public class AccountFragment extends Fragment {
                     editor.putBoolean("nightOpen", false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 }
-                editor.commit();
+                editor.apply();
             }
         });
 
@@ -280,6 +280,8 @@ public class AccountFragment extends Fragment {
                 Glide.with(this).load(personPhoto).into(navUserPhoto);
 
                 Log.d("imgUrl", "signInWithCredential:success: " + personPhoto);
+                Uri deneme = Uri.parse(personPhoto);
+
 
             }
 

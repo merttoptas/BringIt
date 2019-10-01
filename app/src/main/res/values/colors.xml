@@ -37,5 +37,14 @@
     <color name="orange_bg_light">#fff3e0</color>
     <color name="grey_bg_light">#fafafa</color>
 
+    <color name="gradient_start_color" >#4c84ff</color>
+    <color name="gradient_end_color" >#18a3fe</color>
+    <color name="tab_indicator">#c0c0c0</color>
+    <color name="intro_title_color">#000000</color>
+    <color name="intro_description_color">#656565</color>
+
+
+
+
 
 </resources>

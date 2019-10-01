@@ -37,4 +37,6 @@
     <string name="mesaj">Message</string>
     <string name="ilan_detay">Offer Details</string>
     <string name="il">Province</string>
+    <string name="skip">Skip</string>
+    <string name="get_starded">Get Started</string>
 </resources>

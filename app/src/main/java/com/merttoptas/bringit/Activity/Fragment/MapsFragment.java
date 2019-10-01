@@ -342,7 +342,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("offersLocation").child("offers").child("location");
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Offers");
 
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -353,9 +353,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                     Offer o = snapshot.getValue(Offer.class);
                     offerlist.add(o);
-                    //offerlist.add(new Reklam(
-                     //       "54544"
-                   // ));
+
 
                 }
 

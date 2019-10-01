@@ -1,6 +1,7 @@
 package com.merttoptas.bringit.Activity.Model;
 
 public class Offer {
+    private String id;
     private String offerNameSurname;
     private String title;
     private String transport;
@@ -17,9 +18,10 @@ public class Offer {
 
     public Offer(){ }
 
-    public Offer(String title, String transport, String numberOfFloors, String province, String district,
+    public Offer(String id,String title, String transport, String numberOfFloors, String province, String district,
                  String targetProvince, String targetDistrict, String toFloors, double latitude, double longitude,
                  String dateTime, String explanation, String offerNameSurname) {
+        this.id =id;
         this.title = title;
         this.transport = transport;
         this.numberOfFloors = numberOfFloors;
@@ -36,6 +38,11 @@ public class Offer {
 
     }
 
+    public String getId() { return id;
+    }
+
+    public void setId(String id) { this.id = id;
+    }
 
     public String getTitle() { return title; }
 

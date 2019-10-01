@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -26,6 +29,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.merttoptas.bringit.R;
@@ -36,7 +40,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     Typeface typeface;
     DatabaseReference ref;
     FirebaseUser currentUser;
+    Uri mImageUri;
 
 
     @Override
@@ -100,8 +107,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("fbAccess","fbAccess:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 loadingProgress.setVisibility(View.VISIBLE);
-                Intent i = new Intent( getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                startActivity(accountIntent);
+
             }
             @Override
             public void onCancel() {
@@ -136,36 +146,48 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
 
-        String userName = user.getDisplayName();
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.kullanici_adi) + userName,  Toast.LENGTH_LONG).show();
-        String userid = user.getUid();
-        String username =user.getDisplayName();
-        ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+        if(user !=null){
+            String username = user.getDisplayName();
+            String userid = user.getUid();
+            Uri photoURL = user.getPhotoUrl();
 
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("id", userid);
-        hashMap.put("username", username);
-        hashMap.put("imageUrl", "default");
-        if ( currentUser == null){
 
-            ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        Intent accountIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(accountIntent);
-                        finish();
+            ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+            Log.d("photoURL", "photoURL:" + photoURL);
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("id", userid);
+            hashMap.put("username", username);
+
+            for (UserInfo profile : user.getProviderData()){
+                Uri photoUrl = profile.getPhotoUrl();
+                String photoURlL = photoUrl.toString();
+                hashMap.put("imageURL", photoURlL);
+                Log.d("photoURL", "photoURL:" + photoURlL);
+            }
+            if ( currentUser == null){
+
+                ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                            startActivity(accountIntent);
+                            finish();
+                        }
                     }
-                }
-            });
-        }
-        else{
-            Intent accountIntent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(accountIntent);
-            finish();
+                });
+            }
+            else{
+                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                startActivity(accountIntent);
+                finish();
+
+            }
+
+            Toast.makeText(LoginActivity.this, getResources().getString(R.string.kullanici_adi) + username,  Toast.LENGTH_LONG).show();
 
         }
-
 
     }
 
@@ -202,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
+                            user.getPhotoUrl();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -226,6 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("fbsSign", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
+                            user.getPhotoUrl();
                             updateUI(user);
                         } else {
                             Log.w("fbSignC", "signInWithCredential:failure", task.getException());
@@ -238,5 +262,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
     }
+
 
 }

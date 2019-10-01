@@ -340,7 +340,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="30dp"
                 android:checked="false"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/gece_modu"

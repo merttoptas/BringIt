@@ -48,7 +48,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf:19.0.0'
 
 
-
     // facebooklogin
     implementation 'com.facebook.android:facebook-login:[5,6)'
 

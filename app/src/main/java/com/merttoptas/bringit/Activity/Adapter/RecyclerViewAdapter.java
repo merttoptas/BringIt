@@ -16,12 +16,14 @@ import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.Reklam;
+import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
 
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<Object> list;
+    public List<User> userlist;
     private final static int TIP_Offer =1, TIP_Reklam =2;
     private final int VIEW_TYPE_LOADING = 3;
     private Context context;
@@ -84,6 +86,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final int viewType = viewHolder.getItemViewType();
         Object object  = list.get(i);
 
+
         switch (viewType){
 
             case TIP_Offer:
@@ -105,6 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         intent.putExtra("date", ((Offer) list.get(i)).getDateTime());
                         intent.putExtra("explanation", ((Offer) list.get(i)).getExplanation());
                         intent.putExtra("nameSurname", ((Offer) list.get(i)).getOfferNameSurname());
+                        intent.putExtra("userid",  ((Offer) list.get(i)).getId());
 
                         context.startActivity(intent);
 

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
 import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
@@ -86,15 +87,16 @@ public class DetailActivity extends AppCompatActivity {
         tvExplanation.setText(getIntent().getStringExtra("explanation"));
         tvUserNameSurname.setText(getIntent().getStringExtra("nameSurname"));
 
+
     }
 
     public void sendMessage(View view) {
-        Intent i = new Intent(getApplicationContext(), MessageActivity.class);
-        i.putExtra("userName",currentUser.getDisplayName());
-        i.putExtra("userProfile", currentUser.getPhotoUrl());
-        i.putExtra("userid", currentUser.getUid());
-        startActivity(i);
+        User user = new User();
+        Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+        intent.putExtra("namesurname" , user.getUsername());
+        startActivity(intent);
         finish();
+
     }
 
     @Override

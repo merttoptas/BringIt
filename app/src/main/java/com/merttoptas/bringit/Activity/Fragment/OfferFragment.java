@@ -360,7 +360,7 @@ public class OfferFragment extends Fragment {
         }else {
 
             try {
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("offersLocation").child("offers").child("location");
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Offers");
 
                 LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -372,6 +372,7 @@ public class OfferFragment extends Fragment {
                 }
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 latitude =location.getLatitude();
+                String userid = currentUser.getUid();
                 longitude = location .getLongitude();
                 offerNameSurname = currentUser.getDisplayName();
                 String etdateTime = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
@@ -379,7 +380,8 @@ public class OfferFragment extends Fragment {
 
                 dbRef.push().setValue(
                         new Offer(
-                                etOfferTitle.getText().toString().substring(0,1).toUpperCase() + etOfferTitle.toString().substring(1).toLowerCase(),
+                                userid,
+                                etOfferTitle.getText().toString(),
                                 etTransportMethod.getText().toString(),
                                 etNumberOfFloors.getText().toString(),
                                 etProvince.getText().toString().toUpperCase(),
