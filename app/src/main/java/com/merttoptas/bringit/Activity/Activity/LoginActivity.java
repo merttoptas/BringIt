@@ -110,7 +110,12 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 updateUI(user);
                 Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(accountIntent);
+                overridePendingTransition (0, 0);
+
 
             }
             @Override
@@ -172,7 +177,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(accountIntent);
+                            overridePendingTransition (0, 0);
                             finish();
                         }
                     }
@@ -180,7 +189,11 @@ public class LoginActivity extends AppCompatActivity {
             }
             else{
                 Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(accountIntent);
+                overridePendingTransition (0, 0);
                 finish();
 
             }

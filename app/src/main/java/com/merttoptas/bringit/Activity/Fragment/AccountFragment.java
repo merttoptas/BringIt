@@ -273,11 +273,11 @@ public class AccountFragment extends Fragment {
                 String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
                 Log.d("fbİmg", "fbİmgSuccess : " + photoUrl);
 
-                Glide.with(this).load(photoUrl).into(navUserPhoto);
+                Glide.with(this).load(photoUrl).centerCrop().into(navUserPhoto);
             } else if (GoogleAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
                 String personPhoto = acct.getPhotoUrl().toString();
 
-                Glide.with(this).load(personPhoto).into(navUserPhoto);
+                Glide.with(this).load(personPhoto).centerCrop().into(navUserPhoto);
 
                 Log.d("imgUrl", "signInWithCredential:success: " + personPhoto);
                 Uri deneme = Uri.parse(personPhoto);

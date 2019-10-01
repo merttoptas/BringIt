@@ -10,21 +10,34 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.merttoptas.bringit.Activity.Adapter.UserAdapter;
 import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
 import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
+import com.merttoptas.bringit.Activity.Model.Chat;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailActivity extends AppCompatActivity {
     Typeface typeface;
@@ -34,12 +47,11 @@ public class DetailActivity extends AppCompatActivity {
             tvTargetProvince, tvTargetDistrict,tvToFloors,tvDate, tvExplanation,mTitle,mTvTarget,tvTransport;
     Button mMessageSend;
     FirebaseAuth mAuth;
-    ImageView navOfferPhoto;
-    FirebaseDatabase mdb;
-    MapsFragment mapsFragment = new MapsFragment();
+    CircleImageView navOfferPhoto;
     SharedPreferences myPrefs;
-    SharedPreferences.Editor editor;
-
+    DatabaseReference ref;
+    DatabaseReference reference;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_detail);
 
+        bindViews();
         //toolbar set name
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,13 +76,13 @@ public class DetailActivity extends AppCompatActivity {
                 AppCompatDelegate.MODE_NIGHT_YES);
 
         typeface = Typeface.createFromAsset(getAssets(),"fonts/rubik.ttf");
-        bindViews();
         tvTransport.setTypeface(typeface);
         tvUserNameSurname.setTypeface(typeface);
         mTvTarget.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         getDetail();
+
 
     }
 
@@ -88,14 +101,46 @@ public class DetailActivity extends AppCompatActivity {
         tvUserNameSurname.setText(getIntent().getStringExtra("nameSurname"));
 
 
+        final String userid = getIntent().getStringExtra("useridRw");
+        ref = FirebaseDatabase.getInstance().getReference("Users");
+        // Users in position get image photo
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot:  dataSnapshot.getChildren()){
+
+                    User user = snapshot.getValue(User.class);
+
+                    if(user.getId().equals(userid)){
+
+                        String imageUrl = user.getImageURL();
+                        Glide.with(getApplicationContext()).load(imageUrl).into(navOfferPhoto);
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     public void sendMessage(View view) {
-        User user = new User();
         Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-        intent.putExtra("namesurname" , user.getUsername());
+        String userid = getIntent().getStringExtra("useridRw");
+        Log.d("useridRw1", "useridRw1: " + userid);
+        intent.putExtra("useridRw1", userid);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
+        overridePendingTransition (0, 0);
 
     }
 
@@ -104,7 +149,6 @@ public class DetailActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
-
             return true;
         }
         return super.onOptionsItemSelected(item);

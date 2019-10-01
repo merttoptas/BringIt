@@ -1,6 +1,7 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +42,6 @@ public class MessageFragment extends Fragment {
 
 
     public MessageFragment() {
-        // Required empty public constructor
     }
 
 
@@ -60,6 +62,7 @@ public class MessageFragment extends Fragment {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        // Userlist set a chats.
         userList = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -71,11 +74,21 @@ public class MessageFragment extends Fragment {
 
                     Chat chat = snapshot.getValue(Chat.class);
 
-                    if(chat.getSender().equals(firebaseUser.getUid())){
-                        userList.add(chat.getReceiver());
+                    if(chat.getSender().isEmpty()){
+
+                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(chat.getSender().equals(firebaseUser.getUid())){
+                            userList.add(chat.getReceiver());
+                        }
                     }
-                    if(chat.getReceiver().equals(firebaseUser.getUid())){
-                        userList.add(chat.getSender());
+                    if(chat.getReceiver().isEmpty()){
+                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        if(chat.getReceiver().equals(firebaseUser.getUid())){
+                            userList.add(chat.getSender());
+                        }
                     }
                     readChats();
                 }
@@ -122,6 +135,7 @@ public class MessageFragment extends Fragment {
                 }
                 userAdapter = new UserAdapter(getContext(), mUsers);
                 recyclerView.setAdapter(userAdapter);
+                userAdapter.notifyDataSetChanged();
             }
 
             @Override

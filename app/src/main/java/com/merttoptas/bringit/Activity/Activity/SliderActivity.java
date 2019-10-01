@@ -54,22 +54,14 @@ public class SliderActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_slider);
 
-        tabIndicator =findViewById(R.id.tab_indicator);
+        bindViews();
         final  List<ScreenItem> mList = new ArrayList<>();
-
         mList.add(new ScreenItem(getString(R.string.app_name), getString(R.string.tv_slider), R.drawable.slider1));
         mList.add(new ScreenItem(getString(R.string.ilan_yayınla), getString(R.string.tv_slider1), R.drawable.slider3));
         mList.add(new ScreenItem(getString(R.string.teklif_ver), getString(R.string.tv_slider2), R.drawable.slider6));
 
-
-        screenPager = findViewById(R.id.screen_viewpager);
-        //btnNext =findViewById(R.id.btn_next);
-        btnGetStarted = findViewById(R.id.btn_get_started);
-        tvSkip = findViewById(R.id.tv_skip);
-        btnAnim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_animation);
         introViewPagerAdapter = new IntroViewPagerAdapter(this,mList);
         screenPager.setAdapter(introViewPagerAdapter);
-
         tabIndicator.setupWithViewPager(screenPager);
 
         tabIndicator.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
@@ -94,18 +86,14 @@ public class SliderActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void loadLastScreen() {
 
         // show the GETSTARTED Button and hide the indicator and the next button
-
         btnGetStarted.setVisibility(View.VISIBLE);
         tvSkip.setVisibility(View.INVISIBLE);
         tabIndicator.setVisibility(View.INVISIBLE);
-
         // setup animation
        btnGetStarted.setAnimation(btnAnim);
 
@@ -125,11 +113,8 @@ public class SliderActivity extends AppCompatActivity {
 
     }
     private boolean restorePrefData() {
-
-
         SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
-        Boolean isIntroActivityOpenedBefore = pref.getBoolean("isIntroOpened",false);
-        return  isIntroActivityOpenedBefore;
+        return pref.getBoolean("isIntroOpened",false);
 
     }
 
@@ -141,4 +126,14 @@ public class SliderActivity extends AppCompatActivity {
         editor.apply();
 
     }
+
+    private void bindViews(){
+        tabIndicator =findViewById(R.id.tab_indicator);
+        screenPager = findViewById(R.id.screen_viewpager);
+        btnGetStarted = findViewById(R.id.btn_get_started);
+        tvSkip = findViewById(R.id.tv_skip);
+        btnAnim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_animation);
+
+    }
+
 }

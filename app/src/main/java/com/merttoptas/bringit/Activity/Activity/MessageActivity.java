@@ -56,6 +56,7 @@ public class MessageActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     MessageAdapter messageAdapter;
     List<Chat> mChat = new ArrayList<>();
+    private List<User> mUsers;
     CircleImageView profile_image;
     TextView username;
 
@@ -76,7 +77,7 @@ public class MessageActivity extends AppCompatActivity {
         getDelegate().setLocalNightMode(
                 AppCompatDelegate.MODE_NIGHT_YES);
 
-
+        bindViews();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -89,47 +90,19 @@ public class MessageActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        //Firebase
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
-        btn_send = findViewById(R.id.btn_send);
-        etMessageSend = findViewById(R.id.etMessageSend);
-        recyclerView = findViewById(R.id.mRecyclerview);
-        profile_image = findViewById(R.id.profile_image);
-        username = findViewById(R.id.username);
 
+        //recyclerview set.
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        intent =getIntent();
-        final String userid = intent.getStringExtra("userid");
-        final String useridd = intent.getStringExtra("userid");
-        firebaseUser =FirebaseAuth.getInstance().getCurrentUser();
 
-        assert userid != null;
-
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Offers").child(useridd);
-
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                User user = dataSnapshot.getValue(User.class);
-                assert user != null;
-                username.setText(user.getUsername());
-                Glide.with(getApplicationContext()).load(Uri.parse(user.getImageURL())).into(profile_image);
-
-                readMessages(firebaseUser.getUid(), userid);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        getDetailsInfo();
+        readUserInfo();
 
     }
 
@@ -138,6 +111,9 @@ public class MessageActivity extends AppCompatActivity {
 
         if (item.getItemId() == android.R.id.home) {
             Intent i = new Intent(getApplicationContext(), DetailActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            overridePendingTransition (0, 0);
             startActivity(i);
 
             return true;
@@ -158,15 +134,32 @@ public class MessageActivity extends AppCompatActivity {
 
     public void btnSend(View view) {
         intent =getIntent();
-        final String userid = intent.getStringExtra("userid");
-        String msg = etMessageSend.getText().toString();
 
-        if(!msg.equals("")){
-            sendMessage(firebaseUser.getUid(), userid, msg);
-        }else{
-            Toast.makeText(getApplicationContext(), "You can't send empty message", Toast.LENGTH_SHORT).show();
+        if (intent.hasExtra("userid")){
+            final String userid = intent.getStringExtra("userid");
+            String msg = etMessageSend.getText().toString();
+            if(!msg.equals("")){
+                sendMessage(firebaseUser.getUid(), userid, msg);
+            }else{
+                Toast.makeText(getApplicationContext(), "You can't send empty message", Toast.LENGTH_SHORT).show();
+            }
+            etMessageSend.setText("");
         }
-        etMessageSend.setText("");
+        if (intent.hasExtra("useridRw1")){
+
+            final String userid1 = getIntent().getStringExtra("useridRw1");
+            String msg = etMessageSend.getText().toString();
+            if(!msg.equals("")){
+                sendMessage(firebaseUser.getUid(), userid1, msg);
+            }else{
+                Toast.makeText(getApplicationContext(), "You can't send empty message", Toast.LENGTH_SHORT).show();
+            }
+            etMessageSend.setText("");
+        }
+
+
+
+
     }
 
     private void readMessages(final String myid, final String userid){
@@ -201,5 +194,78 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void bindViews(){
+
+        btn_send = findViewById(R.id.btn_send);
+        etMessageSend = findViewById(R.id.etMessageSend);
+        recyclerView = findViewById(R.id.mRecyclerview);
+        profile_image = findViewById(R.id.profile_image);
+        username = findViewById(R.id.username);
+    }
+
+    private void readUserInfo(){
+
+        intent =getIntent();
+
+        if(intent.hasExtra("userid")){
+            final String userid = intent.getStringExtra("userid");
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
+
+            dbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    User user = dataSnapshot.getValue(User.class);
+                    assert user != null;
+                    username.setText(user.getUsername());
+                    Glide.with(getApplicationContext()).load(Uri.parse(user.getImageURL())).into(profile_image);
+                    readMessages(firebaseUser.getUid(), userid);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+    }
+    private void getDetailsInfo(){
+        intent =getIntent();
+
+        if (intent.hasExtra("useridRw1")){
+            final String userid = getIntent().getStringExtra("useridRw1");
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
+            // Users in position get image photo
+            dbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for(DataSnapshot snapshot:  dataSnapshot.getChildren()){
+
+                        User user = snapshot.getValue(User.class);
+
+                        if(user.getId().equals(userid)){
+
+                            String imageUrl = user.getImageURL();
+                            username.setText(user.getUsername());
+                            Glide.with(getApplicationContext()).load(imageUrl).into(profile_image);
+
+                        }
+                        readMessages(firebaseUser.getUid(), userid);
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }
