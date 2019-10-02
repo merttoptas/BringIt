@@ -21,12 +21,18 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
 import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
 import com.merttoptas.bringit.Activity.Fragment.MessageFragment;
 import com.merttoptas.bringit.Activity.Fragment.OfferFragment;
 import com.merttoptas.bringit.R;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 
@@ -40,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     Typeface typeface;
     SharedPreferences myPrefs;
     Switch mySwitch;
+    DatabaseReference ref;
+    FirebaseUser currentUser;
+    FirebaseAuth mAuth;
+
 
 
     @Override
@@ -119,10 +129,30 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             bottomNavigationView.setBackgroundColor(bottomNavigationColor);
         }
 
+        status("online");
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private void status(String status){
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        ref = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        ref.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        status("offline");
     }
 }

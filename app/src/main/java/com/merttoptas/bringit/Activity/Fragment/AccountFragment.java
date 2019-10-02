@@ -1,16 +1,13 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,26 +21,28 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
-import com.merttoptas.bringit.Activity.Activity.DetailActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
+
+import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class AccountFragment extends Fragment {
 
-    private TextView tvTasima;
     private TextView tvIlanSayisi;
-    private TextView tvTasimaSayisi;
     private TextView tvMail, tvIlanlar;
     private TextView tvPhone;
     private TextView tvWebSite;
-    private ImageView navUserPhoto;
+    private CircleImageView navUserPhoto;
     private TextView tvUserNameSurname;
     private ImageView ivNightMode;
     private Switch mySwitch;
@@ -52,11 +51,15 @@ public class AccountFragment extends Fragment {
     private ImageView ivMail,ivPhone;
     private SharedPreferences myPrefs;
     private SharedPreferences.Editor editor;
-    private ConstraintLayout constraintLayout3;
+    Context mContext;
+    DatabaseReference dbRef;
+    private Activity mActivity;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setAccountUser();
 
     }
 
@@ -74,9 +77,9 @@ public class AccountFragment extends Fragment {
 
         tvUserNameSurname = v.findViewById(R.id.tvUserNameSurname);
         tvIlanlar = v.findViewById(R.id.tvIlanlar);
-        tvTasima =v.findViewById(R.id.tvTasima);
+        TextView tvTasima = v.findViewById(R.id.tvTasima);
         tvIlanSayisi =v.findViewById(R.id.tvIlanSayisi);
-        tvTasimaSayisi=v.findViewById(R.id.tvTasimaSayisi);
+        TextView tvTasimaSayisi = v.findViewById(R.id.tvTasimaSayisi);
         tvMail = v.findViewById(R.id.tvMail);
         tvPhone=v.findViewById(R.id.tvPhone);
         tvWebSite=v.findViewById(R.id.tvWebSite);
@@ -85,7 +88,6 @@ public class AccountFragment extends Fragment {
         navUserPhoto = v.findViewById(R.id.navOfferPhoto);
         ivNightMode = v.findViewById(R.id.ivNightMode);
         mySwitch = v.findViewById(R.id.mySwitch);
-        constraintLayout3 = v.findViewById(R.id.constraintLayout);
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
@@ -118,7 +120,6 @@ public class AccountFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        setAccountUser();
         updateUser();
         btnSetAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +129,41 @@ public class AccountFragment extends Fragment {
             }
         });
 
+        dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid());
+        try {
+            dbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if(isAdded()){
+                        User user = dataSnapshot.getValue(User.class);
+                        assert user != null;
+                        tvUserNameSurname.setText(user.getUsername());
+                        if(user.getImageURL().isEmpty()){
+                            Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
+
+                        }else {
+                            if(user.getImageURL().equals("default")){
+                                navUserPhoto.setImageResource(R.drawable.userphoto);
+                            }else{
+                                String userImg=user.getImageURL();
+                                Log.d("ImageUrl", "ImgURl: " + userImg);
+                                Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
+                            }
+                        }
+                    }
+
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return v;
 
 
@@ -138,9 +174,7 @@ public class AccountFragment extends Fragment {
         d.setContentView(R.layout.custom_dialog_style1);
 
         final EditText etMail = d.findViewById(R.id.etMailAdress);
-
         final EditText etPhoneNo = d.findViewById(R.id.etPhoneNo);
-
         final EditText etWebSite = d.findViewById(R.id.etUserWebSite);
 
         // dialog u var firebaseden gelen verilerle doldurduk
@@ -196,48 +230,16 @@ public class AccountFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
         try {
             FirebaseUser currentUser = mAuth.getCurrentUser();
-
             Log.d("dbCurrentUser", "currentUser" + currentUser.getDisplayName() +currentUser.getEmail());
 
         } catch (Exception e) {
-
             e.fillInStackTrace();
-
         }
     }
 
     private void updateUser(){
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-        }
-
-        if (user != null) {
-            for (UserInfo profile : user.getProviderData()) {
-                // Id of the provider (ex: google.com)
-                String providerId = profile.getProviderId();
-
-                // UID specific to the provider
-                String uid = profile.getUid();
-
-                // Name, email address, and profile photo Url
-                String name = profile.getDisplayName();
-                String email = profile.getEmail();
-                Uri photoUrl = profile.getPhotoUrl();
-            }
-        }
-
         try {
 
             if(tvMail.getText().toString().matches("")){
@@ -255,36 +257,9 @@ public class AccountFragment extends Fragment {
                 Log.d("tvPhone", tvPhone.getText().toString());
             }
 
-            tvUserNameSurname.setText(currentUser.getDisplayName().toUpperCase());
         }
         catch (Exception e){
             e.printStackTrace();
-
-        }
-
-        String facebookUserId = "";
-
-        for (UserInfo profile : user.getProviderData()) {
-            // check if the provider id matches "facebook.com"
-            if (FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
-
-                facebookUserId = profile.getUid();
-
-                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
-                Log.d("fbİmg", "fbİmgSuccess : " + photoUrl);
-
-                Glide.with(this).load(photoUrl).centerCrop().into(navUserPhoto);
-            } else if (GoogleAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
-                String personPhoto = acct.getPhotoUrl().toString();
-
-                Glide.with(this).load(personPhoto).centerCrop().into(navUserPhoto);
-
-                Log.d("imgUrl", "signInWithCredential:success: " + personPhoto);
-                Uri deneme = Uri.parse(personPhoto);
-
-
-            }
-
         }
 
     }
@@ -311,14 +286,24 @@ public class AccountFragment extends Fragment {
 
         tvWebSite.setText(myPrefs.getString("webSite", ""));
         tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
+
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
 
+        mContext =null;
+        mActivity = null;
     }
-    public void onButtonPressed(int i) {
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
+        mActivity = getActivity();
+
 
     }
 

@@ -44,7 +44,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 import com.merttoptas.bringit.Activity.Model.CityList;
 import com.merttoptas.bringit.Activity.Model.DistrictList;
-import com.merttoptas.bringit.Activity.Model.GlobalBus;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.R;
 import java.io.BufferedReader;
@@ -210,7 +209,6 @@ public class OfferFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        GlobalBus.getBus().unregister(this);
     }
 
     @Override

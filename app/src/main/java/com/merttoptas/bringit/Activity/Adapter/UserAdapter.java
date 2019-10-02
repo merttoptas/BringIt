@@ -2,22 +2,14 @@ package com.merttoptas.bringit.Activity.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 import com.merttoptas.bringit.Activity.Activity.MessageActivity;
 import com.merttoptas.bringit.Activity.Model.User;
 import androidx.annotation.NonNull;
@@ -27,14 +19,18 @@ import com.merttoptas.bringit.R;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     private Context mContext;
     private List<User> mUsers;
+    private boolean ischat;
 
-    public UserAdapter(Context mContext, List<User> mUsers){
+    public UserAdapter(Context mContext, List<User> mUsers,boolean ischat){
         this.mContext=mContext;
         this.mUsers = mUsers;
+        this.ischat = ischat;
     }
     @NonNull
     @Override
@@ -51,6 +47,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         holder.username.setText(user.getUsername());
         String imageURL = user.getImageURL();
         Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+
+        if(ischat){
+            if(user.getStatus().equals("online")){
+                holder.img_online.setVisibility(View.VISIBLE);
+                holder.img_offline.setVisibility(View.GONE);
+            }
+            else {
+                holder.img_online.setVisibility(View.GONE);
+                holder.img_offline.setVisibility(View.VISIBLE);
+            }
+
+        }
+        else {
+            holder.img_online.setVisibility(View.GONE);
+            holder.img_offline.setVisibility(View.GONE);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,17 +90,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         TextView username;
         ImageView profile_image;
+        private ImageView img_online;
+        private ImageView img_offline;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.username);
             profile_image = itemView.findViewById(R.id.user_image);
+            img_online =itemView.findViewById(R.id.img_online);
+            img_offline = itemView.findViewById(R.id.img_offline);
         }
     }
 
-    private void updateheader(){
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-    }
 }

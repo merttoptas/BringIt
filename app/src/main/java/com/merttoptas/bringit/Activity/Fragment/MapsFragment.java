@@ -97,6 +97,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private Circle mapCircle;
     private GeoFire geoFire;
     private DatabaseReference ref;
+    final int REQUEST_CODE =1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -350,13 +351,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                 offerlist.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     Offer o = snapshot.getValue(Offer.class);
                     offerlist.add(o);
 
-
                 }
-
                 adapter = new RecyclerViewAdapter(offerlist, getActivity());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -384,7 +382,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
     }
-
 
     private void setCircle(Location location){
 

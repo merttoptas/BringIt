@@ -6,22 +6,17 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,17 +26,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.merttoptas.bringit.Activity.Adapter.MessageAdapter;
-import com.merttoptas.bringit.Activity.Adapter.RecyclerViewAdapter;
 import com.merttoptas.bringit.Activity.Model.Chat;
-import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessageActivity extends AppCompatActivity {
@@ -59,6 +50,8 @@ public class MessageActivity extends AppCompatActivity {
     private List<User> mUsers;
     CircleImageView profile_image;
     TextView username;
+    DatabaseReference reference;
+
 
 
     @Override
@@ -80,21 +73,21 @@ public class MessageActivity extends AppCompatActivity {
         bindViews();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                startActivity(new Intent(MessageActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
         //Firebase
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
 
-        //recyclerview set.
+        // recyclerview  set.
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
@@ -156,10 +149,6 @@ public class MessageActivity extends AppCompatActivity {
             }
             etMessageSend.setText("");
         }
-
-
-
-
     }
 
     private void readMessages(final String myid, final String userid){
@@ -177,6 +166,7 @@ public class MessageActivity extends AppCompatActivity {
 
                     Chat chat = snapshot.getValue(Chat.class);
 
+                    assert chat != null;
                     if(chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
                             chat.getReceiver().equals(userid) && chat.getSender().equals(myid))
                     {
@@ -211,6 +201,7 @@ public class MessageActivity extends AppCompatActivity {
 
         if(intent.hasExtra("userid")){
             final String userid = intent.getStringExtra("userid");
+            assert userid != null;
             DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);
 
             dbRef.addValueEventListener(new ValueEventListener() {
@@ -247,7 +238,7 @@ public class MessageActivity extends AppCompatActivity {
                     for(DataSnapshot snapshot:  dataSnapshot.getChildren()){
 
                         User user = snapshot.getValue(User.class);
-
+                        assert user != null;
                         if(user.getId().equals(userid)){
 
                             String imageUrl = user.getImageURL();
@@ -256,8 +247,6 @@ public class MessageActivity extends AppCompatActivity {
 
                         }
                         readMessages(firebaseUser.getUid(), userid);
-
-
                     }
                 }
 
@@ -267,5 +256,30 @@ public class MessageActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void status(String status){
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        status("offline");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+
     }
 }

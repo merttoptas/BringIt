@@ -28,9 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<Object> list;
-    public List<User> userlist;
     private final static int TIP_Offer =1, TIP_Reklam =2;
-    private final int VIEW_TYPE_LOADING = 3;
     private Context context;
     public RecyclerViewAdapter(List<Object> offerlist, Context context) {
 
@@ -129,11 +127,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((ReklamViewHolder)viewHolder).showDetails(reklam);
                 break;
 
-            case VIEW_TYPE_LOADING:
-                showLoadingView((LoadingViewHolder) viewHolder, i);
-                break;
-
-
         }
 
     }
@@ -195,11 +188,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             progressBar = itemView.findViewById(R.id.progressBar);
         }
-    }
-
-    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
-        //ProgressBar would be displayed
-
     }
 
 }
