@@ -109,14 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgress.setVisibility(View.VISIBLE);
                 FirebaseUser user = mAuth.getCurrentUser();
                 updateUI(user);
-                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(accountIntent);
-                overridePendingTransition (0, 0);
-
-
+                setCurrentUser(user);
             }
             @Override
             public void onCancel() {
@@ -136,8 +129,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             updateUI(currentUser);
         }
@@ -151,56 +144,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
 
-        if(user !=null){
-            String username = user.getDisplayName();
-            String userid = user.getUid();
-            Uri photoURL = user.getPhotoUrl();
+        String username = user.getDisplayName();
+        Toast.makeText(LoginActivity.this, getString(R.string.kullanici_adi) + username, Toast.LENGTH_SHORT).show();
+        Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(accountIntent);
+        overridePendingTransition (0, 0);
+        finish();
 
-
-            ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-            Log.d("photoURL", "photoURL:" + photoURL);
-
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("id", userid);
-            hashMap.put("username", username);
-
-            for (UserInfo profile : user.getProviderData()){
-                Uri photoUrl = profile.getPhotoUrl();
-                String photoURlL = photoUrl.toString();
-                hashMap.put("imageURL", photoURlL);
-                Log.d("photoURL", "photoURL:" + photoURlL);
-            }
-            if ( currentUser == null){
-
-                ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(accountIntent);
-                            overridePendingTransition (0, 0);
-                            finish();
-                        }
-                    }
-                });
-            }
-            else{
-                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(accountIntent);
-                overridePendingTransition (0, 0);
-                finish();
-
-            }
-
-            Toast.makeText(LoginActivity.this, getResources().getString(R.string.kullanici_adi) + username,  Toast.LENGTH_LONG).show();
-
-        }
 
     }
 
@@ -238,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
                             user.getPhotoUrl();
+                            setCurrentUser(user);
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -276,5 +230,37 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void setCurrentUser(final FirebaseUser user){
 
+        String username = user.getDisplayName();
+        String userid = user.getUid();
+        Uri photoURL = user.getPhotoUrl();
+
+        if ( currentUser == null){
+
+            ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+            Log.d("photoURL", "photoURL:" + photoURL);
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("id", userid);
+            hashMap.put("username", username);
+            hashMap.put("status", "offline");
+            hashMap.put("search", username.toLowerCase());
+
+            for (UserInfo profile : user.getProviderData()){
+                Uri photoUrl = profile.getPhotoUrl();
+                String photoURlL = photoUrl.toString();
+                hashMap.put("imageURL", photoURlL);
+                Log.d("photoURL", "photoURL:" + photoURlL);
+            }
+            ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                      updateUI(user);
+                    }
+                }
+            });
+        }
+    }
 }

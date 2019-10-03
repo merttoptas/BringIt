@@ -24,16 +24,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.merttoptas.bringit.Activity.Adapter.MessageAdapter;
+import com.merttoptas.bringit.Activity.Fragment.ApiService;
 import com.merttoptas.bringit.Activity.Model.Chat;
 import com.merttoptas.bringit.Activity.Model.User;
+import com.merttoptas.bringit.Activity.Notifications.Client;
+import com.merttoptas.bringit.Activity.Notifications.Data;
+import com.merttoptas.bringit.Activity.Notifications.MyResponse;
+import com.merttoptas.bringit.Activity.Notifications.Sender;
+import com.merttoptas.bringit.Activity.Notifications.Token;
 import com.merttoptas.bringit.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -50,7 +60,10 @@ public class MessageActivity extends AppCompatActivity {
     private List<User> mUsers;
     CircleImageView profile_image;
     TextView username;
-    DatabaseReference reference;
+    ValueEventListener seenListener;
+    ApiService apiService;
+    String userid;
+    boolean notify = false;
 
 
 
@@ -83,6 +96,11 @@ public class MessageActivity extends AppCompatActivity {
                 startActivity(new Intent(MessageActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiService.class);
+
+        intent = getIntent();
+        userid = intent.getStringExtra("userid");
         //Firebase
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
@@ -98,7 +116,6 @@ public class MessageActivity extends AppCompatActivity {
         readUserInfo();
 
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -113,21 +130,187 @@ public class MessageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private void  sendMessage(String sender, String receiver, String message){
+
+    private void seenMessage(final String userid){
+        ref = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat =  snapshot.getValue(Chat.class);
+
+                    if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)){
+
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen", true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void sendMessage(String sender, final String receiver, String message){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        HashMap<String, Object> hashMap = new HashMap<>();
 
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
+        hashMap.put("isseen", false);
 
         reference.child("Chats").push().setValue(hashMap);
+
+
+        // add user to chat fragment
+        intent = getIntent();
+        if(intent.hasExtra("userid")){
+            userid = intent.getStringExtra("userid");
+
+            final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
+                    .child(firebaseUser.getUid())
+                    .child(userid);
+
+            chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists()){
+                        chatRef.child("id").setValue(userid);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
+                    .child(userid)
+                    .child(firebaseUser.getUid());
+            chatRefReceiver.child("id").setValue(firebaseUser.getUid());
+
+        }
+        if(intent.hasExtra("useridRw1")){
+            final String userid1 = getIntent().getStringExtra("useridRw1");
+
+            final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
+                    .child(firebaseUser.getUid())
+                    .child(userid1);
+
+            chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists()){
+                        chatRef.child("id").setValue(userid1);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
+                    .child(userid1)
+                    .child(firebaseUser.getUid());
+            chatRefReceiver.child("id").setValue(firebaseUser.getUid());
+        }
+
+
+
+        final String msg = message;
+
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (notify) {
+                    sendNotifiaction(receiver, user.getUsername(), msg);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendNotifiaction(String receiver, final String username, final String message) {
+
+
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, username+": " + message, getString(R.string.yeni_mesaj), userid);
+                    if(intent.hasExtra("useridRw1")){
+                        final String userid1 = getIntent().getStringExtra("useridRw1");
+                        Data data1 = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, username+": " + message, getString(R.string.yeni_mesaj), userid1);
+                        Sender sender = new Sender (data1, token.getToken());
+                        apiService.sendNotification(sender)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if(response.code() ==200){
+                                            if(response.body().success ==1){
+                                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
+
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                    }
+                                });
+                    }
+                    Sender sender = new Sender (data, token.getToken());
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if(response.code() ==200){
+                                        if(response.body().success ==1){
+                                            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
+
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void btnSend(View view) {
         intent =getIntent();
-
+        notify =true;
         if (intent.hasExtra("userid")){
             final String userid = intent.getStringExtra("userid");
             String msg = etMessageSend.getText().toString();
@@ -186,6 +369,7 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
+
     private void bindViews(){
 
         btn_send = findViewById(R.id.btn_send);
@@ -220,13 +404,14 @@ public class MessageActivity extends AppCompatActivity {
 
                 }
             });
+            seenMessage(userid);
 
         }
 
     }
     private void getDetailsInfo(){
-        intent =getIntent();
 
+        intent =getIntent();
         if (intent.hasExtra("useridRw1")){
             final String userid = getIntent().getStringExtra("useridRw1");
             DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -261,18 +446,20 @@ public class MessageActivity extends AppCompatActivity {
     private void status(String status){
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        ref = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
 
-        reference.updateChildren(hashMap);
+        ref.updateChildren(hashMap);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        if(seenListener !=null){
+            ref.removeEventListener(seenListener);
+        }
         status("offline");
     }
 

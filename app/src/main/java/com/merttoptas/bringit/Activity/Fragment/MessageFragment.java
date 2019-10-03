@@ -8,9 +8,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +24,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.merttoptas.bringit.Activity.Adapter.UserAdapter;
 import com.merttoptas.bringit.Activity.Model.Chat;
+import com.merttoptas.bringit.Activity.Model.Chatlist;
 import  com.merttoptas.bringit.Activity.Model.User;
+import com.merttoptas.bringit.Activity.Notifications.Token;
 import com.merttoptas.bringit.R;
 
 import java.util.ArrayList;
@@ -38,7 +46,8 @@ public class MessageFragment extends Fragment {
     private List<User> mUsers;
     FirebaseUser firebaseUser;
     DatabaseReference reference;
-    private List<String> userList;
+    EditText search_message;
+    private List<Chatlist> usersList;
 
 
     public MessageFragment() {
@@ -60,38 +69,42 @@ public class MessageFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        mUsers = new ArrayList<>();
+
+        search_message = v.findViewById(R.id.search_message);
+        search_message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchMessage(charSequence.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Userlist set a chats.
-        userList = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        usersList = new ArrayList<>();
+
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-
-                for(DataSnapshot snapshot:  dataSnapshot.getChildren()){
-
-                    Chat chat = snapshot.getValue(Chat.class);
-
-                    if(chat.getSender().isEmpty()){
-
-                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
-                    }else{
-                        if(chat.getSender().equals(firebaseUser.getUid())){
-                            userList.add(chat.getReceiver());
-                        }
-                    }
-                    if(chat.getReceiver().isEmpty()){
-                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
-
-                    }else{
-                        if(chat.getReceiver().equals(firebaseUser.getUid())){
-                            userList.add(chat.getSender());
-                        }
-                    }
-                    readChats();
+                usersList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                    usersList.add(chatlist);
                 }
+
+                chatList();
             }
 
             @Override
@@ -100,40 +113,60 @@ public class MessageFragment extends Fragment {
             }
         });
 
-        mUsers = new ArrayList<>();
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
         return v;
 
     }
 
-    private void readChats() {
+    private void searchMessage(String s) {
+        final  FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Query query =  FirebaseDatabase.getInstance().getReference("Users").orderByChild("username").startAt(s).endAt(s+ "\uf8ff");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(search_message.getText().toString().equals("")){
+                    mUsers.clear();
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        User user = snapshot.getValue(User.class);
+                        assert  user !=null;
+                        assert  firebaseUser !=null;
+                        if(!user.getId().equals(firebaseUser.getUid())){
+                            mUsers.add(user);
+                        }
+                    }
+
+                    userAdapter = new UserAdapter(getContext(), mUsers,false);
+                    recyclerView.setAdapter(userAdapter);
+                    userAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void chatList() {
         mUsers = new ArrayList<>();
-
         reference = FirebaseDatabase.getInstance().getReference("Users");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    //display 1 user from chats
-                    for(String id : userList){
-                        if(user.getId().equals(id)){
-                            if(mUsers.size() != 0){
-                                for(User user1 : mUsers){
-                                    if(!user.getId().equals(user1.getId())){
-                                        mUsers.add(user);
-                                    }
-                                }
-                            }else{
-                                mUsers.add(user);
-                            }
+                    for (Chatlist chatlist : usersList){
+                        if (user.getId().equals(chatlist.getId())){
+                            mUsers.add(user);
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers,true);
+                userAdapter = new UserAdapter(getContext(), mUsers, true);
                 recyclerView.setAdapter(userAdapter);
                 userAdapter.notifyDataSetChanged();
             }
@@ -143,6 +176,14 @@ public class MessageFragment extends Fragment {
 
             }
         });
+    }
+
+
+
+    private void updateToken(String token){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
     }
 
 }

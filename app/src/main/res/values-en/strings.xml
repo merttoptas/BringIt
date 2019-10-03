@@ -39,4 +39,8 @@
     <string name="il">Province</string>
     <string name="skip">Skip</string>
     <string name="get_starded">Get Started</string>
+    <string name="bilgiler">Info</string>
+    <string name="kullanici_adi">"User Name: "</string>
+    <string name="delivered">Delivered</string>
+    <string name="seen">Seen</string>
 </resources>

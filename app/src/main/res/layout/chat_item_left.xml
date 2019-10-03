@@ -19,9 +19,19 @@
             android:text="@string/textview"
             android:fontFamily="@font/abeezee"
             android:textColor="@color/quantum_black_100"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_seen"
+            android:text="@string/seen"
+            android:visibility="gone"
+            android:textSize="10sp"
+            android:textColor="?attr/textcolor"
+            android:layout_below="@+id/show_message"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 </RelativeLayout>
