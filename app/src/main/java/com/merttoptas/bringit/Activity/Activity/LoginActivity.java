@@ -7,14 +7,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -39,10 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.net.URL;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -57,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     Typeface typeface;
     DatabaseReference ref;
     FirebaseUser currentUser;
-    Uri mImageUri;
 
 
     @Override
@@ -73,11 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.SignInButton);
         loadingProgress = findViewById(R.id.progressBar);
         LoginButton = findViewById(R.id.login_button);
-
         loadingProgress.setVisibility(View.INVISIBLE);
-
         mCallbackManager = CallbackManager.Factory.create();
-
         googleFacebookSign();
 
     }
@@ -186,7 +176,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
@@ -194,7 +183,6 @@ public class LoginActivity extends AppCompatActivity {
                             setCurrentUser(user);
                             updateUI(user);
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             updateUI(null);
                         }

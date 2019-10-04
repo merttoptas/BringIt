@@ -14,9 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,18 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.merttoptas.bringit.Activity.Adapter.UserAdapter;
-import com.merttoptas.bringit.Activity.Fragment.AccountFragment;
-import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
-import com.merttoptas.bringit.Activity.Model.Chat;
-import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailActivity extends AppCompatActivity {
@@ -50,8 +39,6 @@ public class DetailActivity extends AppCompatActivity {
     CircleImageView navOfferPhoto;
     SharedPreferences myPrefs;
     DatabaseReference ref;
-    DatabaseReference reference;
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +70,6 @@ public class DetailActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         getDetail();
 
-
     }
 
     public void getDetail() {
@@ -99,7 +85,6 @@ public class DetailActivity extends AppCompatActivity {
         tvDate.setText(getIntent().getStringExtra("date"));
         tvExplanation.setText(getIntent().getStringExtra("explanation"));
         tvUserNameSurname.setText(getIntent().getStringExtra("nameSurname"));
-
 
         final String userid = getIntent().getStringExtra("useridRw");
         ref = FirebaseDatabase.getInstance().getReference("Users");
@@ -128,7 +113,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     public void sendMessage(View view) {
@@ -141,15 +125,17 @@ public class DetailActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition (0, 0);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
-            return true;
+            overridePendingTransition (0, 0);            return true;
         }
         return super.onOptionsItemSelected(item);
     }

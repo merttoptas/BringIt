@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         }
 
+
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
     }
@@ -85,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/rubik.ttf");
         mySwitch = findViewById(R.id.mySwitch);
-
         Trace myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
         myTrace.start();
+
 
     }
 
@@ -118,19 +119,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         super.onResume();
 
-        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
-
+            if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             int bottomNavigationColor = Color.parseColor("#424242");
             bottomNavigationView.setBackgroundColor(bottomNavigationColor);
-
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             int bottomNavigationColor = Color.parseColor("#ffffffff");
             bottomNavigationView.setBackgroundColor(bottomNavigationColor);
-        }
-
-        status("online");
-
+         }
+            status("online");
     }
 
     @Override
@@ -142,10 +139,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         ref = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
-
         ref.updateChildren(hashMap);
     }
 
