@@ -176,7 +176,7 @@ public class AccountFragment extends Fragment {
     }
     private void uploadImage(){
         final ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Uploading");
+        pd.setMessage(getString(R.string.yukleme));
         pd.show();
 
         if(imageUri !=null){
@@ -205,7 +205,7 @@ public class AccountFragment extends Fragment {
                         dbRef.updateChildren(map);
                         pd.dismiss();
                     }else {
-                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.hata, Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
@@ -218,7 +218,7 @@ public class AccountFragment extends Fragment {
             });
 
         }else {
-            Toast.makeText(getContext(), "No image selected!" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.fotograf_secilmedi , Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -232,7 +232,7 @@ public class AccountFragment extends Fragment {
             imageUri =data.getData();
 
             if (uploadTask !=null && uploadTask.isInProgress() ) {
-                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.yukleme_devam, Toast.LENGTH_SHORT).show();
             }else {
                 uploadImage();
             }
@@ -353,12 +353,16 @@ public class AccountFragment extends Fragment {
         }else {
             tvPhone.setText(myPrefs.getString("phone", ""));
         }
+        if(tvUserNameSurname.getText().toString().matches("")){
+            tvUserNameSurname.setText(myPrefs.getString("username",""));
+        }
 
         tvWebSite.setText(myPrefs.getString("webSite", ""));
         tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
 
         dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid());
         try {
+            myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             dbRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -366,7 +370,10 @@ public class AccountFragment extends Fragment {
                     if(isAdded()){
                         User user = dataSnapshot.getValue(User.class);
                         assert user != null;
+                        editor =myPrefs.edit();
                         tvUserNameSurname.setText(user.getUsername());
+                        editor.putString("username", tvUserNameSurname.getText().toString());
+                        editor.apply();
                         if(user.getImageURL().isEmpty()){
                             Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
 

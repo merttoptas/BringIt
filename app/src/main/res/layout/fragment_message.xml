@@ -30,7 +30,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/message_btn_style"
-                android:hint="Search">
+                android:hint="@string/arama">
 
             </EditText>
 

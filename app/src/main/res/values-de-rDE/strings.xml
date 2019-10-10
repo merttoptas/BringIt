@@ -34,7 +34,7 @@
     <string name="mail_adresi">Mail Adresse</string>
     <string name="location_izin_Ver">Erlauben Sie mir bitte!</string>
     <string name="llce">Kreis</string>
-    <string name="kullanici_adi">Nutzername:</string>
+    <string name="kullanici_adi">"Willkommen:  "</string>
     <string name="kayit_basarisiz">Registrierung fehlgeschlagen!</string>
     <string name="kaydet">sparen</string>
     <string name="ilan_detay">"Details zum Angebot "</string>
@@ -49,4 +49,9 @@
     <string name="kat_sayisi">Anzahl der Stockwerke</string>
     <string name="tv_slider2">Haben Sie eine Reederei? Möchten Sie es professionell tragen? Sie können bieten, indem Sie die Anzeigen betrachten. BringIt bringt Anzeigen basierend auf Ihrem Standort.</string>
     <string name="tv_slider1">Wenn Sie umziehen oder Ihre Sachen an einen Ort bringen möchten, machen Sie einfach Werbung und holen Sie Angebote von Reedereien ein.</string>
+    <string name="yukleme">Hochladen!</string>
+    <string name="yukleme_devam">Upload ist ein Fortschritt</string>
+    <string name="hata">Error</string>
+    <string name="fotograf_secilmedi">Keine Bilder ausgewahlt</string>
+    <string name="arama">Suche</string>
 </resources>

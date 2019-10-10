@@ -60,7 +60,7 @@
     <string name="tv_slider2">Nakliye firmanız mı var? Profesyonel bir şekilde taşımak mı istiyorsanız? İlanlara bakarak, teklif verebilirsiniz. BringIt, konumunuza göre ilanları getirir.</string>
     <string name="skip">Geç</string>
     <string name="get_starded">Başlayın</string>
-    <string name="kullanici_adi">Kullanıcı Adı:</string>
+    <string name="kullanici_adi">"Hoşgeldin: "</string>
     <string name="seen">Görüldü</string>
 
 
@@ -109,6 +109,11 @@
     <string name="delivered">İletildi</string>
     <string name="yeni_mesaj">Yeni Mesaj!</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-1002372938729651/2395463391</string>
+    <string name="yukleme">Yükleniyor</string>
+    <string name="hata">Hata!</string>
+    <string name="fotograf_secilmedi">Fotoğraf seçilmedi!</string>
+    <string name="yukleme_devam">Yükleme Devam Ediyor</string>
+    <string name="arama">Arama</string>
 
 
 </resources>
