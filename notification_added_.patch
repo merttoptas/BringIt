@@ -1,0 +1,1731 @@
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Activity/MessageActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Activity/MessageActivity.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Activity/MessageActivity.java	(date 1570129089000)
+@@ -24,16 +24,26 @@
+ import com.google.firebase.database.DatabaseError;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.database.Query;
+ import com.google.firebase.database.ValueEventListener;
+ import com.merttoptas.bringit.Activity.Adapter.MessageAdapter;
++import com.merttoptas.bringit.Activity.Fragment.ApiService;
+ import com.merttoptas.bringit.Activity.Model.Chat;
+ import com.merttoptas.bringit.Activity.Model.User;
++import com.merttoptas.bringit.Activity.Notifications.Client;
++import com.merttoptas.bringit.Activity.Notifications.Data;
++import com.merttoptas.bringit.Activity.Notifications.MyResponse;
++import com.merttoptas.bringit.Activity.Notifications.Sender;
++import com.merttoptas.bringit.Activity.Notifications.Token;
+ import com.merttoptas.bringit.R;
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Objects;
+ import de.hdodenhof.circleimageview.CircleImageView;
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
+ 
+ public class MessageActivity extends AppCompatActivity {
+ 
+@@ -50,7 +60,10 @@
+     private List<User> mUsers;
+     CircleImageView profile_image;
+     TextView username;
+-    DatabaseReference reference;
++    ValueEventListener seenListener;
++    ApiService apiService;
++    String userid;
++    boolean notify = false;
+ 
+ 
+ 
+@@ -83,6 +96,11 @@
+                 startActivity(new Intent(MessageActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+             }
+         });
++
++        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiService.class);
++
++        intent = getIntent();
++        userid = intent.getStringExtra("userid");
+         //Firebase
+         mAuth = FirebaseAuth.getInstance();
+         firebaseUser = mAuth.getCurrentUser();
+@@ -98,7 +116,6 @@
+         readUserInfo();
+ 
+     }
+-
+     @Override
+     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+ 
+@@ -113,21 +130,187 @@
+         }
+         return super.onOptionsItemSelected(item);
+     }
+-    private void  sendMessage(String sender, String receiver, String message){
++
++    private void seenMessage(final String userid){
++        ref = FirebaseDatabase.getInstance().getReference("Chats");
++        seenListener = ref.addValueEventListener(new ValueEventListener() {
++            @Override
++            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
++                    Chat chat =  snapshot.getValue(Chat.class);
++
++                    if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)){
++
++                        HashMap<String, Object> hashMap = new HashMap<>();
++                        hashMap.put("isseen", true);
++                        snapshot.getRef().updateChildren(hashMap);
++                    }
++
++                }
++            }
++
++            @Override
++            public void onCancelled(@NonNull DatabaseError databaseError) {
++
++            }
++        });
++    }
++    private void sendMessage(String sender, final String receiver, String message){
+ 
+         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
++
+         HashMap<String, Object> hashMap = new HashMap<>();
+-
+         hashMap.put("sender", sender);
+         hashMap.put("receiver", receiver);
+         hashMap.put("message", message);
++        hashMap.put("isseen", false);
+ 
+         reference.child("Chats").push().setValue(hashMap);
++
++
++        // add user to chat fragment
++        intent = getIntent();
++        if(intent.hasExtra("userid")){
++            userid = intent.getStringExtra("userid");
++
++            final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
++                    .child(firebaseUser.getUid())
++                    .child(userid);
++
++            chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
++                @Override
++                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                    if (!dataSnapshot.exists()){
++                        chatRef.child("id").setValue(userid);
++                    }
++                }
++
++                @Override
++                public void onCancelled(@NonNull DatabaseError databaseError) {
++
++                }
++            });
++            final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
++                    .child(userid)
++                    .child(firebaseUser.getUid());
++            chatRefReceiver.child("id").setValue(firebaseUser.getUid());
++
++        }
++        if(intent.hasExtra("useridRw1")){
++            final String userid1 = getIntent().getStringExtra("useridRw1");
++
++            final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
++                    .child(firebaseUser.getUid())
++                    .child(userid1);
++
++            chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
++                @Override
++                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                    if (!dataSnapshot.exists()){
++                        chatRef.child("id").setValue(userid1);
++                    }
++                }
++
++                @Override
++                public void onCancelled(@NonNull DatabaseError databaseError) {
++
++                }
++            });
++            final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
++                    .child(userid1)
++                    .child(firebaseUser.getUid());
++            chatRefReceiver.child("id").setValue(firebaseUser.getUid());
++        }
++
++
++
++        final String msg = message;
++
++        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
++        reference.addValueEventListener(new ValueEventListener() {
++            @Override
++            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                User user = dataSnapshot.getValue(User.class);
++                if (notify) {
++                    sendNotifiaction(receiver, user.getUsername(), msg);
++                }
++                notify = false;
++            }
++
++            @Override
++            public void onCancelled(@NonNull DatabaseError databaseError) {
++
++            }
++        });
++    }
++
++    private void sendNotifiaction(String receiver, final String username, final String message) {
++
++
++        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
++
++        Query query = tokens.orderByKey().equalTo(receiver);
++        query.addValueEventListener(new ValueEventListener() {
++            @Override
++            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
++                    Token token = snapshot.getValue(Token.class);
++                    Data data = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, username+": " + message, getString(R.string.yeni_mesaj), userid);
++                    if(intent.hasExtra("useridRw1")){
++                        final String userid1 = getIntent().getStringExtra("useridRw1");
++                        Data data1 = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, username+": " + message, getString(R.string.yeni_mesaj), userid1);
++                        Sender sender = new Sender (data1, token.getToken());
++                        apiService.sendNotification(sender)
++                                .enqueue(new Callback<MyResponse>() {
++                                    @Override
++                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
++                                        if(response.code() ==200){
++                                            if(response.body().success ==1){
++                                                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
++
++                                            }
++                                        }
++                                    }
++
++                                    @Override
++                                    public void onFailure(Call<MyResponse> call, Throwable t) {
++
++                                    }
++                                });
++                    }
++                    Sender sender = new Sender (data, token.getToken());
++                    apiService.sendNotification(sender)
++                            .enqueue(new Callback<MyResponse>() {
++                                @Override
++                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
++                                    if(response.code() ==200){
++                                        if(response.body().success ==1){
++                                            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
++
++                                        }
++                                    }
++                                }
++
++                                @Override
++                                public void onFailure(Call<MyResponse> call, Throwable t) {
++
++                                }
++                            });
++
++                }
++
++            }
++
++            @Override
++            public void onCancelled(@NonNull DatabaseError databaseError) {
++
++            }
++        });
+     }
+ 
+     public void btnSend(View view) {
+         intent =getIntent();
+-
++        notify =true;
+         if (intent.hasExtra("userid")){
+             final String userid = intent.getStringExtra("userid");
+             String msg = etMessageSend.getText().toString();
+@@ -186,6 +369,7 @@
+         });
+     }
+ 
++
+     private void bindViews(){
+ 
+         btn_send = findViewById(R.id.btn_send);
+@@ -220,13 +404,14 @@
+ 
+                 }
+             });
++            seenMessage(userid);
+ 
+         }
+ 
+     }
+     private void getDetailsInfo(){
++
+         intent =getIntent();
+-
+         if (intent.hasExtra("useridRw1")){
+             final String userid = getIntent().getStringExtra("useridRw1");
+             DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
+@@ -261,18 +446,20 @@
+     private void status(String status){
+         mAuth = FirebaseAuth.getInstance();
+         firebaseUser = mAuth.getCurrentUser();
+-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
++        ref = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+ 
+         HashMap<String, Object> hashMap = new HashMap<>();
+         hashMap.put("status", status);
+ 
+-        reference.updateChildren(hashMap);
++        ref.updateChildren(hashMap);
+     }
+ 
+     @Override
+     protected void onPause() {
+         super.onPause();
+-
++        if(seenListener !=null){
++            ref.removeEventListener(seenListener);
++        }
+         status("offline");
+     }
+ 
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Activity/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Activity/LoginActivity.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Activity/LoginActivity.java	(date 1570103353000)
+@@ -109,14 +109,7 @@
+                 loadingProgress.setVisibility(View.VISIBLE);
+                 FirebaseUser user = mAuth.getCurrentUser();
+                 updateUI(user);
+-                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+-                startActivity(accountIntent);
+-                overridePendingTransition (0, 0);
+-
+-
++                setCurrentUser(user);
+             }
+             @Override
+             public void onCancel() {
+@@ -136,8 +129,8 @@
+ 
+     @Override
+     protected void onStart() {
++
+         FirebaseUser currentUser = mAuth.getCurrentUser();
+-
+         if(currentUser != null){
+             updateUI(currentUser);
+         }
+@@ -151,56 +144,16 @@
+ 
+     private void updateUI(FirebaseUser user) {
+ 
+-        if(user !=null){
+-            String username = user.getDisplayName();
+-            String userid = user.getUid();
+-            Uri photoURL = user.getPhotoUrl();
+-
+-
+-            ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+-            Log.d("photoURL", "photoURL:" + photoURL);
+-
+-            HashMap<String, String> hashMap = new HashMap<>();
+-            hashMap.put("id", userid);
+-            hashMap.put("username", username);
+-
+-            for (UserInfo profile : user.getProviderData()){
+-                Uri photoUrl = profile.getPhotoUrl();
+-                String photoURlL = photoUrl.toString();
+-                hashMap.put("imageURL", photoURlL);
+-                Log.d("photoURL", "photoURL:" + photoURlL);
+-            }
+-            if ( currentUser == null){
+-
+-                ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+-                    @Override
+-                    public void onComplete(@NonNull Task<Void> task) {
+-                        if(task.isSuccessful()){
+-                            Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+-                            accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+-                            startActivity(accountIntent);
+-                            overridePendingTransition (0, 0);
+-                            finish();
+-                        }
+-                    }
+-                });
+-            }
+-            else{
+-                Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+-                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+-                startActivity(accountIntent);
+-                overridePendingTransition (0, 0);
+-                finish();
+-
+-            }
++        String username = user.getDisplayName();
++        Toast.makeText(LoginActivity.this, getString(R.string.kullanici_adi) + username, Toast.LENGTH_SHORT).show();
++        Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
++        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
++        accountIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
++        accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        startActivity(accountIntent);
++        overridePendingTransition (0, 0);
++        finish();
+ 
+-            Toast.makeText(LoginActivity.this, getResources().getString(R.string.kullanici_adi) + username,  Toast.LENGTH_LONG).show();
+-
+-        }
+ 
+     }
+ 
+@@ -238,6 +191,7 @@
+                             FirebaseUser user = mAuth.getCurrentUser();
+                             assert user != null;
+                             user.getPhotoUrl();
++                            setCurrentUser(user);
+                             updateUI(user);
+                         } else {
+                             // If sign in fails, display a message to the user.
+@@ -276,5 +230,37 @@
+ 
+     }
+ 
++    private void setCurrentUser(final FirebaseUser user){
++
++        String username = user.getDisplayName();
++        String userid = user.getUid();
++        Uri photoURL = user.getPhotoUrl();
++
++        if ( currentUser == null){
++
++            ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
++            Log.d("photoURL", "photoURL:" + photoURL);
+ 
++            HashMap<String, String> hashMap = new HashMap<>();
++            hashMap.put("id", userid);
++            hashMap.put("username", username);
++            hashMap.put("status", "offline");
++            hashMap.put("search", username.toLowerCase());
++
++            for (UserInfo profile : user.getProviderData()){
++                Uri photoUrl = profile.getPhotoUrl();
++                String photoURlL = photoUrl.toString();
++                hashMap.put("imageURL", photoURlL);
++                Log.d("photoURL", "photoURL:" + photoURlL);
++            }
++            ref.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
++                @Override
++                public void onComplete(@NonNull Task<Void> task) {
++                    if(task.isSuccessful()){
++                      updateUI(user);
++                    }
++                }
++            });
++        }
++    }
+ }
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Fragment/AccountFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Fragment/AccountFragment.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Fragment/AccountFragment.java	(date 1570052142000)
+@@ -2,8 +2,12 @@
+ 
+ import android.app.Activity;
+ import android.app.Dialog;
++import android.app.ProgressDialog;
++import android.content.ContentResolver;
+ import android.content.Context;
++import android.content.Intent;
+ import android.content.SharedPreferences;
++import android.net.Uri;
+ import android.os.Bundle;
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
+@@ -14,13 +18,20 @@
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.webkit.MimeTypeMap;
+ import android.widget.Button;
+ import android.widget.CompoundButton;
+ import android.widget.EditText;
+ import android.widget.ImageView;
+ import android.widget.Switch;
+ import android.widget.TextView;
++import android.widget.Toast;
++
+ import com.bumptech.glide.Glide;
++import com.google.android.gms.tasks.Continuation;
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.OnFailureListener;
++import com.google.android.gms.tasks.Task;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseUser;
+ import com.google.firebase.database.DataSnapshot;
+@@ -28,10 +39,14 @@
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
+ import com.google.firebase.database.ValueEventListener;
++import com.google.firebase.storage.FirebaseStorage;
++import com.google.firebase.storage.StorageReference;
++import com.google.firebase.storage.StorageTask;
++import com.google.firebase.storage.UploadTask;
+ import com.merttoptas.bringit.Activity.Model.User;
+ import com.merttoptas.bringit.R;
+ 
+-import java.util.Objects;
++import java.util.HashMap;
+ 
+ import de.hdodenhof.circleimageview.CircleImageView;
+ 
+@@ -54,12 +69,15 @@
+     Context mContext;
+     DatabaseReference dbRef;
+     private Activity mActivity;
++    StorageReference storageReference;
++    private static final int IMAGE_REQUEST = 1;
++    private Uri imageUri;
++    private StorageTask<UploadTask.TaskSnapshot> uploadTask;
+ 
+ 
+     @Override
+     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+         super.onActivityCreated(savedInstanceState);
+-        setAccountUser();
+ 
+     }
+ 
+@@ -119,7 +137,10 @@
+         //firebase
+         mAuth = FirebaseAuth.getInstance();
+         currentUser = mAuth.getCurrentUser();
++        storageReference = FirebaseStorage.getInstance().getReference("uploads");
++        currentUser = mAuth.getCurrentUser();
+ 
++        setAccountUser();
+         updateUser();
+         btnSetAccount.setOnClickListener(new View.OnClickListener() {
+             @Override
+@@ -129,44 +150,93 @@
+             }
+         });
+ 
+-        dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid());
+-        try {
+-            dbRef.addValueEventListener(new ValueEventListener() {
++        navUserPhoto.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++
++                openImage();
++            }
++        });
++
++        return v;
++
++    }
++
++    private void openImage() {
++        Intent intent = new Intent();
++        intent.setType("image/*");
++        intent.setAction(Intent.ACTION_GET_CONTENT);
++        startActivityForResult(intent, IMAGE_REQUEST);
++    }
++    private String getFileExtension(Uri uri){
++        ContentResolver contentResolver = getContext().getContentResolver();
++        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
++
++        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
++    }
++    private void uploadImage(){
++        final ProgressDialog pd = new ProgressDialog(getContext());
++        pd.setMessage("Uploading");
++        pd.show();
++
++        if(imageUri !=null){
++            final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
++                    + "." + getFileExtension(imageUri));
++
++            uploadTask = fileReference.putFile(imageUri);
++            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
++                @Override
++                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
++                    if (!task.isSuccessful()) {
++                        throw  task.getException();
++                    }
++                    return fileReference.getDownloadUrl();
++                }
++            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                 @Override
+-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                public void onComplete(@NonNull Task<Uri> task) {
++                    if (task.isSuccessful()){
++                        Uri downloadUri =task.getResult();
++                        String mUri = downloadUri.toString();
+ 
+-                    if(isAdded()){
+-                        User user = dataSnapshot.getValue(User.class);
+-                        assert user != null;
+-                        tvUserNameSurname.setText(user.getUsername());
+-                        if(user.getImageURL().isEmpty()){
+-                            Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
+-
+-                        }else {
+-                            if(user.getImageURL().equals("default")){
+-                                navUserPhoto.setImageResource(R.drawable.userphoto);
+-                            }else{
+-                                String userImg=user.getImageURL();
+-                                Log.d("ImageUrl", "ImgURl: " + userImg);
+-                                Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
+-                            }
+-                        }
+-                    }
+-
+-                }
+-
++                        dbRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
++                        HashMap<String,Object> map = new HashMap<>();
++                        map.put("imageURL", mUri);
++                        dbRef.updateChildren(map);
++                        pd.dismiss();
++                    }else {
++                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
++                        pd.dismiss();
++                    }
++                }
++            }).addOnFailureListener(new OnFailureListener() {
++                @Override
++                public void onFailure(@NonNull Exception e) {
++                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
++                    pd.dismiss();
++                }
++            });
++
++        }else {
++            Toast.makeText(getContext(), "No image selected!" , Toast.LENGTH_SHORT).show();
++
++        }
++    }
+ 
+-                @Override
+-                public void onCancelled(@NonNull DatabaseError databaseError) {
++    @Override
++    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
++        super.onActivityResult(requestCode, resultCode, data);
++
++        if(requestCode == IMAGE_REQUEST && resultCode == Activity.RESULT_OK
++                        && data !=null && data.getData() !=null){
++            imageUri =data.getData();
+ 
+-                }
+-            });
+-        }catch (Exception e){
+-            e.printStackTrace();
++            if (uploadTask !=null && uploadTask.isInProgress() ) {
++                Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
++            }else {
++                uploadImage();
++            }
+         }
+-        return v;
+-
+-
+     }
+ 
+     private void createDialog(){
+@@ -287,6 +357,41 @@
+         tvWebSite.setText(myPrefs.getString("webSite", ""));
+         tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
+ 
++        dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid());
++        try {
++            dbRef.addValueEventListener(new ValueEventListener() {
++                @Override
++                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++
++                    if(isAdded()){
++                        User user = dataSnapshot.getValue(User.class);
++                        assert user != null;
++                        tvUserNameSurname.setText(user.getUsername());
++                        if(user.getImageURL().isEmpty()){
++                            Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
++
++                        }else {
++                            if(user.getImageURL().equals("default")){
++                                navUserPhoto.setImageResource(R.drawable.userphoto);
++                            }else{
++                                String userImg=user.getImageURL();
++                                Log.d("ImageUrl", "ImgURl: " + userImg);
++                                Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
++                            }
++                        }
++                    }
++
++                }
++
++
++                @Override
++                public void onCancelled(@NonNull DatabaseError databaseError) {
++
++                }
++            });
++        }catch (Exception e){
++            e.printStackTrace();
++        }
+ 
+     }
+ 
+@@ -304,7 +409,6 @@
+         mContext = context;
+         mActivity = getActivity();
+ 
+-
+     }
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/AndroidManifest.xml	(date 1570121846000)
+@@ -64,12 +64,33 @@
+         <meta-data
+             android:name="preloaded_fonts"
+             android:resource="@array/preloaded_fonts" />
++
++        <service android:name=".Activity.Notifications.MyFirebaseIdService"
++            android:enabled="true"
++            android:exported="true">
++            <intent-filter>
++                <action android:name="com.google.firebase.INSTANCE_ID_EVENT">
++                </action>
++            </intent-filter>
++        </service>
++
++        <service android:name=".Activity.Notifications.MyFirebaseMessaging"
++            android:enabled="true"
++            android:exported="true">
++            <intent-filter>
++                <action android:name="com.google.firebase.MESSAGING_EVENT">
++                </action>
++            </intent-filter>
++        </service>
++
+     </application>
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
++
+ 
+     <uses-permission android:name="android.permission.INTERNET" />
+ 
+Index: app/src/main/res/values-en/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values-en/strings.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/res/values-en/strings.xml	(date 1570104597000)
+@@ -39,4 +39,8 @@
+     <string name="il">Province</string>
+     <string name="skip">Skip</string>
+     <string name="get_starded">Get Started</string>
++    <string name="bilgiler">Info</string>
++    <string name="kullanici_adi">"User Name: "</string>
++    <string name="delivered">Delivered</string>
++    <string name="seen">Seen</string>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_message.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_message.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/res/layout/fragment_message.xml	(date 1570054906000)
+@@ -6,8 +6,6 @@
+     android:layout_height="match_parent"
+     tools:context=".Activity.Fragment.MessageFragment">
+ 
+-
+-
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+@@ -15,11 +13,34 @@
+             android:id="@+id/toolbar"
+             layout="@layout/toolbar"></include>
+ 
++        <RelativeLayout
++            android:id="@+id/relative_bottom"
++            android:layout_width="match_parent"
++            android:background="?attr/backgroundColor"
++            android:layout_below="@+id/toolbar"
++            android:layout_height="wrap_content">
++            <EditText
++                android:id="@+id/search_message"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginStart="70dp"
++                android:layout_marginTop="7dp"
++                android:padding="8dp"
++                android:layout_marginEnd="5dp"
++                android:layout_marginBottom="5dp"
++                android:layout_centerHorizontal="true"
++                android:background="@drawable/message_btn_style"
++                android:hint="Search">
++
++            </EditText>
++
++        </RelativeLayout>
++
+         <androidx.recyclerview.widget.RecyclerView
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/recycler_view"
+-            android:layout_below="@id/toolbar"
++            android:layout_below="@id/relative_bottom"
+             android:background="?attr/backgroundColor">
+ 
+ 
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Token.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Token.java	(date 1570110475000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Token.java	(date 1570110475000)
+@@ -0,0 +1,14 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++public class Token {
++    private String token;
++
++    public Token(String token) {
++        this.token = token;
++    }
++
++    public Token(){ }
++    public String getToken() { return token; }
++
++    public void setToken(String token) { this.token = token; }
++}
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyResponse.java	(date 1570110738000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyResponse.java	(date 1570110738000)
+@@ -0,0 +1,5 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++public class MyResponse {
++    public int success;
++}
+Index: app/src/main/res/layout/chat_item_left.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/chat_item_left.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/res/layout/chat_item_left.xml	(date 1570127871000)
+@@ -19,9 +19,19 @@
+             android:text="@string/textview"
+             android:fontFamily="@font/abeezee"
+             android:textColor="@color/quantum_black_100"
+-            android:textSize="14sp" />
++            android:textSize="18sp" />
+ 
+-
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:id="@+id/txt_seen"
++            android:text="@string/seen"
++            android:visibility="gone"
++            android:textSize="10sp"
++            android:textColor="?attr/textcolor"
++            android:layout_below="@+id/show_message"
++            android:layout_alignParentRight="true"
++            android:layout_alignParentEnd="true"/>
+ 
+     </RelativeLayout>
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/build.gradle	(date 1570111780000)
+@@ -30,6 +30,7 @@
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test:runner:1.2.0'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
++
+     //firebase auth
+     implementation 'com.google.firebase:firebase-auth:19.0.0'
+     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+@@ -39,6 +40,11 @@
+     implementation 'com.google.firebase:firebase-database:19.1.0'
+     implementation 'com.google.firebase:firebase-storage:19.0.1'
+ 
++    // Retrofit2 and messaging.
++
++    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
++    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
++    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+     //firebase crasch
+     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+ 
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Data.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Data.java	(date 1570110700000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Data.java	(date 1570110700000)
+@@ -0,0 +1,58 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++public class Data {
++    private String user;
++    private int icon;
++    private String body;
++    private String title;
++    private String sented;
++
++    public Data(String user, int icon, String body, String title, String sented) {
++        this.user = user;
++        this.icon = icon;
++        this.body = body;
++        this.title = title;
++        this.sented = sented;
++    }
++    public Data(){}
++
++    public String getUser() {
++        return user;
++    }
++
++    public void setUser(String user) {
++        this.user = user;
++    }
++
++    public int getIcon() {
++        return icon;
++    }
++
++    public void setIcon(int icon) {
++        this.icon = icon;
++    }
++
++    public String getBody() {
++        return body;
++    }
++
++    public void setBody(String body) {
++        this.body = body;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public void setTitle(String title) {
++        this.title = title;
++    }
++
++    public String getSented() {
++        return sented;
++    }
++
++    public void setSented(String sented) {
++        this.sented = sented;
++    }
++}
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Client.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Client.java	(date 1570121234000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Client.java	(date 1570121234000)
+@@ -0,0 +1,18 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++import retrofit2.Retrofit;
++import retrofit2.converter.gson.GsonConverterFactory;
++
++public class Client {
++    private static Retrofit retrofit =null;
++
++    public static Retrofit getClient(String url){
++        if(retrofit ==null){
++            retrofit = new Retrofit.Builder()
++                    .baseUrl(url)
++                    .addConverterFactory(GsonConverterFactory.create())
++                    .build();
++        }
++        return retrofit;
++    }
++}
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Sender.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Sender.java	(date 1570110854000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/Sender.java	(date 1570110854000)
+@@ -0,0 +1,31 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++public class Sender {
++    public Data data;
++    public String to;
++
++    public Sender(Data data, String to) {
++        this.data = data;
++        this.to = to;
++    }
++
++    public Sender(){}
++    public Data getData() {
++        return data;
++    }
++
++
++    public void setData(Data data) {
++        this.data = data;
++    }
++
++    public String getTo() {
++        return to;
++    }
++
++    public void setTo(String to) {
++        this.to = to;
++    }
++
++
++}
+Index: app/src/main/res/layout/chat_item_right.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/chat_item_right.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/res/layout/chat_item_right.xml	(date 1570127871000)
+@@ -11,16 +11,25 @@
+         android:layout_alignParentRight="true">
+ 
+         <TextView
++            android:id="@+id/show_message"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:background="@drawable/background_right"
+-            android:text="@string/textview"
+             android:layout_alignParentEnd="true"
+-            android:id="@+id/show_message"
++            android:background="@drawable/background_right"
+             android:fontFamily="@font/abeezee"
+-            android:textSize="14sp"
++            android:padding="8dp"
++            android:text="@string/textview"
+             android:textColor="@color/quantum_black_100"
+-            android:padding="8dp" />
+-
++            android:textSize="18sp" />
++        <TextView
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:id="@+id/txt_seen"
++            android:text="@string/seen"
++            android:textSize="10sp"
++            android:textColor="?attr/textcolor"
++            android:layout_below="@+id/show_message"
++            android:layout_alignParentRight="true"
++            android:layout_alignParentEnd="true"/>
+     </RelativeLayout>
+ </RelativeLayout>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/inspectionProfiles/Project_Default.xml	(date 1570053226000)
++++ .idea/inspectionProfiles/Project_Default.xml	(date 1570053226000)
+@@ -0,0 +1,6 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="InfiniteLoopStatement" enabled="false" level="WARNING" enabled_by_default="false" />
++  </profile>
++</component>
+\ No newline at end of file
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseIdService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseIdService.java	(date 1570116703000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseIdService.java	(date 1570116703000)
+@@ -0,0 +1,33 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++import androidx.annotation.NonNull;
++
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.iid.FirebaseInstanceId;
++import com.google.firebase.messaging.FirebaseMessaging;
++import com.google.firebase.messaging.FirebaseMessagingService;
++
++public class MyFirebaseIdService extends FirebaseMessagingService {
++
++    @Override
++    public void onNewToken(@NonNull String s) {
++        super.onNewToken(s);
++
++        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
++
++        String refreshToken = FirebaseInstanceId.getInstance().getToken();
++        if(firebaseUser !=null){
++            updateToken(refreshToken);
++        }
++    }
++
++    private void updateToken(String refreshToken) {
++        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
++        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
++        Token token = new Token(refreshToken);
++        reference.child(firebaseUser.getUid()).setValue(token);
++    }
++}
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/res/values/strings.xml	(date 1570128637000)
+@@ -53,7 +53,6 @@
+     <string name="tasinma_bilgileri">Taşınma Bilgileri</string>
+     <string name="ilan_detay">İlan Detayı</string>
+     <string name="bilgiler">Bilgiler</string>
+-    <string name="kullanici_adi">Kullanıcı Adı:</string>
+     <string name="teklif_ver">Teklif Verin</string>
+     <string name="ilan_yayınla">İlan Verin</string>
+     <string name="tv_slider">Bring It, eşyalarınızı kolay, ucuz ve güvenli bir şekilde taşımanızı kolaylaştırır. İlanları, konumunuza göre getirir.</string>
+@@ -61,6 +60,8 @@
+     <string name="tv_slider2">Nakliye firmanız mı var? Profesyonel bir şekilde taşımak mı istiyorsanız? İlanlara bakarak, teklif verebilirsiniz. BringIt, konumunuza göre ilanları getirir.</string>
+     <string name="skip">Geç</string>
+     <string name="get_starded">Başlayın</string>
++    <string name="kullanici_adi">Kullanıcı Adı:</string>
++    <string name="seen">Görüldü</string>
+ 
+ 
+     <string-array name="tasinmaSekli">
+@@ -105,6 +106,8 @@
+         <item>7+1</item>
+ 
+     </string-array>
++    <string name="delivered">İletildi</string>
++    <string name="yeni_mesaj">Yeni Mesaj!</string>
+ 
+ 
+ </resources>
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Model/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Model/User.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Model/User.java	(date 1570053255000)
+@@ -5,13 +5,15 @@
+     private String username;
+     private String imageURL;
+     private String status;
++    private String search;
+ 
+     public User(){ }
+-    public User(String id, String username, String imageURL, String status) {
++    public User(String id, String username, String imageURL, String status, String search) {
+         this.id = id;
+         this.username = username;
+         this.imageURL = imageURL;
+         this.status =  status;
++        this.search = search;
+     }
+ 
+     public String getId() {
+@@ -38,9 +40,11 @@
+         this.imageURL = imageURL;
+     }
+ 
+-    public String getStatus() { return status;
+-    }
++    public String getStatus() { return status; }
++
++    public void setStatus(String mstatus) { this.status = mstatus; }
+ 
+-    public void setStatus(String mstatus) { this.status = mstatus;
+-    }
++    public String getSearch() { return search; }
++
++    public void setSearch(String search) { this.search = search; }
+ }
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Model/Chat.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Model/Chat.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Model/Chat.java	(date 1570104383000)
+@@ -4,11 +4,13 @@
+     private String sender;
+     private String receiver;
+     private String message;
++    private boolean isseen;
+ 
+-    public Chat(String sender, String receiver, String message) {
++    public Chat(String sender, String receiver, String message, boolean isseen) {
+         this.sender = sender;
+         this.receiver = receiver;
+         this.message = message;
++        this.isseen = isseen;
+     }
+     public Chat(){}
+ 
+@@ -35,4 +37,9 @@
+     public void setMessage(String message) {
+         this.message = message;
+     }
++
++    public boolean isIsseen() { return isseen;
++    }
++
++    public void setIsseen(boolean isseen) { this.isseen = isseen; }
+ }
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseMessaging.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseMessaging.java	(date 1570123217000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/MyFirebaseMessaging.java	(date 1570123217000)
+@@ -0,0 +1,107 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++import android.app.Notification;
++import android.app.NotificationManager;
++import android.app.PendingIntent;
++import android.content.Context;
++import android.content.Intent;
++import android.content.SharedPreferences;
++import android.media.RingtoneManager;
++import android.net.Uri;
++import android.os.Build;
++import android.os.Bundle;
++import androidx.core.app.NotificationCompat;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.messaging.FirebaseMessagingService;
++import com.google.firebase.messaging.RemoteMessage;
++import com.merttoptas.bringit.Activity.Activity.MessageActivity;
++
++public class MyFirebaseMessaging extends FirebaseMessagingService {
++
++    @Override
++    public void onMessageReceived(RemoteMessage remoteMessage) {
++        super.onMessageReceived(remoteMessage);
++
++        String sented = remoteMessage.getData().get("sented");
++        String user = remoteMessage.getData().get("user");
++
++        SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
++        String currentUser = preferences.getString("currentuser", "none");
++
++        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
++
++        if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
++            if (!currentUser.equals(user)) {
++                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++                    sendOreoNotification(remoteMessage);
++                } else {
++                    sendNotification(remoteMessage);
++                }
++            }
++        }
++    }
++
++    private void sendOreoNotification(RemoteMessage remoteMessage){
++        String user = remoteMessage.getData().get("user");
++        String icon = remoteMessage.getData().get("icon");
++        String title = remoteMessage.getData().get("title");
++        String body = remoteMessage.getData().get("body");
++
++        RemoteMessage.Notification notification = remoteMessage.getNotification();
++        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
++        Intent intent = new Intent(this, MessageActivity.class);
++        Bundle bundle = new Bundle();
++        bundle.putString("userid", user);
++        intent.putExtras(bundle);
++        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
++        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
++
++        OreoNotification oreoNotification = new OreoNotification(this);
++        Notification.Builder builder = oreoNotification.getOreoNotification(title, body, pendingIntent,
++                defaultSound, icon);
++
++        int i = 0;
++        if (j > 0){
++            i = j;
++        }
++
++        oreoNotification.getManager().notify(i, builder.build());
++
++    }
++
++    private void sendNotification(RemoteMessage remoteMessage) {
++
++        String user = remoteMessage.getData().get("user");
++        String icon = remoteMessage.getData().get("icon");
++        String title = remoteMessage.getData().get("title");
++        String body = remoteMessage.getData().get("body");
++
++        RemoteMessage.Notification notification = remoteMessage.getNotification();
++        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
++        Intent intent = new Intent(this, MessageActivity.class);
++        Bundle bundle = new Bundle();
++        bundle.putString("userid", user);
++        intent.putExtras(bundle);
++        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
++
++        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
++        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
++                .setSmallIcon(Integer.parseInt(icon))
++                .setContentTitle(title)
++                .setContentText(body)
++                .setAutoCancel(true)
++                .setSound(defaultSound)
++                .setContentIntent(pendingIntent);
++        NotificationManager noti = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
++
++        int i = 0;
++        if (j > 0){
++            i = j;
++        }
++
++        noti.notify(i, builder.build());
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Fragment/ApiService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Fragment/ApiService.java	(date 1570120174000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Fragment/ApiService.java	(date 1570120174000)
+@@ -0,0 +1,19 @@
++package com.merttoptas.bringit.Activity.Fragment;
++import com.merttoptas.bringit.Activity.Notifications.MyResponse;
++import com.merttoptas.bringit.Activity.Notifications.Sender;
++
++import retrofit2.Call;
++import retrofit2.http.Body;
++import retrofit2.http.Headers;
++import retrofit2.http.POST;
++
++public interface ApiService {
++    @Headers(
++            {
++                    "Content-Type:application/json",
++                    "Authorization:key=AAAAm-KPWyU:APA91bFArok5hrQ2H999z8orJBTUqbrb6C0VNaUOSW4QWVXjAsuA818xkeuatXGEEo4xZPZ-OJMpQVJyvFlmd-N7xeu-9yIpdM-seoBsn9AJB8D-fA7FTxg44isYBbdeQTciDnL2i84j"
++            }
++    )
++    @POST("fcm/send")
++    Call<MyResponse> sendNotification(@Body Sender body);
++}
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Notifications/OreoNotification.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Notifications/OreoNotification.java	(date 1570124222000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Notifications/OreoNotification.java	(date 1570124222000)
+@@ -0,0 +1,60 @@
++package com.merttoptas.bringit.Activity.Notifications;
++
++import android.annotation.TargetApi;
++import android.app.Notification;
++import android.app.NotificationChannel;
++import android.app.NotificationManager;
++import android.app.PendingIntent;
++import android.content.Context;
++import android.content.ContextWrapper;
++import android.net.Uri;
++import android.os.Build;
++
++public class OreoNotification extends ContextWrapper {
++
++    private static final String CHANNEL_ID = "com.merttoptas.bringit";
++    private static final String CHANNEL_NAME = "bringit";
++
++    private NotificationManager notificationManager;
++
++    public OreoNotification(Context base) {
++        super(base);
++
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
++            createChannel();
++        }
++    }
++
++    @TargetApi(Build.VERSION_CODES.O)
++    private void createChannel() {
++
++        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
++                CHANNEL_NAME,
++                NotificationManager.IMPORTANCE_DEFAULT);
++        channel.enableLights(false);
++        channel.enableVibration(true);
++        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
++
++        getManager().createNotificationChannel(channel);
++    }
++
++    public NotificationManager getManager(){
++        if (notificationManager == null){
++            notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
++        }
++
++        return  notificationManager;
++    }
++
++    @TargetApi(Build.VERSION_CODES.O)
++    public  Notification.Builder getOreoNotification(String title, String body,
++                                                     PendingIntent pendingIntent, Uri soundUri, String icon){
++        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
++                .setContentIntent(pendingIntent)
++                .setContentTitle(title)
++                .setContentText(body)
++                .setSmallIcon(Integer.parseInt(icon))
++                .setSound(soundUri)
++                .setAutoCancel(true);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Model/Chatlist.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Model/Chatlist.java	(date 1570124117000)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Model/Chatlist.java	(date 1570124117000)
+@@ -0,0 +1,20 @@
++package com.merttoptas.bringit.Activity.Model;
++
++public class Chatlist {
++    public String id;
++
++    public Chatlist(String id) {
++        this.id = id;
++    }
++
++    public Chatlist() {
++    }
++
++    public String getId() {
++        return id;
++    }
++
++    public void setId(String id) {
++        this.id = id;
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Adapter/MessageAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Adapter/MessageAdapter.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Adapter/MessageAdapter.java	(date 1570105223000)
+@@ -45,6 +45,15 @@
+ 
+         holder.show_message.setText(chat.getMessage());
+ 
++        if(position == mChat.size()-1){
++            if(chat.isIsseen()){
++                holder.txt_seen.setText(R.string.seen);
++            }else {
++                holder.txt_seen.setText(R.string.delivered);
++            }
++        }else {
++            holder.txt_seen.setVisibility(View.GONE);
++        }
+     }
+ 
+     @Override
+@@ -55,10 +64,12 @@
+     public class ViewHolder extends RecyclerView.ViewHolder{
+ 
+         TextView show_message;
++        TextView txt_seen;
+ 
+         public ViewHolder(@NonNull View itemView) {
+             super(itemView);
+             show_message = itemView.findViewById(R.id.show_message);
++            txt_seen =itemView.findViewById(R.id.txt_seen);
+         }
+     }
+ 
+Index: app/src/main/java/com/merttoptas/bringit/Activity/Fragment/MessageFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/merttoptas/bringit/Activity/Fragment/MessageFragment.java	(revision 0f27229cd711381cc50bc7f8c5ed3a12c1794014)
++++ app/src/main/java/com/merttoptas/bringit/Activity/Fragment/MessageFragment.java	(date 1570125298000)
+@@ -8,9 +8,13 @@
+ import androidx.fragment.app.Fragment;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
++
++import android.text.Editable;
++import android.text.TextWatcher;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.EditText;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+@@ -20,10 +24,14 @@
+ import com.google.firebase.database.DatabaseError;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.database.Query;
+ import com.google.firebase.database.ValueEventListener;
++import com.google.firebase.iid.FirebaseInstanceId;
+ import com.merttoptas.bringit.Activity.Adapter.UserAdapter;
+ import com.merttoptas.bringit.Activity.Model.Chat;
++import com.merttoptas.bringit.Activity.Model.Chatlist;
+ import  com.merttoptas.bringit.Activity.Model.User;
++import com.merttoptas.bringit.Activity.Notifications.Token;
+ import com.merttoptas.bringit.R;
+ 
+ import java.util.ArrayList;
+@@ -38,7 +46,8 @@
+     private List<User> mUsers;
+     FirebaseUser firebaseUser;
+     DatabaseReference reference;
+-    private List<String> userList;
++    EditText search_message;
++    private List<Chatlist> usersList;
+ 
+ 
+     public MessageFragment() {
+@@ -60,38 +69,42 @@
+         recyclerView.setHasFixedSize(true);
+         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+ 
++        mUsers = new ArrayList<>();
++
++        search_message = v.findViewById(R.id.search_message);
++        search_message.addTextChangedListener(new TextWatcher() {
++            @Override
++            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
++
++            }
++
++            @Override
++            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
++                searchMessage(charSequence.toString().toLowerCase());
++            }
++
++            @Override
++            public void afterTextChanged(Editable editable) {
++
++            }
++        });
++
+         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+ 
+         // Userlist set a chats.
+-        userList = new ArrayList<>();
+-        reference = FirebaseDatabase.getInstance().getReference("Chats");
++        usersList = new ArrayList<>();
++
++        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
+         reference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+-                userList.clear();
+-
+-                for(DataSnapshot snapshot:  dataSnapshot.getChildren()){
+-
+-                    Chat chat = snapshot.getValue(Chat.class);
+-
+-                    if(chat.getSender().isEmpty()){
+-
+-                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
+-                    }else{
+-                        if(chat.getSender().equals(firebaseUser.getUid())){
+-                            userList.add(chat.getReceiver());
+-                        }
+-                    }
+-                    if(chat.getReceiver().isEmpty()){
+-                        Toast.makeText(getActivity(), "Mesajlar Alınamadı", Toast.LENGTH_SHORT).show();
++                usersList.clear();
++                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
++                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
++                    usersList.add(chatlist);
++                }
+ 
+-                    }else{
+-                        if(chat.getReceiver().equals(firebaseUser.getUid())){
+-                            userList.add(chat.getSender());
+-                        }
+-                    }
+-                    readChats();
+-                }
++                chatList();
+             }
+ 
+             @Override
+@@ -100,40 +113,60 @@
+             }
+         });
+ 
+-        mUsers = new ArrayList<>();
++        updateToken(FirebaseInstanceId.getInstance().getToken());
+ 
+         return v;
+ 
+     }
+ 
+-    private void readChats() {
++    private void searchMessage(String s) {
++        final  FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
++        Query query =  FirebaseDatabase.getInstance().getReference("Users").orderByChild("username").startAt(s).endAt(s+ "\uf8ff");
++
++        query.addValueEventListener(new ValueEventListener() {
++            @Override
++            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
++                if(search_message.getText().toString().equals("")){
++                    mUsers.clear();
++
++                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
++                        User user = snapshot.getValue(User.class);
++                        assert  user !=null;
++                        assert  firebaseUser !=null;
++                        if(!user.getId().equals(firebaseUser.getUid())){
++                            mUsers.add(user);
++                        }
++                    }
++
++                    userAdapter = new UserAdapter(getContext(), mUsers,false);
++                    recyclerView.setAdapter(userAdapter);
++                    userAdapter.notifyDataSetChanged();
++                }
++            }
++
++            @Override
++            public void onCancelled(@NonNull DatabaseError databaseError) {
++
++            }
++        });
++    }
++
++    private void chatList() {
+         mUsers = new ArrayList<>();
+-
+         reference = FirebaseDatabase.getInstance().getReference("Users");
+-
+         reference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 mUsers.clear();
+-
+-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
++                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                     User user = snapshot.getValue(User.class);
+-                    //display 1 user from chats
+-                    for(String id : userList){
+-                        if(user.getId().equals(id)){
+-                            if(mUsers.size() != 0){
+-                                for(User user1 : mUsers){
+-                                    if(!user.getId().equals(user1.getId())){
+-                                        mUsers.add(user);
+-                                    }
+-                                }
+-                            }else{
+-                                mUsers.add(user);
+-                            }
++                    for (Chatlist chatlist : usersList){
++                        if (user.getId().equals(chatlist.getId())){
++                            mUsers.add(user);
+                         }
+                     }
+                 }
+-                userAdapter = new UserAdapter(getContext(), mUsers,true);
++                userAdapter = new UserAdapter(getContext(), mUsers, true);
+                 recyclerView.setAdapter(userAdapter);
+                 userAdapter.notifyDataSetChanged();
+             }
+@@ -145,4 +178,12 @@
+         });
+     }
+ 
++
++
++    private void updateToken(String token){
++        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
++        Token token1 = new Token(token);
++        reference.child(firebaseUser.getUid()).setValue(token1);
++    }
++
+ }

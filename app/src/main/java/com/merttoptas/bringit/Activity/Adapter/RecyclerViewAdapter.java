@@ -2,7 +2,6 @@ package com.merttoptas.bringit.Activity.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseUser;
 import com.merttoptas.bringit.Activity.Activity.DetailActivity;
-import com.merttoptas.bringit.Activity.Activity.MainActivity;
-import com.merttoptas.bringit.Activity.Fragment.MapsFragment;
 import com.merttoptas.bringit.Activity.Model.Offer;
 import com.merttoptas.bringit.Activity.Model.Reklam;
-import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<Object> list;
@@ -68,7 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
 
             case TIP_Reklam:
-                layout = R.layout.reklam_layout;
+                layout = R.layout.admob_layout;
                 View reklamView =
                         LayoutInflater
                                 .from(viewGroup.getContext())

@@ -32,6 +32,11 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -240,8 +245,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onKeyEntered(String key, GeoLocation location) {
 
-                            marker= mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)).draggable(true)
-                                    .title(currentUser.getDisplayName()));
+                            marker= mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
+                                    .title("Users"));
+
                             //list the all users location in firebase database
 
                             Log.d("DbLocation", key +" :"  + location.latitude + " " +location.longitude);

@@ -55,7 +55,7 @@
     <string name="bilgiler">Bilgiler</string>
     <string name="teklif_ver">Teklif Verin</string>
     <string name="ilan_yayınla">İlan Verin</string>
-    <string name="tv_slider">Bring It, eşyalarınızı kolay, ucuz ve güvenli bir şekilde taşımanızı kolaylaştırır. İlanları, konumunuza göre getirir.</string>
+    <string name="tv_slider">Bring It, eşyalarınızı kolay, ucuz ve güvenli bir şekilde taşımanızı kolaylaştırır. İlanları, konumunuza göre listeler.</string>
     <string name="tv_slider1">Taşınıyorsanız veya eşyalarınızı bir yere götürmek istiyorsanız, kolayca ilan verin ve nakliye firmalarından teklif almaya başlayın.</string>
     <string name="tv_slider2">Nakliye firmanız mı var? Profesyonel bir şekilde taşımak mı istiyorsanız? İlanlara bakarak, teklif verebilirsiniz. BringIt, konumunuza göre ilanları getirir.</string>
     <string name="skip">Geç</string>
@@ -108,6 +108,7 @@
     </string-array>
     <string name="delivered">İletildi</string>
     <string name="yeni_mesaj">Yeni Mesaj!</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-1002372938729651/2395463391</string>
 
 
 </resources>

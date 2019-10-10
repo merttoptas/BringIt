@@ -43,4 +43,10 @@
     <string name="kullanici_adi">"User Name: "</string>
     <string name="delivered">Delivered</string>
     <string name="seen">Seen</string>
+    <string name="yeni_mesaj">New Message!</string>
+    <string name="teklif_ver">Offer</string>
+    <string name="ilan_yayınla">Advertise</string>
+    <string name="tv_slider">Bring It makes it easy to transport your belongings easily, cheaply and safely. Lists ads by your location.</string>
+    <string name="tv_slider2">Do you have a shipping company? Want to carry it professionally? You can bid by looking at the ads. BringIt brings ads based on your location.</string>
+    <string name="tv_slider1">If you are moving or you want to take your things to a place, simply advertise and start getting offers from shipping companies.</string>
 </resources>

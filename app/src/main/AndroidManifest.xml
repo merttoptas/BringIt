@@ -34,11 +34,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.Activity.MainActivity"></activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1002372938729651~2934519442"/>
         <activity android:name=".Activity.Activity.LoginActivity" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">

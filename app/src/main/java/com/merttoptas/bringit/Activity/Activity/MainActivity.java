@@ -20,6 +20,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     DatabaseReference ref;
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
-
+    AdView mAdView;
 
 
     @Override
@@ -88,7 +95,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mySwitch = findViewById(R.id.mySwitch);
         Trace myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
         myTrace.start();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
 
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
