@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">BringIt</string>
-    <string name="facebook_app_id" translatable="false">2251530274888483</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb2251530274888483</string>
+    <string name="facebook_app_id" translatable="false">436459696979103</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb436459696979103</string>
     <string name="btnCıkıs">Çıkış Yap </string>
     <string name="todo" translatable="false">TODO</string>
     <string name="title_activity_maps" translatable="false">Map</string>
@@ -26,11 +26,11 @@
     <string name="hesap">Hesap</string>
     <string name="ayarla">Ayarla</string>
     <string name="bringit" translatable="false">BringIt</string>
-    <string name="tvNameSurname" translatable="false">Mert Toptaş</string>
+    <string name="tvNameSurname" translatable="false">Empty</string>
     <string name="tasima">Taşıma</string>
-    <string name="tvMail_account" translatable="false">merttoptas34@gmail.com</string>
+    <string name="tvMail_account" translatable="false">example@gmail.com</string>
     <string name="tvPhone_account" translatable="false">+901234567890</string>
-    <string name="tvWebSite_account" translatable="false">merttoptas.com</string>
+    <string name="tvWebSite_account" translatable="false">example.com</string>
     <string name="tvIlanNumber" translatable="false">0</string>
     <string name="tvTasimaNumber" translatable="false">0</string>
     <string name="tamam">Tamam</string>
