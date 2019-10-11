@@ -219,12 +219,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setCurrentUser(final FirebaseUser user){
-
         String username = user.getDisplayName();
         String userid = user.getUid();
         Uri photoURL = user.getPhotoUrl();
-
-        if ( currentUser == null){
 
             ref = FirebaseDatabase.getInstance().getReference("Users").child(userid);
             Log.d("photoURL", "photoURL:" + photoURL);
@@ -249,6 +246,5 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
     }
 }

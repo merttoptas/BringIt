@@ -376,7 +376,6 @@ public class AccountFragment extends Fragment {
                         editor.apply();
                         if(user.getImageURL().isEmpty()){
                             Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
-
                         }else {
                             if(user.getImageURL().equals("default")){
                                 navUserPhoto.setImageResource(R.drawable.userphoto);
