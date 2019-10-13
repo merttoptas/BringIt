@@ -39,6 +39,7 @@ public class DetailActivity extends AppCompatActivity {
     CircleImageView navOfferPhoto;
     SharedPreferences myPrefs;
     DatabaseReference ref;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,11 @@ public class DetailActivity extends AppCompatActivity {
         mTvTarget.setTypeface(typeface);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        final String userid = getIntent().getStringExtra("useridRw");
+
+        if(currentUser.getUid().equals(userid)){
+            mMessageSend.setVisibility(View.INVISIBLE);
+        }
         getDetail();
 
     }
@@ -119,6 +125,8 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
         String userid = getIntent().getStringExtra("useridRw");
         Log.d("useridRw1", "useridRw1: " + userid);
+
+
         intent.putExtra("useridRw1", userid);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

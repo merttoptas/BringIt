@@ -103,6 +103,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private GeoFire geoFire;
     private DatabaseReference ref;
     final int REQUEST_CODE =1;
+    private Activity mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -328,6 +329,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onDetach() {
+        mActivity =null;
+        super.onDetach();
     }
 
     @Override

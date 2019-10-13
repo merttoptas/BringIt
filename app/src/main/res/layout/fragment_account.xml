@@ -38,12 +38,12 @@
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="165dp"
+                    android:layout_marginTop="160dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="?attr/cardBackground"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="10dp"
-                    app:cardBackgroundColor="?attr/cardBackground"
                     app:cardPreventCornerOverlap="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
@@ -71,8 +71,8 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/abeezee"
                                 android:text="@string/ilanlar"
-                                android:textColor="?attr/textcolor"
                                 android:textAllCaps="false"
+                                android:textColor="?attr/textcolor"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -100,8 +100,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/abeezee"
-                                android:textColor="?attr/textcolor"
                                 android:text="@string/tasima"
+                                android:textColor="?attr/textcolor"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -126,8 +126,8 @@
                     android:id="@+id/constraintLayout"
                     android:layout_width="0dp"
                     android:layout_height="220dp"
-                    android:orientation="vertical"
                     android:background="?attr/backgroundColor"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -196,7 +196,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLogout" />
 
 
         <LinearLayout
@@ -311,7 +311,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -322,7 +321,7 @@
             android:layout_marginBottom="8dp"
             android:paddingStart="25dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/btnSetAccount"
+            app:layout_constraintBottom_toTopOf="@+id/linearLogout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -331,8 +330,8 @@
 
             <ImageView
                 android:id="@+id/ivNightMode"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_camera_night_mode" />
 
             <Switch
@@ -342,6 +341,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="30dp"
                 android:checked="false"
+                android:textStyle="bold"
                 android:fontFamily="@font/abeezee"
                 android:text="@string/gece_modu"
                 android:textAllCaps="false"
@@ -349,6 +349,44 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            android:paddingStart="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnSetAccount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/ivLogOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_exit_to_app_black_24dp"
+                android:contentDescription="TODO" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="25dp"
+                android:fontFamily="@font/abeezee"
+                android:text="@string/cikis_yap"
+                android:textColor="?attr/textcolor"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

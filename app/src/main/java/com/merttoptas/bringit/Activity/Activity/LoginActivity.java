@@ -242,6 +242,7 @@ public class LoginActivity extends AppCompatActivity {
             hashMap.put("username", username);
             hashMap.put("status", "offline");
             hashMap.put("search", username.toLowerCase());
+            hashMap.put("leads", "0");
 
             for (UserInfo profile : user.getProviderData()){
                 Uri photoUrl = profile.getPhotoUrl();

@@ -1,7 +1,9 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.merttoptas.bringit.Activity.Activity.MainActivity;
+import com.merttoptas.bringit.Activity.Activity.MessageActivity;
 import com.merttoptas.bringit.Activity.Adapter.UserAdapter;
 import com.merttoptas.bringit.Activity.Model.Chat;
 import com.merttoptas.bringit.Activity.Model.Chatlist;
@@ -48,8 +52,7 @@ public class MessageFragment extends Fragment {
     DatabaseReference reference;
     EditText search_message;
     private List<Chatlist> usersList;
-
-
+    private Activity mActivity;
     public MessageFragment() {
     }
 
@@ -64,7 +67,6 @@ public class MessageFragment extends Fragment {
         mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(toolbar.getTitle());
         mTitle.setText(R.string.mesajlar);
-
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -186,4 +188,18 @@ public class MessageFragment extends Fragment {
         reference.child(firebaseUser.getUid()).setValue(token1);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity){
+            mActivity=(Activity) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        mActivity = null;
+        super.onDetach();
+    }
 }

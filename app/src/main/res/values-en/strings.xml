@@ -54,4 +54,6 @@
     <string name="hata">Error!</string>
     <string name="fotograf_secilmedi">No images selected!</string>
     <string name="arama">Search</string>
+    <string name="cikis_yap">Exit</string>
+    <string name="cikis_yapildi">"Exited "</string>
 </resources>

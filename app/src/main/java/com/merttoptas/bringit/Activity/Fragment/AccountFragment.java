@@ -43,6 +43,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.merttoptas.bringit.Activity.Activity.LoginActivity;
 import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
 
@@ -57,6 +58,7 @@ public class AccountFragment extends Fragment {
     private TextView tvMail, tvIlanlar;
     private TextView tvPhone;
     private TextView tvWebSite;
+    private TextView tvLogout;
     private CircleImageView navUserPhoto;
     private TextView tvUserNameSurname;
     private ImageView ivNightMode;
@@ -106,6 +108,8 @@ public class AccountFragment extends Fragment {
         navUserPhoto = v.findViewById(R.id.navOfferPhoto);
         ivNightMode = v.findViewById(R.id.ivNightMode);
         mySwitch = v.findViewById(R.id.mySwitch);
+        tvLogout = v.findViewById(R.id.tvLogout);
+
         Button btnSetAccount = v.findViewById(R.id.btnSetAccount);
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
@@ -132,7 +136,7 @@ public class AccountFragment extends Fragment {
             }
         });
 
-
+        logOut();
 
         //firebase
         mAuth = FirebaseAuth.getInstance();
@@ -356,9 +360,8 @@ public class AccountFragment extends Fragment {
         if(tvUserNameSurname.getText().toString().matches("")){
             tvUserNameSurname.setText(myPrefs.getString("username",""));
         }
-
         tvWebSite.setText(myPrefs.getString("webSite", ""));
-        tvIlanSayisi.setText(myPrefs.getString("offerNumber","0"));
+
 
         dbRef= FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid());
         try {
@@ -367,25 +370,31 @@ public class AccountFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    if(isAdded()){
-                        User user = dataSnapshot.getValue(User.class);
-                        assert user != null;
-                        editor =myPrefs.edit();
-                        tvUserNameSurname.setText(user.getUsername());
-                        editor.putString("username", tvUserNameSurname.getText().toString());
-                        editor.apply();
-                        if(user.getImageURL().isEmpty()){
-                            Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
-                        }else {
-                            if(user.getImageURL().equals("default")){
-                                navUserPhoto.setImageResource(R.drawable.userphoto);
-                            }else{
-                                String userImg=user.getImageURL();
-                                Log.d("ImageUrl", "ImgURl: " + userImg);
-                                Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
+                    try {
+                        if(isAdded()){
+                            User user = dataSnapshot.getValue(User.class);
+                            assert user != null;
+                            editor =myPrefs.edit();
+                            tvUserNameSurname.setText(user.getUsername());
+                            tvIlanSayisi.setText(user.getLeads());
+                            editor.putString("username", tvUserNameSurname.getText().toString());
+                            editor.apply();
+                            if(user.getImageURL().isEmpty()){
+                                Log.d("ImageUrl", "ImgURl: " + user.getImageURL());
+                            }else {
+                                if(user.getImageURL().equals("default")){
+                                    navUserPhoto.setImageResource(R.drawable.userphoto);
+                                }else{
+                                    String userImg=user.getImageURL();
+                                    Log.d("ImageUrl", "ImgURl: " + userImg);
+                                    Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
+                                }
                             }
                         }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+
 
                 }
 
@@ -415,6 +424,30 @@ public class AccountFragment extends Fragment {
         mContext = context;
         mActivity = getActivity();
 
+    }
+
+    private void logOut(){
+
+        //logout
+        tvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                try {
+                    final ProgressDialog pd = new ProgressDialog(getContext());
+                    pd.setMessage("Çıkış Yapılıyor..");
+                    pd.show();
+                    mAuth.signOut();
+                    Toast.makeText(getContext(), R.string.cikis_yapildi, Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getContext(), LoginActivity.class);
+                    pd.dismiss();
+                    startActivity(i);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

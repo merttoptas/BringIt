@@ -1,6 +1,7 @@
 package com.merttoptas.bringit.Activity.Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -38,13 +39,18 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
+import com.merttoptas.bringit.Activity.Model.Chat;
 import com.merttoptas.bringit.Activity.Model.CityList;
 import com.merttoptas.bringit.Activity.Model.DistrictList;
 import com.merttoptas.bringit.Activity.Model.Offer;
+import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -54,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -80,6 +87,7 @@ public class OfferFragment extends Fragment {
     private TextView tvIlanSayisi;
     int offerNumber =0;
     String offerNameSurname  ="";
+    private Activity mActivity;
 
 
     public OfferFragment() {
@@ -215,6 +223,12 @@ public class OfferFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onDetach() {
+        mActivity = null;
+        super.onDetach();
     }
 
     private void initTransportMove(){
@@ -398,18 +412,33 @@ public class OfferFragment extends Fragment {
                 textClear();
                 Toast.makeText(getActivity(), getString(R.string.basariya_kaydedildi), Toast.LENGTH_SHORT).show();
                 System.out.println(offerNumber);
-                myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                editor =myPrefs.edit();
+                DatabaseReference Ref = FirebaseDatabase.getInstance().getReference().child("Users");
+                Ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            User user =  snapshot.getValue(User.class);
+                            if(user.getId().equals(currentUser.getUid())){
+                                String leads = String.valueOf(offerNumber);
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put("leads", leads);
+                                snapshot.getRef().updateChildren(hashMap);
+                            }
 
-                editor.putString("offerNumber", Integer.toString(offerNumber));
-                editor.apply();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }catch (Exception e){
-
-                e.printStackTrace();
-
-                Toast.makeText(getActivity(), getString(R.string.kayit_basarisiz), Toast.LENGTH_SHORT).show();
-            }
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), getString(R.string.kayit_basarisiz), Toast.LENGTH_SHORT).show();
+                }
         }
 
 

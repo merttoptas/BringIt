@@ -85,7 +85,12 @@ public class SliderActivity extends AppCompatActivity {
 
             }
         });
-
+        tvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                screenPager.setCurrentItem(mList.size());
+            }
+        });
     }
 
     private void loadLastScreen() {
@@ -111,19 +116,24 @@ public class SliderActivity extends AppCompatActivity {
         savePrefsData();
         finish();
 
+
+
     }
     private boolean restorePrefData() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
-        return pref.getBoolean("isIntroOpened",false);
+
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        Boolean isIntroActivityOpnendBefore = pref.getBoolean("isIntroOpnend", false);
+        return isIntroActivityOpnendBefore;
 
     }
 
     private void savePrefsData() {
-
         SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("isIntroOpened",true);
+        editor.putBoolean("isIntroOpnend",true);
         editor.apply();
+
 
     }
 

@@ -69,16 +69,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if(switchState){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .replace(R.id.container, accountFragment).commit();
 
         }else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    .replace(R.id.container, mapsFragment).commit();
 
         }
 
-
+        if(currentUser ==null){
+            status("offline");
+        }
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
     }
@@ -113,17 +117,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (menuItem.getItemId()) {
 
             case R.id.navigation_account:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, accountFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).
+                        replace(R.id.container, accountFragment,"accountFragment").addToBackStack("accountFragment").commit();
                 return  true;
             case R.id.navigation_offer:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, offerFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .replace(R.id.container, offerFragment, "offerFragment").addToBackStack("offerFragment").commit();
                 return  true;
 
             case R.id.navigation_maps:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, mapsFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .replace(R.id.container, mapsFragment, "mapsFragment").addToBackStack("mapsFragment").commit();
                 return true;
             case R.id.navigation_message:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.container, messageFragment).commit();
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                        .replace(R.id.container, messageFragment,"messageFragment").addToBackStack("messageFragment").commit();
                 return true;
         }
 
@@ -153,16 +161,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void status(String status){
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        ref = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", status);
-        ref.updateChildren(hashMap);
+        if(currentUser !=null){
+            ref = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("status", status);
+            ref.updateChildren(hashMap);
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if(currentUser !=null){
+            status("offline");
 
-        status("offline");
+        }
     }
 }
