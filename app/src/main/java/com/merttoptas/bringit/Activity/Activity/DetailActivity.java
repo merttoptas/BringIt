@@ -13,6 +13,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
@@ -40,6 +42,9 @@ public class DetailActivity extends AppCompatActivity {
     SharedPreferences myPrefs;
     DatabaseReference ref;
     Intent intent;
+    Animation btnAnim ;
+    CardView cardView, cardView1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,8 @@ public class DetailActivity extends AppCompatActivity {
 
         if(currentUser.getUid().equals(userid)){
             mMessageSend.setVisibility(View.INVISIBLE);
+        }else{
+            mMessageSend.setAnimation(btnAnim);
         }
         getDetail();
 
@@ -174,6 +181,14 @@ public class DetailActivity extends AppCompatActivity {
         mTitle.setText(R.string.ilan_detay);
         mCardView = findViewById(R.id.cardView);
         mTvTarget = findViewById(R.id.mTvTarget);
+        cardView1 = findViewById(R.id.cardView1);
+
+        //Animations
+        btnAnim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_animation);
+        mCardView.setAnimation(btnAnim);
+        cardView1.setAnimation(btnAnim);
+
     }
+
 
 }

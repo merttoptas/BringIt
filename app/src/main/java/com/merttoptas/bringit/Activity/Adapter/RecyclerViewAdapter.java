@@ -172,14 +172,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private class LoadingViewHolder extends RecyclerView.ViewHolder {
-
-        ProgressBar progressBar;
-
-        public LoadingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            progressBar = itemView.findViewById(R.id.progressBar);
-        }
-    }
-
 }

@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,6 +45,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.merttoptas.bringit.Activity.Activity.LoginActivity;
+import com.merttoptas.bringit.Activity.Activity.MainActivity;
 import com.merttoptas.bringit.Activity.Model.User;
 import com.merttoptas.bringit.R;
 
@@ -70,11 +72,13 @@ public class AccountFragment extends Fragment {
     private SharedPreferences.Editor editor;
     Context mContext;
     DatabaseReference dbRef;
-    private Activity mActivity;
     StorageReference storageReference;
     private static final int IMAGE_REQUEST = 1;
     private Uri imageUri;
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
+    Activity mActivity;
+
+
 
 
     @Override
@@ -86,11 +90,10 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
 
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             getActivity().setTheme(R.style.darktheme);
         }else {
-
             getActivity().setTheme(R.style.AppTheme);
         }
         View v= inflater.inflate(R.layout.fragment_account, container, false);
@@ -114,12 +117,14 @@ public class AccountFragment extends Fragment {
 
         if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             mySwitch.setChecked(true);
+
         }
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         myPrefs =getActivity().getSharedPreferences("nightMode",Context.MODE_PRIVATE );
         editor = myPrefs.edit();
-        mySwitch.setChecked(myPrefs.getBoolean("nightOpen", false));
+        mySwitch.setChecked(myPrefs.getBoolean("nightOpen", false)
+        );
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -142,7 +147,6 @@ public class AccountFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
-        currentUser = mAuth.getCurrentUser();
 
         setAccountUser();
         updateUser();
@@ -387,7 +391,7 @@ public class AccountFragment extends Fragment {
                                 }else{
                                     String userImg=user.getImageURL();
                                     Log.d("ImageUrl", "ImgURl: " + userImg);
-                                    Glide.with(mActivity).load(userImg).centerCrop().into(navUserPhoto);
+                                    Glide.with(getActivity()).load(userImg).centerCrop().circleCrop().into(navUserPhoto);
                                 }
                             }
                         }
@@ -413,17 +417,16 @@ public class AccountFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-
         mContext =null;
-        mActivity = null;
+        mActivity =null;
+
+
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mContext = context;
-        mActivity = getActivity();
-
     }
 
     private void logOut(){
@@ -432,16 +435,15 @@ public class AccountFragment extends Fragment {
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 try {
-                    final ProgressDialog pd = new ProgressDialog(getContext());
-                    pd.setMessage("Çıkış Yapılıyor..");
-                    pd.show();
-                    mAuth.signOut();
-                    Toast.makeText(getContext(), R.string.cikis_yapildi, Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    getActivity().finish();
                     Intent i = new Intent(getContext(), LoginActivity.class);
-                    pd.dismiss();
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
+
+                    Toast.makeText(getContext(), R.string.cikis_yapildi, Toast.LENGTH_SHORT).show();
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -449,5 +451,4 @@ public class AccountFragment extends Fragment {
             }
         });
     }
-
 }

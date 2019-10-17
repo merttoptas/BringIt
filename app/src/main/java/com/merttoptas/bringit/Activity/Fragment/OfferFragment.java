@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -88,6 +90,8 @@ public class OfferFragment extends Fragment {
     int offerNumber =0;
     String offerNameSurname  ="";
     private Activity mActivity;
+    Animation btnAnim ;
+
 
 
     public OfferFragment() {
@@ -157,6 +161,8 @@ public class OfferFragment extends Fragment {
         scrollView = v.findViewById(R.id.scrollView);
         etExplanation = v.findViewById(R.id.etExplanation);
         tvIlanSayisi = v.findViewById(R.id.tvIlanSayisi);
+        btnAnim = AnimationUtils.loadAnimation(getActivity(),R.anim.button_animation);
+
 
         typeface = Typeface.createFromAsset(Objects.requireNonNull(getActivity()).getAssets(), "fonts/SourceSansPro-Regular.ttf");
         btnOfferSave.setTypeface(typeface);
@@ -167,7 +173,7 @@ public class OfferFragment extends Fragment {
         mTitle.setText(R.string.ilan_ver);
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
+        btnOfferSave.setAnimation(btnAnim);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
 

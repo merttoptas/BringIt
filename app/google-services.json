@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "669520976677",
-    "firebase_url": "https://bring-it-54584.firebaseio.com",
-    "project_id": "bring-it-54584",
-    "storage_bucket": "bring-it-54584.appspot.com"
+    "project_number": "807087052495",
+    "firebase_url": "https://bringit-235e4.firebaseio.com",
+    "project_id": "bringit-235e4",
+    "storage_bucket": "bringit-235e4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669520976677:android:631044a9093c8d42",
+        "mobilesdk_app_id": "1:807087052495:android:d249775030bf2b2d9bc9ba",
         "android_client_info": {
           "package_name": "com.merttoptas.bringit"
         }
       },
       "oauth_client": [
         {
-          "client_id": "669520976677-hb9mg22efn7ivvd0kn509uobnosqi90a.apps.googleusercontent.com",
+          "client_id": "807087052495-4dbrogh6iet21tuik4mt80f62q2sjoi0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.merttoptas.bringit",
@@ -23,28 +23,24 @@
           }
         },
         {
-          "client_id": "669520976677-3n0h2vetr6mfo44ljdtl7h9rrrfk7r5u.apps.googleusercontent.com",
+          "client_id": "807087052495-orb3aqk9bn3fob1m58go6j8m7q6nef7s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.merttoptas.bringit",
-            "certificate_hash": "70841c155f961d21f5212197064aa9c07cd2a2e8"
+            "certificate_hash": "4e04e554becf32eca73b17172b3da42afc56f471"
           }
-        },
-        {
-          "client_id": "669520976677-3sv6tls1nvl01d0v5b9utbd2af51bjng.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaxOFZti8xNPFmMpdJKC4Pbh2YFGIlU3s"
+          "current_key": "AIzaSyDRnw3y4wSi0kquMwDCVsR1rjg3M5fYY_M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "669520976677-3sv6tls1nvl01d0v5b9utbd2af51bjng.apps.googleusercontent.com",
+              "client_id": "807087052495-a5avvfcjbql3c22mi25qehphobln4btv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

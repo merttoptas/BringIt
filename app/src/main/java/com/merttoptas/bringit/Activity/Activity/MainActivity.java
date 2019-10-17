@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     FirebaseUser currentUser;
     FirebaseAuth mAuth;
     AdView mAdView;
-
+    private Activity mActivity;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onStart() {
@@ -71,18 +74,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .replace(R.id.container, accountFragment).commit();
-
         }else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                     .replace(R.id.container, mapsFragment).commit();
-
         }
-
-        if(currentUser ==null){
-            status("offline");
-        }
+        status("offline");
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
 
     }
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -117,21 +115,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (menuItem.getItemId()) {
 
             case R.id.navigation_account:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).
-                        replace(R.id.container, accountFragment,"accountFragment").addToBackStack("accountFragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, accountFragment,"accountFragment")
+                        .commit();
                 return  true;
             case R.id.navigation_offer:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, offerFragment, "offerFragment").addToBackStack("offerFragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, offerFragment, "offerFragment").commit();
                 return  true;
 
             case R.id.navigation_maps:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, mapsFragment, "mapsFragment").addToBackStack("mapsFragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, mapsFragment, "mapsFragment").commit();
                 return true;
             case R.id.navigation_message:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, messageFragment,"messageFragment").addToBackStack("messageFragment").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, messageFragment,"messageFragment")
+                        .commit();
                 return true;
         }
 
@@ -142,20 +138,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         super.onResume();
 
-            if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+        if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+
             int bottomNavigationColor = Color.parseColor("#424242");
             bottomNavigationView.setBackgroundColor(bottomNavigationColor);
-        }else{
+        }
+        else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
             int bottomNavigationColor = Color.parseColor("#ffffffff");
             bottomNavigationView.setBackgroundColor(bottomNavigationColor);
-         }
-            status("online");
+        }
+        status("online");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isFinishing();
+
     }
 
     private void status(String status){
@@ -173,9 +174,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onPause() {
         super.onPause();
-        if(currentUser !=null){
-            status("offline");
-
-        }
+        status("offline");
     }
 }

@@ -3,6 +3,8 @@
     <string name="facebook_app_id" translatable="false">436459696979103</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb436459696979103</string>
     <string name="btnCıkıs">Çıkış Yap </string>
+    <string name="default_web_client_id" translatable="false">807087052495-a5avvfcjbql3c22mi25qehphobln4btv.apps.googleusercontent.com</string>
+    <string name="google_maps_key" translatable="false">AIzaSyB4PvyN4bfmpjGGpI1Odfq01d60V91dPug</string>
     <string name="todo" translatable="false">TODO</string>
     <string name="title_activity_maps" translatable="false">Map</string>
     <string name="title_activity_offer" translatable="false">OfferActivity</string>
@@ -62,6 +64,16 @@
     <string name="get_starded">Başlayın</string>
     <string name="kullanici_adi">"Hoşgeldin: "</string>
     <string name="seen">Görüldü</string>
+    <string name="delivered">İletildi</string>
+    <string name="yeni_mesaj">Yeni Mesaj!</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-1002372938729651/2395463391</string>
+    <string name="yukleme">Yükleniyor</string>
+    <string name="hata">Hata!</string>
+    <string name="fotograf_secilmedi">Fotoğraf seçilmedi!</string>
+    <string name="yukleme_devam">Yükleme Devam Ediyor</string>
+    <string name="arama">Arama</string>
+    <string name="cikis_yapildi">Çıkış Yapıldı</string>
+    <string name="cikis_yap">Çıkış Yap</string>
 
 
     <string-array name="tasinmaSekli">
@@ -106,16 +118,5 @@
         <item>7+1</item>
 
     </string-array>
-    <string name="delivered">İletildi</string>
-    <string name="yeni_mesaj">Yeni Mesaj!</string>
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-1002372938729651/2395463391</string>
-    <string name="yukleme">Yükleniyor</string>
-    <string name="hata">Hata!</string>
-    <string name="fotograf_secilmedi">Fotoğraf seçilmedi!</string>
-    <string name="yukleme_devam">Yükleme Devam Ediyor</string>
-    <string name="arama">Arama</string>
-    <string name="cikis_yapildi">Çıkış Yapıldı</string>
-    <string name="cikis_yap">Çıkış Yap</string>
-
 
 </resources>

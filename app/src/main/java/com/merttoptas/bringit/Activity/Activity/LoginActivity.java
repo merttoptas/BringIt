@@ -47,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     SignInButton signInButton;
     LoginButton LoginButton;
     GoogleSignInClient mGoogleSignInClient;
-    private static final String TAG = "FACELOG";
+    private static final String TAG = "LoginActivity";
+    private static final int RC_SIGN_IN = 9001;
     private CallbackManager mCallbackManager;
     TextView tvLoginText;
     Typeface typeface;
@@ -78,22 +79,21 @@ public class LoginActivity extends AppCompatActivity {
     public void googleFacebookSign(){
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("669520976677-3sv6tls1nvl01d0v5b9utbd2af51bjng.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+                .requestProfile()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, 101);
+                signIn();
             }
         });
 
         mAuth = FirebaseAuth.getInstance();
         //Facebook Login
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
         LoginButton.setReadPermissions("email", "public_profile");
         LoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -133,14 +133,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 101);
+        signInIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        signInIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        signInIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             String username = user.getDisplayName();
             Toast.makeText(LoginActivity.this, getString(R.string.kullanici_adi) + username, Toast.LENGTH_SHORT).show();
-
         }
 
         Intent accountIntent = new Intent(getApplicationContext(), SliderActivity.class);
@@ -150,8 +153,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(accountIntent);
         overridePendingTransition (0, 0);
         finish();
-
-
     }
 
     @Override
@@ -160,10 +161,11 @@ public class LoginActivity extends AppCompatActivity {
 
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 101) {
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
                 firebaseAuthWithGoogle(account);
                 loadingProgress.setVisibility(View.VISIBLE);
             } catch (ApiException e) {
@@ -186,7 +188,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
-                            user.getPhotoUrl();
                             setCurrentUser(user);
                             updateUI(user);
                         } else {
@@ -211,7 +212,6 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("fbsSign", "signInWithCredential:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
-                            user.getPhotoUrl();
                             setCurrentUser(user);
                         } else {
                             Log.w("fbSignC", "signInWithCredential:failure", task.getException());

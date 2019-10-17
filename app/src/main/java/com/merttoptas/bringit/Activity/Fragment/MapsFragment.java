@@ -3,6 +3,7 @@ package com.merttoptas.bringit.Activity.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -104,6 +105,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private DatabaseReference ref;
     final int REQUEST_CODE =1;
     private Activity mActivity;
+    Context mContext;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -173,7 +176,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             }
 
-
         }
 
     }
@@ -188,7 +190,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onStart() {
         super.onStart();
-
 
         if (currentUser == null){
             FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -218,27 +219,26 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                     if(mLastLocation !=null){
+                            final double latitude = mLastLocation.getLatitude();
+                            final double longitude = mLastLocation.getLongitude();
+                            geoFire.setLocation(currentUser.getUid(),new GeoLocation(latitude, longitude),
+                                    new GeoFire.CompletionListener() {
+                                        @Override
+                                        public void onComplete(String key, DatabaseError error) {
 
-                        final double latitude = mLastLocation.getLatitude();
-                        final double longitude = mLastLocation.getLongitude();
-                        geoFire.setLocation(currentUser.getUid(),new GeoLocation(latitude, longitude),
-                                new GeoFire.CompletionListener() {
-                                    @Override
-                                    public void onComplete(String key, DatabaseError error) {
+                                            //ad marker
+                                            if(marker !=null){
+                                                marker.remove();
+                                            }
+                                            marker = mMap.addMarker(new MarkerOptions()
+                                                    .position(new LatLng(latitude,longitude))
+                                                    .title(currentUser.getDisplayName()));
 
-                                        //ad marker
-                                        if(marker !=null){
-                                        marker.remove();
+                                            //move camera
+                                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 10.0f));
+
                                         }
-                                        marker = mMap.addMarker(new MarkerOptions()
-                                                .position(new LatLng(latitude,longitude))
-                                                .title(currentUser.getDisplayName()));
-
-                                        //move camera
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 10.0f));
-
-                                    }
-                                });
+                                    });
                     }
 
                     setCircle(location);
@@ -333,13 +333,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onDetach() {
-        mActivity =null;
         super.onDetach();
+        mActivity =null;
+        mContext =null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mActivity =null;
+        mContext =null;
     }
 
     @Override
